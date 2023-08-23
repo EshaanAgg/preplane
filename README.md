@@ -1,0 +1,19 @@
+# Preplane
+
+Preplane is a program that helps you to master internships and placements!
+
+### Technical Details
+
+This is a `Maven` project that is built on top of the `SpringBoot` framework.
+
+#### Tech Stack
+
+- Java 20
+- Thymeleaf for the frontend UI
+- MySQL
+- JDBC for database management and backend API development
+
+#### Setting up the Project
+
+1. Install and setup [`Java 20`](https://www.oracle.com/in/java/technologies/downloads/). The [following guide](https://ubuntuhandbook.org/index.php/2022/03/install-jdk-18-ubuntu/) might be helpful in setting up the same.
+2. Make sure you have a running MySQL server instance running. Create a database called `preplane` on the same. Update the connection URL and login credentials in the [application.properties file](./src/main/resources/application.properties).
