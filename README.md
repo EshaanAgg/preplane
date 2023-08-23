@@ -16,4 +16,5 @@ This is a `Maven` project that is built on top of the `SpringBoot` framework.
 #### Setting up the Project
 
 1. Install and setup [`Java 20`](https://www.oracle.com/in/java/technologies/downloads/). The [following guide](https://ubuntuhandbook.org/index.php/2022/03/install-jdk-18-ubuntu/) might be helpful in setting up the same.
-2. Make sure you have a running MySQL server instance running. Create a database called `preplane` on the same. Update the connection URL and login credentials in the [application.properties file](./src/main/resources/application.properties).
+2. Make sure you have a running MySQL server instance running. Update the connection URL and login credentials in the [application.properties file](./src/main/resources/application.properties).
+3. Make sure that your running MySQL instance has the updated schema. For the same, you can run the [`schema.sql`](./src/main/resources/schema.sql) file against your MySQL connection. It would drop the exisiting database `preplane` (if it exists) and then setup all the tables.
