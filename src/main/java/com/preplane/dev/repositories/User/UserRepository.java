@@ -1,23 +1,22 @@
 package com.preplane.dev.repositories.User;
 
-import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.List;
 
 import com.preplane.dev.models.User;
 
 public interface UserRepository {
-    // Returns the newly created User object
-    User save(User user);
+    // Returns 1 if the user was saved successfully
+    int save(User user);
 
-    // Returns the updated user
-    User update(User user);
+    // Returns 1 if the user was found and updated successfully
+    int update(User user);
 
-    // Returns an optional type which resolves to User if the same was found
-    Optional<User> findById(int userId);
+    // Returns the user object if found, else null
+    User findById(int userId);
 
-    // Returns a boolean showing if the deletion was successful or not
-    boolean deleteById(int userId);
+    // Returns 1 if the user with the provided userId was found
+    int deleteById(int userId);
 
-    // Returns a list of all the users
-    Stream<User> findAll(int limit, int offset);
+    // Returns the list of users in the database
+    List<User> findAll(int limit, int offset);
 }
