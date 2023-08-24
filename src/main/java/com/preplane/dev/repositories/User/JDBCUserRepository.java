@@ -68,7 +68,11 @@ public class JDBCUserRepository implements UserRepository {
     public List<User> findAll(int limit, int offset) {
         String sqlQuery = "SELECT * FROM user LIMIT ? OFFSET ?";
         Object payload = new Object[] { limit, offset };
-
-        return template.query(sqlQuery, this.mapper, payload);
+        try {
+            return template.query(sqlQuery, this.mapper, payload);
+        } catch (Exception e) {
+            System.out.print(e);
+            return null;
+        }
     }
 }
