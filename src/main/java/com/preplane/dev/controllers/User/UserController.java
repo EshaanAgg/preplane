@@ -33,66 +33,65 @@ public class UserController {
     public ResponseEntity<List<User>> getAllTutorials(@RequestParam Optional<Integer> limit,
             @RequestParam Optional<Integer> offset) {
         try {
-            List<User> users = new ArrayList<User>();
+            int lim = limit.orElse(50);
+            int off = offset.orElse(0);
 
-            userRepository.findAll(limit.orElse(50), offset.orElse(0)).forEach(users::add);
-
-            if (users.isEmpty())
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
-            return new ResponseEntity<>(users, HttpStatus.OK);
+            var response = userRepository.findAll(lim, off);
+            return new ResponseEntity<>(response.response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
-        User user = userRepository.findById(id);
+    // @GetMapping("/user/{id}")
+    // public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
+    // User user = userRepository.findById(id);
 
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        }
-    }
+    // if (user == null) {
+    // return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    // } else {
+    // return new ResponseEntity<>(user, HttpStatus.OK);
+    // }
+    // }
 
     @PostMapping("/user")
     public ResponseEntity<String> createUser(@RequestBody User user) {
         try {
-            System.out.println(user.toString());
-            userRepository.save(new User(user.getUsername(), user.getPassword()));
-            return new ResponseEntity<>("User was created successfully.", HttpStatus.CREATED);
+            var response = userRepository.save(new User(user.getUsername(), user.getPassword()));
+            return new ResponseEntity<>(response.message, response.statusCode);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PutMapping("/user/{id}")
-    public ResponseEntity<String> updateUser(@PathVariable("id") int id, @RequestBody User user) {
-        User _user = userRepository.findById(id);
+    // @PutMapping("/user/{id}")
+    // public ResponseEntity<String> updateUser(@PathVariable("id") int id,
+    // @RequestBody User user) {
+    // User _user = userRepository.findById(id);
 
-        if (_user != null) {
-            _user.setUsername(user.getUsername());
-            _user.setPassword(user.getPassword());
+    // if (_user != null) {
+    // _user.setUsername(user.getUsername());
+    // _user.setPassword(user.getPassword());
 
-            userRepository.update(_user);
-            return new ResponseEntity<>("User was updated successfully.", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Cannot find User with id=" + id, HttpStatus.NOT_FOUND);
-        }
-    }
+    // userRepository.update(_user);
+    // return new ResponseEntity<>("User was updated successfully.", HttpStatus.OK);
+    // } else {
+    // return new ResponseEntity<>("Cannot find User with id=" + id,
+    // HttpStatus.NOT_FOUND);
+    // }
+    // }
 
-    @DeleteMapping("/user/{id}")
-    public ResponseEntity<String> deleteTutorial(@PathVariable("id") int id) {
-        try {
-            int result = userRepository.deleteById(id);
-            if (result == 0) {
-                return new ResponseEntity<>("Cannot find User with id=" + id, HttpStatus.OK);
-            }
-            return new ResponseEntity<>("User was deleted successfully.", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Cannot delete tutorial.", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+    // @DeleteMapping("/user/{id}")
+    // public ResponseEntity<String> deleteTutorial(@PathVariable("id") int id) {
+    // try {
+    // int result = userRepository.deleteById(id);
+    // if (result == 0) {
+    // return new ResponseEntity<>("Cannot find User with id=" + id, HttpStatus.OK);
+    // }
+    // return new ResponseEntity<>("User was deleted successfully.", HttpStatus.OK);
+    // } catch (Exception e) {
+    // return new ResponseEntity<>("Cannot delete tutorial.",
+    // HttpStatus.INTERNAL_SERVER_ERROR);
+    // }
+    // }
 }
