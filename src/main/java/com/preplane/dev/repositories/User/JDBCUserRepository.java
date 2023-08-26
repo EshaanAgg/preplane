@@ -3,7 +3,6 @@ package com.preplane.dev.repositories.User;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -53,37 +52,84 @@ public class JDBCUserRepository implements UserRepository {
 
     }
 
-    // @Override
-    // @Transactional
-    // public SQLResult<Integer> update(User user) {
-    // String sqlQuery = "UPDATE user SET username = ?, password = ?, where user_id
-    // = ?";
-    // Object payload = new Object[] { user.getUsername(), user.getPassword(),
-    // user.getId() };
+    @Override
+    @Transactional
+    public SQLResult<Integer> update(User user) {
+        String sqlQuery = "UPDATE user SET username = ?, password = ? WHERE user_id = ?";
+        var result = new SQLResult<Integer>();
 
-    // return template.update(sqlQuery, payload);
-    // }
+        try {
+            int rowCount = template.update(sqlQuery, user.getUsername(), user.getPassword(), user.getId());
+            result.response = rowCount;
 
-    // @Override
-    // @Transactional
-    // public User findById(int userId) {
-    // String sqlQuery = "SELECT * FROM user WHERE user_id = ?";
-    // Object payload = new Object[] { userId };
+            if (rowCount == 1) {
+                result.message = "The user was updated succesfully.";
+                result.statusCode = HttpStatus.OK;
+            } else {
+                result.message = "There is no user with the provided user_id.";
+                result.statusCode = HttpStatus.BAD_REQUEST;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            result.message = "There was an error in updating the user. Error Message: " + e.getMessage();
+            result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
 
-    // try {
-    // User user = template.queryForObject(sqlQuery, this.mapper, payload);
-    // return user;
-    // } catch (IncorrectResultSizeDataAccessException e) {
-    // return null;
-    // }
-    // }
+        return result;
 
-    // @Override
-    // @Transactional
-    // public int deleteById(int userId) {
-    // String sqlQuery = "DELETE FROM user WHERE user_id = ?";
-    // return template.update(sqlQuery, userId);
-    // }
+    }
+
+    @Override
+    @Transactional
+    public SQLResult<User> findById(int userId) {
+        String sqlQuery = "SELECT * FROM user WHERE user_id = ?";
+        var result = new SQLResult<User>();
+
+        try {
+            var response = template.query(sqlQuery, this.mapper, userId);
+
+            if (!response.isEmpty()) {
+                result.message = "User fetched successfully.";
+                result.statusCode = HttpStatus.OK;
+                result.response = response.get(0);
+            } else {
+                result.message = "There is no user with such the provided id.";
+                result.statusCode = HttpStatus.BAD_REQUEST;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            result.message = "There was an error in fetching the user. Error Message: " + e.getMessage();
+            result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public SQLResult<Integer> deleteById(int userId) {
+        String sqlQuery = "DELETE FROM user WHERE user_id = ?";
+        var result = new SQLResult<Integer>();
+
+        try {
+            var rowCount = template.update(sqlQuery, userId);
+            result.response = rowCount;
+
+            if (rowCount == 1) {
+                result.message = "User deleted successfully.";
+                result.statusCode = HttpStatus.OK;
+            } else {
+                result.message = "There is no user with such the provided id.";
+                result.statusCode = HttpStatus.BAD_REQUEST;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            result.message = "There was an error in deleting the user. Error Message: " + e.getMessage();
+            result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return result;
+    }
 
     @Override
     @Transactional

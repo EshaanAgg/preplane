@@ -1,6 +1,5 @@
 package com.preplane.dev.controllers.User;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,16 +42,11 @@ public class UserController {
         }
     }
 
-    // @GetMapping("/user/{id}")
-    // public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
-    // User user = userRepository.findById(id);
-
-    // if (user == null) {
-    // return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    // } else {
-    // return new ResponseEntity<>(user, HttpStatus.OK);
-    // }
-    // }
+    @GetMapping("/user/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
+        var response = userRepository.findById(id);
+        return new ResponseEntity<>(response.response, response.statusCode);
+    }
 
     @PostMapping("/user")
     public ResponseEntity<String> createUser(@RequestBody User user) {
@@ -64,34 +58,18 @@ public class UserController {
         }
     }
 
-    // @PutMapping("/user/{id}")
-    // public ResponseEntity<String> updateUser(@PathVariable("id") int id,
-    // @RequestBody User user) {
-    // User _user = userRepository.findById(id);
+    @PutMapping("/user/{id}")
+    public ResponseEntity<String> updateUser(@PathVariable("id") int id,
+            @RequestBody User user) {
 
-    // if (_user != null) {
-    // _user.setUsername(user.getUsername());
-    // _user.setPassword(user.getPassword());
+        user.setId(id);
+        var response = userRepository.update(user);
+        return new ResponseEntity<>(response.message, response.statusCode);
+    }
 
-    // userRepository.update(_user);
-    // return new ResponseEntity<>("User was updated successfully.", HttpStatus.OK);
-    // } else {
-    // return new ResponseEntity<>("Cannot find User with id=" + id,
-    // HttpStatus.NOT_FOUND);
-    // }
-    // }
-
-    // @DeleteMapping("/user/{id}")
-    // public ResponseEntity<String> deleteTutorial(@PathVariable("id") int id) {
-    // try {
-    // int result = userRepository.deleteById(id);
-    // if (result == 0) {
-    // return new ResponseEntity<>("Cannot find User with id=" + id, HttpStatus.OK);
-    // }
-    // return new ResponseEntity<>("User was deleted successfully.", HttpStatus.OK);
-    // } catch (Exception e) {
-    // return new ResponseEntity<>("Cannot delete tutorial.",
-    // HttpStatus.INTERNAL_SERVER_ERROR);
-    // }
-    // }
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<String> deleteTutorial(@PathVariable("id") int id) {
+        var response = userRepository.deleteById(id);
+        return new ResponseEntity<>(response.message, response.statusCode);
+    }
 }
