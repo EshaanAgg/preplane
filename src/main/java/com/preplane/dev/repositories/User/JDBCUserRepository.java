@@ -28,11 +28,11 @@ public class JDBCUserRepository implements UserRepository {
     @Override
     @Transactional
     public SQLResult<Integer> save(User user) {
-        String sqlQuery = "INSERT INTO user (username, password) VALUES (?,?)";
+        String sqlQuery = "INSERT INTO user (username, password, emailAddress) VALUES (?,?, ?)";
         var result = new SQLResult<Integer>();
 
         try {
-            int rowCount = template.update(sqlQuery, user.getUsername(), user.getPassword());
+            int rowCount = template.update(sqlQuery, user.getUsername(), user.getPassword(), user.getEmailAddress());
             result.response = rowCount;
 
             if (rowCount == 1) {
