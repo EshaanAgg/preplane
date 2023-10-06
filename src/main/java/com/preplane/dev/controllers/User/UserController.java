@@ -29,7 +29,7 @@ public class UserController {
     JDBCUserRepository userRepository;
 
     @GetMapping("/user")
-    public ResponseEntity<List<User>> getAllTutorials(@RequestParam Optional<Integer> limit,
+    public ResponseEntity<List<User>> getAllUsers(@RequestParam Optional<Integer> limit,
             @RequestParam Optional<Integer> offset) {
         try {
             int lim = limit.orElse(50);
@@ -48,12 +48,12 @@ public class UserController {
         return new ResponseEntity<>(response.response, response.statusCode);
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<String> createUser(@RequestBody User user) {
+    @PostMapping("/auth/signup")
+    public ResponseEntity<String> createUser(@RequestBody User reqUser) {
         try {
-            // Update password of the user by hashing the same
-
-            var response = userRepository.save(new User(user.getUsername(), user.getPassword()));
+            User user = new User(reqUser.getUsername(), reqUser.getPassword(), reqUser.getEmailAddress());
+            var response = userRepository
+                    .save(user);
             return new ResponseEntity<>(response.message, response.statusCode);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

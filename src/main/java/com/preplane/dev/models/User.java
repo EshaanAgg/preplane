@@ -13,13 +13,14 @@ public class User {
 
     // Constructors
     public User() {
+        this.roles.add("USER");
     }
 
     public User(String username, String password, String emailAddress) {
         this.username = username;
         this.emailAddress = emailAddress;
         this.password = password;
-        this.roles.add("ADMIN");
+        this.roles.add("USER");
     }
 
     public User(int userId, String username, String password, String emailAddress) {
@@ -27,7 +28,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.emailAddress = emailAddress;
-        this.roles.add("ADMIN");
+        this.roles.add("USER");
     }
 
     // Getters for all the fields
