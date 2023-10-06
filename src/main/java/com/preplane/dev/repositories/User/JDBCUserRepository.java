@@ -1,6 +1,7 @@
 package com.preplane.dev.repositories.User;
 
 import java.util.List;
+import java.sql.Timestamp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.preplane.dev.assets.SQLResult;
 import com.preplane.dev.models.User;
+import com.preplane.dev.rowMappers.CountMapper;
 import com.preplane.dev.rowMappers.UserRowMapper;
 
 import org.springframework.jdbc.core.RowMapper;
@@ -20,19 +22,22 @@ public class JDBCUserRepository implements UserRepository {
     @Autowired
     private JdbcTemplate template;
     private RowMapper<User> mapper;
+    private RowMapper<Integer> countMapper;
 
     public JDBCUserRepository() {
         this.mapper = new UserRowMapper();
+        this.countMapper = new CountMapper();
     }
 
     @Override
     @Transactional
     public SQLResult<Integer> save(User user) {
-        String sqlQuery = "INSERT INTO user (username, password, emailAddress) VALUES (?,?, ?)";
+        String sqlQuery = "INSERT INTO user (username, password, email_address, first_name, last_name) VALUES (?,?,?,?,?)";
         var result = new SQLResult<Integer>();
 
         try {
-            int rowCount = template.update(sqlQuery, user.getUsername(), user.getPassword(), user.getEmailAddress());
+            int rowCount = template.update(sqlQuery, user.getUsername(), user.getPassword(), user.getEmailAddress(),
+                    user.getFirstName(), user.getLastName());
             result.response = rowCount;
 
             if (rowCount == 1) {
@@ -49,7 +54,6 @@ public class JDBCUserRepository implements UserRepository {
         }
 
         return result;
-
     }
 
     @Override
@@ -181,5 +185,33 @@ public class JDBCUserRepository implements UserRepository {
         }
 
         return result;
+    }
+
+    @Override
+    @Transactional
+    public void updateLoginTime(int userId) {
+        String sqlQuery = "UPDATE user SET last_login = ? WHERE userId = ?";
+        try {
+            template.update(sqlQuery, new Timestamp(System.currentTimeMillis()), userId);
+        } catch (Exception e) {
+            System.out.println("There was an error in updating the last login time: ");
+            System.out.println(e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public boolean usernameExists(String username) {
+        String sqlQuery = "SELECT COUNT(*) AS count FROM user WHERE username = ?";
+        Integer count = template.query(sqlQuery, this.countMapper, username).get(0);
+        return count > 0;
+    }
+
+    @Override
+    @Transactional
+    public boolean emailExists(String email) {
+        String sqlQuery = "SELECT COUNT(*) AS count FROM user WHERE email_address = ?";
+        Integer count = template.query(sqlQuery, this.countMapper, email).get(0);
+        return count > 0;
     }
 }
