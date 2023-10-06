@@ -82,8 +82,8 @@ public class AuthController {
 
             // Create new user's account
             User user = new User(signUpReq.username,
-                    signUpReq.emailAddress,
                     encoder.encode(signUpReq.password),
+                    signUpReq.emailAddress,
                     signUpReq.firstName,
                     signUpReq.lastName);
 

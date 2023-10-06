@@ -14,7 +14,7 @@ public class User {
     private String lastName;
     private Date lastLoginAt;
     private String avatar;
-    private String role = "USER";
+    private String role = "ROLE_USER";
 
     // Constructors
     public User() {
@@ -24,6 +24,12 @@ public class User {
         this.username = username;
         this.emailAddress = emailAddress;
         this.password = password;
+    }
+
+    public User(int id, String username, String password, String emailAddress, String role) {
+        this(username, password, emailAddress);
+        this.userId = id;
+        this.role = role;
     }
 
     public User(String username, String password, String emailAddress, String firstName, String lastName) {

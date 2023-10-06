@@ -11,10 +11,15 @@ CREATE TABLE user (
     first_name VARCHAR(200) DEFAULT 'John',
     last_name VARCHAR(200) DEFAULT 'Doe',
     email_address VARCHAR(200) NOT NULL, 
-    role ENUM('ADMIN', 'MAINTAINER', 'USER') NOT NULL DEFAULT 'USER',
+    role ENUM('ROLE_ADMIN', 'ROLE_MAINTAINER', 'ROLE_USER') NOT NULL DEFAULT 'USER',
     last_login DATETIME DEFAULT NOW(),
     avatar VARCHAR(300),
     PRIMARY KEY (user_id)
+);
+
+-- Create a default admin user
+INSERT INTO user (username, password, first_name, last_name, email_address, role) VALUES (
+    'admin', '$2a$10$MNpZkeA6OHRp5UlNpA7YvuEujgpom2Ob3mKj1QIxsnwRz9H8glBu6', 'Root', 'User', 'admin@preplane.dev', 'ROLE_ADMIN'
 );
 
 CREATE TABLE thread (
