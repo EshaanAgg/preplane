@@ -12,6 +12,8 @@ public interface UserRepository {
 
     SQLResult<User> findById(int userId);
 
+    SQLResult<User> findByUsername(String username);
+
     SQLResult<Integer> deleteById(int userId);
 
     SQLResult<List<User>> findAll(int limit, int offset);

@@ -93,7 +93,33 @@ public class JDBCUserRepository implements UserRepository {
                 result.statusCode = HttpStatus.OK;
                 result.response = response.get(0);
             } else {
-                result.message = "There is no user with such the provided id.";
+                result.message = "There is no user with such the provided ID.";
+                result.statusCode = HttpStatus.BAD_REQUEST;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            result.message = "There was an error in fetching the user. Error Message: " + e.getMessage();
+            result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public SQLResult<User> findByUsername(String username) {
+        String sqlQuery = "SELECT * FROM user WHERE username = ?";
+        var result = new SQLResult<User>();
+
+        try {
+            var response = template.query(sqlQuery, this.mapper, username);
+
+            if (!response.isEmpty()) {
+                result.message = "User fetched successfully.";
+                result.statusCode = HttpStatus.OK;
+                result.response = response.get(0);
+            } else {
+                result.message = "There is no user with such the provided ID.";
                 result.statusCode = HttpStatus.BAD_REQUEST;
             }
         } catch (Exception e) {
@@ -119,7 +145,7 @@ public class JDBCUserRepository implements UserRepository {
                 result.message = "User deleted successfully.";
                 result.statusCode = HttpStatus.OK;
             } else {
-                result.message = "There is no user with such the provided id.";
+                result.message = "There is no user with such the provided ID.";
                 result.statusCode = HttpStatus.BAD_REQUEST;
             }
         } catch (Exception e) {

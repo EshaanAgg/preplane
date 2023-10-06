@@ -48,9 +48,11 @@ public class UserController {
         return new ResponseEntity<>(response.response, response.statusCode);
     }
 
-    @PostMapping("/user")
+    @PostMapping("/signup")
     public ResponseEntity<String> createUser(@RequestBody User user) {
         try {
+            // Update password of the user by hashing the same
+
             var response = userRepository.save(new User(user.getUsername(), user.getPassword()));
             return new ResponseEntity<>(response.message, response.statusCode);
         } catch (Exception e) {

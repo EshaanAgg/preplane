@@ -9,8 +9,8 @@ CREATE TABLE user (
     username VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(200) NOT NULL,
     name VARCHAR(200) NOT NULL,
-    email VARCHAR(200) NOT NULL, 
-    premium BOOL DEFAULT FALSE,
+    emailAddress VARCHAR(200) NOT NULL, 
+    role ENUM('ADMIN', 'MAINTAINER', 'USER') NOT NULL DEFAULT 'USER',
     last_login DATETIME DEFAULT NOW(),
     avatar VARCHAR(300),
     PRIMARY KEY (user_id)

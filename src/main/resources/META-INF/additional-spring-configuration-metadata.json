@@ -1,0 +1,19 @@
+{
+	"properties": [
+		{
+			"name": "preplane.app.JWTSecret",
+			"type": "java.lang.String",
+			"description": "JWT Secret which is used to generate and sign the JSON Web Tokens generated for the authentication."
+		},
+		{
+			"name": "preplane.app.JWTExpirationDuration",
+			"type": "java.lang.Long",
+			"description": "The expiration duration of a generated JWT specified in miliseconds. After the expiration of this duration, the user would need to sign in again."
+		},
+		{
+			"name": "preplane.app.JWTSecret",
+			"type": "java.lang.String",
+			"description": "A description for 'preplane.app.JWTSecret'"
+		}
+	]
+}
