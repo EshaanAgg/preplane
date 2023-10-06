@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.preplane.dev.assets.SQLResult;
 import com.preplane.dev.models.User;
 import com.preplane.dev.rowMappers.CountMapper;
-import com.preplane.dev.rowMappers.User.UserAuthRowMapper;
 import com.preplane.dev.rowMappers.User.UserRowMapper;
 
 import org.springframework.jdbc.core.RowMapper;
@@ -24,12 +23,10 @@ public class JDBCUserRepository implements UserRepository {
     @Autowired
     private JdbcTemplate template;
     private RowMapper<User> mapper;
-    private RowMapper<User> authMapper;
     private RowMapper<Integer> countMapper;
 
     public JDBCUserRepository() {
         this.mapper = new UserRowMapper();
-        this.authMapper = new UserAuthRowMapper();
         this.countMapper = new CountMapper();
     }
 
@@ -170,7 +167,7 @@ public class JDBCUserRepository implements UserRepository {
     @Transactional
     public Optional<User> findByUsername(String username) {
         String sqlQuery = "SELECT * FROM user WHERE username = ?";
-        var users = template.query(sqlQuery, this.authMapper, username);
+        var users = template.query(sqlQuery, this.mapper, username);
 
         if (users.size() == 0)
             return Optional.empty();

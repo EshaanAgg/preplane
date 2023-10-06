@@ -2,19 +2,23 @@ package com.preplane.dev.models;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 
 public class User {
-
     private int userId;
     private String username;
-    private String password;
     private String emailAddress;
     private String firstName;
     private String lastName;
     private Date lastLoginAt;
     private String avatar;
     private String role = "ROLE_USER";
+
+    @JsonIgnore
+    private String password;
 
     // Constructors
     public User() {
@@ -24,12 +28,6 @@ public class User {
         this.username = username;
         this.emailAddress = emailAddress;
         this.password = password;
-    }
-
-    public User(int id, String username, String password, String emailAddress, String role) {
-        this(username, password, emailAddress);
-        this.userId = id;
-        this.role = role;
     }
 
     public User(String username, String password, String emailAddress, String firstName, String lastName) {

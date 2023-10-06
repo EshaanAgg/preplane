@@ -15,6 +15,7 @@ public class UserRowMapper implements RowMapper<User> {
         int userId = resultSet.getInt("user_id");
         String username = resultSet.getString("username");
         String emailAddress = resultSet.getString("email_address");
+        String password = resultSet.getString("password");
         String firstName = resultSet.getString("first_name");
         String lastName = resultSet.getString("last_name");
         String role = resultSet.getString("role");
@@ -22,6 +23,6 @@ public class UserRowMapper implements RowMapper<User> {
         Date lastLoginAt = resultSet.getDate("last_login");
 
         // We do not map the map of the user
-        return new User(userId, username, "", emailAddress, firstName, lastName, role, avatar, lastLoginAt);
+        return new User(userId, username, password, emailAddress, firstName, lastName, role, avatar, lastLoginAt);
     }
 }

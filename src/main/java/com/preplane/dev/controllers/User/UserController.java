@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,13 +21,13 @@ import com.preplane.dev.security.Auth;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
     JDBCUserRepository userRepository;
 
-    @GetMapping("/users")
+    @GetMapping("/")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<User>> getAllUsers(@RequestParam Optional<Integer> limit,
             @RequestParam Optional<Integer> offset) {
@@ -44,20 +43,19 @@ public class UserController {
         }
     }
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
-
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable("id") int id) {
         var response = userRepository.findById(id);
-        return new ResponseEntity<>(response.response, response.statusCode);
+        return new ResponseEntity<User>(response.response, response.statusCode);
     }
 
-    @DeleteMapping("/user/{id}")
-    public ResponseEntity<String> deleteTutorial(@PathVariable("id") int id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTutorial(@PathVariable("id") int id) {
         // The user can only delete himself, or be deleted by an admin
-        if (Auth.getCurrentUser().getId() != id)
+        if (Auth.VerifySelfOrAdmin(id))
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 
         var response = userRepository.deleteById(id);
-        return new ResponseEntity<>(response.message, response.statusCode);
+        return new ResponseEntity<String>(response.message, response.statusCode);
     }
 }
