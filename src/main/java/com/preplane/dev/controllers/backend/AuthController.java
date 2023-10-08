@@ -1,4 +1,4 @@
-package com.preplane.dev.controllers;
+package com.preplane.dev.controllers.backend;
 
 import java.util.stream.Collectors;
 
