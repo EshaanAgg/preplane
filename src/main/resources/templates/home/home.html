@@ -9,7 +9,11 @@
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <link href="css/style.css" rel="stylesheet" />   
   </head>
-    <body>
+    <body class="m-0 font-sans text-base antialiased font-normal leading-default bg-gray-50 text-slate-500">
         <div th:replace="fragments/sidenav :: sidenav">This content will be gone</div>
+        <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
+          <!-- <div>Hello</div> -->
+          <div th:replace="fragments/navbar :: navbar" th:with="name=${title}">This content will be gone</div>
+        </main>
     </body>
   </html>
