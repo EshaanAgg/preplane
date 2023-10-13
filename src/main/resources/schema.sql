@@ -11,7 +11,7 @@ CREATE TABLE user (
     first_name VARCHAR(200) DEFAULT 'John',
     last_name VARCHAR(200) DEFAULT 'Doe',
     email_address VARCHAR(200) NOT NULL, 
-    role ENUM('ROLE_ADMIN', 'ROLE_MAINTAINER', 'ROLE_USER') NOT NULL DEFAULT 'USER',
+    role ENUM('ROLE_ADMIN', 'ROLE_MAINTAINER', 'ROLE_USER') NOT NULL DEFAULT 'ROLE_USER',
     last_login DATETIME DEFAULT NOW(),
     avatar VARCHAR(300),
     PRIMARY KEY (user_id)
