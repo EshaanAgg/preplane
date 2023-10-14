@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.preplane.dev.models.User;
@@ -43,10 +44,9 @@ public class AuthController {
     JWTUtils JWTUtils;
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
+    public ResponseEntity<?> authenticateUser(@RequestParam("username") String username, @RequestParam("password") String password) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.username, loginRequest.password));
+                new UsernamePasswordAuthenticationToken(username, password));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = JWTUtils.generateJwtToken(authentication);
@@ -65,27 +65,27 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpReq) {
+    public ResponseEntity<?> registerUser(@RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("emailAddress") String emailAddress, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
         try {
 
-            if (userRepository.usernameExists(signUpReq.username)) {
+            if (userRepository.usernameExists(username)) {
                 return ResponseEntity
                         .badRequest()
                         .body(new MessageResponse("Error: Username is already taken!"));
             }
 
-            if (userRepository.emailExists(signUpReq.emailAddress)) {
+            if (userRepository.emailExists(emailAddress)) {
                 return ResponseEntity
                         .badRequest()
                         .body(new MessageResponse("Error: Email is already in use!"));
             }
 
             // Create new user's account
-            User user = new User(signUpReq.username,
-                    encoder.encode(signUpReq.password),
-                    signUpReq.emailAddress,
-                    signUpReq.firstName,
-                    signUpReq.lastName);
+            User user = new User(username,
+                    encoder.encode(password),
+                    emailAddress,
+                    firstName,
+                    lastName);
 
             var response = userRepository.save(user);
             return new ResponseEntity<>(response.message, response.statusCode);
