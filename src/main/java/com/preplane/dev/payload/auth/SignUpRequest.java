@@ -24,44 +24,4 @@ public class SignUpRequest {
     // Optional parameters with their default values
     public String firstName = "John";
     public String lastName = "Doe";
-
-    public String getusername() {
-        return username;
-    }
-
-    public String getemailAddress() {
-        return emailAddress;
-    }
-
-    public String getpassword() {
-        return password;
-    }
-
-    public String getfirstName() {
-        return firstName;
-    }
-
-    public String getlastName() {
-        return lastName;
-    }
-
-    public void setusername(String username) {
-        this.username = username;
-    }
-
-    public void setemailAddress(String email) {
-        emailAddress = email;
-    }
-
-    public void setpassword(String password) {
-        this.password = password;
-    }
-
-    public void setfirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setlastName(String lastName) {
-        this.lastName = lastName;
-    }
 }
