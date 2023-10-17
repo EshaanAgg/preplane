@@ -2048,6 +2048,12 @@ h6 {
 	--tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
+.from-white-600 {
+	--tw-gradient-from: #bfc4d8;
+	--tw-gradient-to: rgb(33 82 255 / 0);
+	--tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
 .from-red-500 {
 	--tw-gradient-from: #f53939;
 	--tw-gradient-to: rgb(245 57 57 / 0);
@@ -3309,6 +3315,13 @@ h6 {
 .after\:from-blue-600::after {
 	content: var(--tw-content);
 	--tw-gradient-from: #2152ff;
+	--tw-gradient-to: rgb(33 82 255 / 0);
+	--tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.after\:from-white-600::after {
+	content: var(--tw-content);
+	--tw-gradient-from: #c9cedd;
 	--tw-gradient-to: rgb(33 82 255 / 0);
 	--tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
