@@ -13,6 +13,7 @@
 
 <body class="m-0 font-sans antialiased font-normal bg-white text-start text-base leading-default text-slate-500">
 
+  <!-- Navigation Bar -->
   <nav
     class="absolute top-0 z-30 flex flex-wrap items-center justify-between w-full px-4 py-2 mt-6 mb-4 shadow-none lg:flex-nowrap lg:justify-start ">
     <div class="container flex items-center justify-between py-0 flex-wrap-inherit">
@@ -28,6 +29,7 @@
             class="w-5.5 rounded-xs mt-1.75 duration-350 relative my-0 mx-auto block h-px bg-white transition-all"></span>
         </span>
       </button>
+
       <div navbar-menu
         class="items-center flex-grow transition-all ease-soft duration-350 lg-max:bg-white lg-max:max-h-0 lg-max:overflow-hidden basis-full rounded-xl lg:flex lg:basis-auto">
         <ul class="flex flex-col pl-0 mx-auto mb-0 list-none lg:flex-row xl:ml-auto">
@@ -40,7 +42,7 @@
           </li>
           <li>
             <a class="block px-4 py-2 mr-2 font-normal text-white transition-all duration-250 lg-max:opacity-0 lg-max:text-slate-700 ease-soft-in-out text-sm lg:px-2 lg:hover:text-white"
-              href="../pages/profile.html">
+              th:href="@{/profile}">
               <i class="mr-1 text-white lg-max:text-slate-700 fa fa-user opacity-100"></i>
               Profile
             </a>
@@ -58,11 +60,11 @@
     </div>
   </nav>
 
+  <!-- Main content -->
   <main class="mt-0 transition-all duration-200 ease-soft-in-out">
     <section class="min-h-screen mb-32">
-      <div
-        class="relative flex items-start pt-12 pb-56 m-4 overflow-hidden bg-center bg-cover min-h-50-screen rounded-xl"
-        style="background-image: url('../assets/img/curved-images/curved14.jpg')">
+      <div style="background-image: url('../assets/img/signup/curved.jpg')"
+        class="relative flex items-start pt-12 pb-56 m-4 overflow-hidden bg-center bg-cover min-h-50-screen rounded-xl">
         <span
           class="absolute top-0 left-0 w-full h-full bg-center bg-cover bg-gradient-to-tl from-purple-700 to-pink-500 opacity-100"></span>
         <div class="container z-10">
@@ -83,39 +85,46 @@
                   class="bg-gradient-to-tl text-bold text-transparent from-purple-700 to-pink-500 bg-clip-text font-bold">
                   <i
                     class="mr-1 text-transparent from-purple-700 to-pink-500 lg-max:text-slate-700 fa fa-user opacity-100"></i>
-                  Sign Up</h4>
+                  Sign Up
+                </h4>
               </div>
               <div class="flex flex-wrap px-3 -mx-3 sm:px-6 xl:px-12">
               </div>
               <div class="flex-auto p-6">
-                <form role="form text-left">
+                <form role="form text-left" id="signup-form">
                   <div class="mb-4">
                     <input type="text"
                       class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
-                      placeholder="First Name" aria-label="First Name" aria-describedby="email-addon" />
+                      placeholder="First Name" aria-label="First Name" aria-describedby="email-addon" id="firstname" />
                   </div>
                   <div class="mb-4">
                     <input type="text"
                       class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
-                      placeholder="Last Name" aria-label="Last Name" aria-describedby="email-addon" />
+                      placeholder="Last Name" aria-label="Last Name" aria-describedby="email-addon" id="lastname" />
                   </div>
                   <div class="mb-4">
                     <input type="text"
                       class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
-                      placeholder="Username" aria-label="Username" aria-describedby="email-addon" />
+                      placeholder="Username" aria-label="Username" aria-describedby="email-addon" id="username" />
                   </div>
                   <div class="mb-4">
                     <input type="email"
                       class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
-                      placeholder="Email" aria-label="Email" aria-describedby="email-addon" />
+                      placeholder="Email" aria-label="Email" aria-describedby="email-addon" id="email" />
                   </div>
                   <div class="mb-4">
                     <input type="password"
                       class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
-                      placeholder="Password" aria-label="Password" aria-describedby="password-addon" />
+                      placeholder="Password" aria-label="Password" aria-describedby="password-addon" id="password" />
                   </div>
+
+                  <!-- Message containers -->
+                  <div class="text-red-500 text-sm" id="error-messages"></div>
+                  <div class="text-green-600 text-sm" id="success-messages"></div>
+
+                  <!-- Submit button -->
                   <div class="text-center">
-                    <button type="button"
+                    <button type="submit"
                       class="inline-block w-full px-6 py-3 mt-6 mb-2 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl from-purple-700 to-pink-500 ">Sign
                       up</button>
                   </div>
@@ -128,9 +137,66 @@
         </div>
       </div>
       <br>
+
+      <!-- Footer -->
       <div th:replace="fragments/footer :: footer"></div>
     </section>
   </main>
 </body>
+
+<script>
+  const errorMessageDiv = document.getElementById('error-messages');
+  const successMessageDiv = document.getElementById('success-messages');
+
+  function showErrorMessages(messages) {
+    errorMessageDiv.classList.remove("hidden");
+    errorMessageDiv.innerHTML = messages.join("<br>");
+  }
+
+  function showSucessMessages(messages) {
+    successMessageDiv.classList.remove("hidden");
+    successMessageDiv.innerHTML = messages.join("<br>");
+  }
+
+  function clearMessages() {
+    errorMessageDiv.classList.add("hidden");
+    successMessageDiv.classList.add("hidden");
+    errorMessageDiv.innerHTML = "";
+    successMessageDiv.innerHTML = "";
+  }
+
+  function handleSignup(event) {
+    event.preventDefault();
+    clearMessages();
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const emailAddress = document.getElementById('email').value;
+    const firstName = document.getElementById('firstname').value;
+    const lastName = document.getElementById('lastname').value;
+
+    fetch('/api/auth/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username, password, emailAddress, firstName, lastName
+      })
+    }).then(res => res.json()).then((data) => {
+      if (data.errors) showErrorMessages(data.errors);
+      else showSucessMessages([data.message, "Please login with your credentials."])
+    }).catch((err) => {
+      console.log("The signup request resulted in errors: ", err);
+      showErrorMessages(["Unexpected error occured. Please try again."])
+    });
+  }
+
+  document.getElementById('signup-form').addEventListener('submit', handleSignup);
+  clearMessages();
+</script>
+
+<!-- Plugin for Scrollbar  -->
+<script src="../assets/js/plugins/perfectScrollbar.js" async></script>
 
 </html>

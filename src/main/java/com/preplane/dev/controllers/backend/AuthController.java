@@ -88,7 +88,7 @@ public class AuthController {
                     signUpReq.lastName);
 
             var response = userRepository.save(user);
-            return new ResponseEntity<>(response.message, response.statusCode);
+            return new ResponseEntity<>(new MessageResponse(response.message), response.statusCode);
         } catch (Exception e) {
             return ResponseEntity
                     .badRequest()
