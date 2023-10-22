@@ -15,11 +15,4 @@ public interface ProblemRepository {
     SQLResult<Integer> deleteById(int problemId);
 
     SQLResult<List<Problem>> findAll(int limit, int offset);
-
-    // Utility functions for data integrity and additional queries
-    // Add more methods as needed
-
-    // For example:
-    // void updateSomeField(int problemId, SomeType someValue);
-    // List<Problem> findByAuthor(int authorId);
 }
