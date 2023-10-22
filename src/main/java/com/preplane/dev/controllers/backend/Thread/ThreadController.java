@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/api/threads")
 public class ThreadController {
@@ -27,7 +26,7 @@ public class ThreadController {
 
     @GetMapping("/")
     public ResponseEntity<List<Thread>> getAllThreads(@RequestParam Optional<Integer> limit,
-                                                      @RequestParam Optional<Integer> offset) {
+            @RequestParam Optional<Integer> offset) {
 
         try {
             int lim = limit.orElse(50);
@@ -67,7 +66,8 @@ public class ThreadController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Thread> updateThread(@PathVariable("id") int id, @RequestBody Thread thread, @AuthenticationPrincipal User loggedInUser) {
+    public ResponseEntity<Thread> updateThread(@PathVariable("id") int id, @RequestBody Thread thread,
+            @AuthenticationPrincipal User loggedInUser) {
         try {
             var existingThreadResponse = threadRepository.findById(id);
             if (existingThreadResponse.statusCode == HttpStatus.OK) {

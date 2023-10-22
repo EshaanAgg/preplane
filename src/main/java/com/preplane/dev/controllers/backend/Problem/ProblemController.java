@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/api/problems")
 public class ProblemController {
@@ -27,7 +26,7 @@ public class ProblemController {
 
     @GetMapping("/")
     public ResponseEntity<List<Problem>> getAllProblems(@RequestParam Optional<Integer> limit,
-                                                        @RequestParam Optional<Integer> offset) {
+            @RequestParam Optional<Integer> offset) {
 
         try {
             int lim = limit.orElse(50);

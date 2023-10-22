@@ -22,13 +22,15 @@ public class JDBCProblemRepository implements ProblemRepository {
     @Override
     @Transactional
     public SQLResult<Integer> save(Problem problem) {
-        String sqlQuery = "INSERT INTO coding_problem (title, statement, author, authors_solution, testcases, time_limit, memory_limit) " +
+        String sqlQuery = "INSERT INTO coding_problem (title, statement, author, authors_solution, testcases, time_limit, memory_limit) "
+                +
                 "VALUES (?,?,?,?,?,?,?)";
         var result = new SQLResult<Integer>();
 
         try {
             int rowCount = template.update(sqlQuery, problem.getTitle(), problem.getStatement(), problem.getAuthor(),
-                    problem.getAuthorsSolution(), problem.getTestcases(), problem.getTimeLimit(), problem.getMemoryLimit());
+                    problem.getAuthorsSolution(), problem.getTestcases(), problem.getTimeLimit(),
+                    problem.getMemoryLimit());
             result.response = rowCount;
 
             if (rowCount == 1) {

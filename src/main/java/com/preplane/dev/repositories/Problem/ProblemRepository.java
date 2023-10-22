@@ -6,7 +6,8 @@ import com.preplane.dev.models.Problem;
 import java.util.List;
 
 public interface ProblemRepository {
-    // Result functions that are directly consumed by the controllers to send responses
+    // Result functions that are directly consumed by the controllers to send
+    // responses
     SQLResult<Integer> save(Problem problem);
 
     SQLResult<Problem> findById(int problemId);

@@ -7,7 +7,7 @@ public class Problem {
     private int problemId;
     private String title;
     private String statement;
-    private int author;//Foreign Key from Users
+    private int author;// Foreign Key from Users
     private String authorsSolution;
     private String testcases;
     private double timeLimit;
@@ -16,7 +16,8 @@ public class Problem {
     public Problem() {
     }
 
-    public Problem(String title, String statement, int author, String authorsSolution, String testcases, double timeLimit, double memoryLimit) {
+    public Problem(String title, String statement, int author, String authorsSolution, String testcases,
+            double timeLimit, double memoryLimit) {
         this.title = title;
         this.statement = statement;
         this.author = author;
