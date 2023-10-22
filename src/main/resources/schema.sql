@@ -205,3 +205,11 @@ VALUES
     (17, 2), (17, 5), (17, 8), -- Problem 17 associated with 'Strings', 'Medium', 'Facebook'
     (18, 3), (18, 6), (18, 9), -- Problem 18 associated with 'Arrays', 'Hard', 'Amazon'
     (19, 1), (19, 4), (19, 7); -- Problem 19 associated with 'Math', 'Easy', 'Google' 
+
+INSERT INTO thread (thread_id, title, content, created_at, user_created)
+VALUES
+    (1, 'Thread Title 1', 'Content of thread 1', '2023-10-22 10:00:00', 1), /* Currently all blogs are from admin */
+    (2, 'Thread Title 2', 'Content of thread 2', '2023-10-22 10:30:00', 1),
+    (3, 'Thread Title 3', 'Content of thread 3', '2023-10-22 11:00:00', 1),
+    (4, 'Thread Title 4', 'Content of thread 4', '2023-10-22 11:30:00', 1),
+    (5, 'Thread Title 5', 'Content of thread 5', '2023-10-22 12:00:00', 1);
