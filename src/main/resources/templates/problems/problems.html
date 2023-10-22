@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Preplane | Discuss</title>
+    <!-- Fonts and icons -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+    <!-- Font Awesome Icons -->
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <!-- Nucleo Icons -->
+    <link href="css/style.css" rel="stylesheet" />
+    <!-- Main Styling -->
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+
+</head>
+
+<body class="m-0 font-sans antialiased font-normal text-base leading-default bg-gray-50 text-slate-500">
+    <div th:replace="fragments/sidenav :: sidenav">This content will be replaced by the `sidenav` fragment</div>
+    <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
+        <!-- Navbar -->
+        <div th:replace="fragments/navbar :: navbar" th:with="name=${title}">This content will be replaced by the
+            `navbar`
+            fragment</div>
+    <div class="w-full px-6 py-6 mx-auto">
+        <!-- table 1 -->
+        <div class="flex flex-wrap -mx-3">
+            <div class="flex-none w-full max-w-full px-3">
+                <div
+                    class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
+                    <div class="p-6 pb-0 mb-0 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
+                        <h6>Problems table</h6>
+                    </div>
+                    <div class="flex-auto px-0 pt-0 pb-2">
+                        <div class="p-0 overflow-x-auto">
+                            <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-300">
+                                <div class="flex flex-wrap -mx-3 mb-4 ml-1">
+                                    <div class="flex-none w-full max-w-1/4 px-3">
+                                        <!-- Filter Options -->
+                                        <div class="flex space-x-2 mb-4">
+                                            <select id="difficulty"
+                                                class="p-2 border h-12 rounded border-gradient ml-2 mr-2"
+                                                style="border: 2px solid rgba(159, 30, 182,0.5); width: 150px;">
+                                                <option value="" disabled selected>Difficulty</option>
+                                                <option value="easy">Easy</option>
+                                                <option value="medium">Medium</option>
+                                                <option value="hard">Hard</option>
+                                            </select>
+                                            <select id="status"
+                                                class="p-2 border h-12 rounded border-gradient ml-2 mr-2"
+                                                style="border: 2px solid rgba(159, 30, 182,0.5); width: 150px;">
+                                                <option value="" disabled selected>Status</option>
+                                                <option value="ToDo">ToDo</option>
+                                                <option value="Solved">Solved</option>
+                                                <option value="Attempted">Attempted</option>
+                                                <!-- Add more options as needed -->
+                                            </select>
+                                            <select id="tags" class="p-2 border h-12 rounded border-gradient ml-2 mr-4"
+                                                style="border: 2px solid rgba(159, 30, 182,0.5); width: 150px;">
+                                                <option value="" disabled selected>Tags</option>
+                                                <option value="Array">Array</option>
+                                                <option value="String">String</option>
+                                                <option value="LinkedList">Linked List</option>
+                                                <!-- Add more options as needed -->
+                                            </select>
+                                            <div class="flex space-x-2 mb-4">
+                                                <div class="relative w-full xl:w-full flex items-center border border-gradient"
+                                                    style="width:300px;">
+                                                    <input type="text" id="search" class="w-full p-2 pr-10 rounded"
+                                                        placeholder="Search problems..."
+                                                        style="border: 2px solid rgba(159, 30, 182, 0.5);">
+                                                    <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                                        <div
+                                                            class="w-12 h-12 rounded-full flex items-center justify-center shadow-xl">
+                                                            <img src="https://img.icons8.com/sf-black/64/ba1593/source-code.png"
+                                                                alt="Search Icon" class="w-8 h-8" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button>
+                                                <div
+                                                    style="border: 3px solid green; padding: 10px; display: inline-block; width:60px;height: 60px ; border-radius: 50%; display: flex; justify-content: center; align-items: center;margin-left: 40px; margin-bottom: 10px;">
+                                                    <img src="https://img.icons8.com/external-tanah-basah-glyph-tanah-basah/48/40C057/external-Shuffle-arrows-tanah-basah-glyph-tanah-basah.png"
+                                                        alt="Image" style="height:30px ; width: 30px;" />
+                                                </div>
+                                            </button>
+                                            <div
+                                                style="color: green;margin-left: 20px;margin-top: 15px;font-weight: 600;">
+                                                Pick One</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <thead class="align-bottom">
+                                    <tr>
+                                        <th
+                                            class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
+                                            Problem</th>
+                                        <th
+                                            class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
+                                            Tags</th>
+                                        <th
+                                            class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
+                                            Status</th>
+                                        <th
+                                            class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
+                                            Last Submission</th>
+                                        <th
+                                            class="px-6 py-3 font-semibold capitalize align-middle bg-transparent border-b border-gray-200 border-solid shadow-none tracking-none whitespace-nowrap text-slate-400 opacity-70">
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="problemsTableBody">
+                                    <!-- Problems table content will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- card 2 -->
+
+        <div class="flex flex-wrap -mx-3">
+            <div class="flex-none w-full max-w-full px-3">
+                <div
+                    class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
+                    <div class="p-6 pb-0 mb-0 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
+                        <h6>Tags Progress</h6>
+                    </div>
+                    <div class="flex-auto px-0 pt-0 pb-2">
+                        <div class="p-0 overflow-x-auto">
+                            <table
+                                class="items-center justify-center w-full mb-0 align-top border-gray-200 text-slate-300">
+                                <thead class="align-bottom">
+                                    <tr>
+                                        <th
+                                            class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
+                                            Tag</th>
+                                        <th
+                                            class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
+                                            Total Problems</th>
+                                        <th
+                                            class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
+                                            Currently Solved</th>
+                                        <th
+                                            class="px-6 py-3 pl-2 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
+                                            Progress Bar</th>
+                                        <th
+                                            class="px-6 py-3 font-semibold capitalize align-middle bg-transparent border-b border-gray-200 border-solid shadow-none tracking-none whitespace-nowrap">
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tagsProgressTableBody">
+                                    <!-- Tags progress table content will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add your scrollbar and other scripts as per your original HTML -->
+    <!-- ... -->
+
+    <script>
+        function fetchData() {
+            // Simulated data (replace with actual data fetching logic)
+            const problemsData = [
+                {
+                    name: "Bob's Dillemma",
+                    successRate: "59% Success Rate",
+                    tags: ["Manager", "Organization"],
+                    status: "Accepted",
+                    lastSubmission: "23/04/18",
+                },
+                // Add more problem data as needed
+            ];
+
+            const tagsProgressData = [
+                {
+                    tag: "Math",
+                    totalProblems: 123,
+                    currentlySolved: 65,
+                    progress: 60,
+                },
+                // Add more tag progress data as needed
+            ];
+
+            return { problemsData, tagsProgressData };
+        }
+
+        function populateData() {
+            const { problemsData, tagsProgressData } = fetchData();
+
+            // Populate Problems Table
+            const problemsTableBody = document.getElementById("problemsTableBody");
+            problemsData.forEach((problem) => {
+                problemsTableBody.innerHTML += `
+            <tr>
+              <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                <div class="flex px-2 py-1">
+                  <div>
+                    <img src="https://img.icons8.com/ios/50/ba1593/math.png"
+                      class="inline-flex items-center justify-center mr-4 text-sm text-white transition-all duration-200 ease-soft-in-out h-8 w-8"
+                      alt="user1" />
+                  </div>
+                  <div class="flex flex-col justify-center">
+                    <h6 class="mb-0 text-sm leading-normal">${problem.name}</h6>
+                    <p class="mb-0 text-xs leading-tight text-slate-400">${problem.successRate}</p>
+                  </div>
+                </div>
+              </td>
+              <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                <p class="mb-0 text-xs font-semibold leading-tight">${problem.tags[0]}</p>
+                <p class="mb-0 text-xs leading-tight text-slate-400">${problem.tags[1]}</p>
+              </td>
+              <td
+                class="p-2 text-sm leading-normal text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                <span
+                  class="bg-gradient-to-tl from-green-600 to-lime-400 px-2.5 text-xs rounded-1.8 py-1.4 inline-block whitespace-nowrap text-center align-baseline font-bold uppercase leading-none text-white">${problem.status}</span>
+              </td>
+              <td
+                class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                <span class="text-xs font-semibold leading-tight text-slate-400">${problem.lastSubmission}</span>
+              </td>
+              <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                <button
+                  style="background-color: green; color: white;font-weight: 300;font-size: small; padding: 5px 5px; border: none; border-radius: 5px; text-align: center; width: 60px; height: 30px; opacity: 0.7;">
+                  Solve
+                </button>
+              </td>
+            </tr>
+          `;
+            });
+
+            // Populate Tags Progress Table
+            const tagsProgressTableBody = document.getElementById("tagsProgressTableBody");
+            tagsProgressData.forEach((tagProgress) => {
+                tagsProgressTableBody.innerHTML += `
+            <tr>
+              <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                <div class="flex px-2">
+                  <div>
+                    <img src="https://img.icons8.com/ios/50/ba1593/math.png"
+                      class="inline-flex items-center justify-center mr-4 text-sm text-white transition-all duration-200 ease-soft-in-out h-9 w-9"
+                      alt="spotify" />
+                  </div>
+                  <div class="my-auto">
+                    <h6 class="mb-0 text-sm leading-normal">${tagProgress.tag}</h6>
+                  </div>
+                </div>
+              </td>
+              <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                <p class="mb-0 text-sm font-semibold leading-normal">${tagProgress.totalProblems}</p>
+              </td>
+              <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                <span class="text-xs font-semibold leading-tight">${tagProgress.currentlySolved}</span>
+              </td>
+              <td
+                class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                <div class="flex items-center justify-center">
+                  <span class="mr-2 text-xs font-semibold leading-tight">${tagProgress.progress}%</span>
+                  <div>
+                    <div class="text-xs h-0.75 w-30 m-0 flex overflow-visible rounded-lg bg-gray-200">
+                      <div
+                        class="duration-600 ease-soft bg-gradient-to-tl from-blue-600 to-cyan-400 -mt-0.38 -ml-px flex h-1.5 w-3/5 flex-col justify-center overflow-hidden whitespace-nowrap rounded bg-fuchsia-300 text-center text-white transition-all"
+                        role="progressbar" aria-valuenow="${tagProgress.progress}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                <div style="border: 3px solid green; padding: 10px; display: inline-block; width:40px;height: 40px ; border-radius: 50%; display: flex; justify-content: center; align-items: center;">
+                  <img src="https://img.icons8.com/external-tanah-basah-glyph-tanah-basah/48/40C057/external-Shuffle-arrows-tanah-basah-glyph-tanah-basah.png" alt="Image" style="height:20px ; width: 20px;" />
+                </div>
+              </td>
+            </tr>
+          `;
+            });
+        }
+
+        populateData();
+    </script>
+
+    <!-- plugin for scrollbar -->
+    <script src="../assets/js/plugins/perfect-scrollbar.min.js" async></script>
+    <!-- github button -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <!-- main script file  -->
+    <script src="../assets/js/soft-ui-dashboard-tailwind.js?v=1.0.5" async></script>
+
+</body>
+
+</html>
