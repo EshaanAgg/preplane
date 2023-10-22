@@ -39,6 +39,17 @@ public class ThreadController {
         }
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Thread>> getThreadsByUserId(@PathVariable("userId") int userId) {
+    try {
+        var response = threadRepository.findByUserId(userId);
+        return new ResponseEntity<>(response.response, response.statusCode);
+    } catch (Exception e) {
+        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getThreadById(@PathVariable("id") int id) {
         var response = threadRepository.findById(id);
