@@ -123,10 +123,10 @@ CREATE TABLE coding_submission (
     problem_id INT NOT NULL, 
     user_id INT NOT NULL,
     submission_time DATETIME DEFAULT NOW(),
-    compiler_verdict ENUM ('AC', 'WA', 'MLE', 'TLE', 'CE') DEFAULT 'WA',
+    compiler_verdict ENUM ('AC', 'WA', 'MLE', 'TLE', 'CE', 'IN_QUEUE') DEFAULT 'IN_QUEUE',
     code VARCHAR(4096) NOT NULL,
-    execution_time  DOUBLE NOT NULL,
-    execution_memory  DOUBLE NOT NULL,
+    execution_time DOUBLE,
+    execution_memory DOUBLE,
     PRIMARY KEY (submission_id),
     FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,
     FOREIGN KEY (problem_id) REFERENCES coding_problem(problem_id) ON DELETE CASCADE
@@ -206,9 +206,10 @@ VALUES
     (18, 3), (18, 6), (18, 9), -- Problem 18 associated with 'Arrays', 'Hard', 'Amazon'
     (19, 1), (19, 4), (19, 7); -- Problem 19 associated with 'Math', 'Easy', 'Google' 
 
+-- Insert blogs for admin
 INSERT INTO thread (thread_id, title, content, created_at, user_created)
 VALUES
-    (1, 'Thread Title 1', 'Content of thread 1', '2023-10-22 10:00:00', 1), /* Currently all blogs are from admin */
+    (1, 'Thread Title 1', 'Content of thread 1', '2023-10-22 10:00:00', 1), 
     (2, 'Thread Title 2', 'Content of thread 2', '2023-10-22 10:30:00', 1),
     (3, 'Thread Title 3', 'Content of thread 3', '2023-10-22 11:00:00', 1),
     (4, 'Thread Title 4', 'Content of thread 4', '2023-10-22 11:30:00', 1),

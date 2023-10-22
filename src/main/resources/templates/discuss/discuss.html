@@ -28,8 +28,7 @@
             <!-- content -->
             <button id="openDialog"
                 style="background-color: rgba(159, 30, 182,0.5); color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;margin-left: 87%;"
-                onclick="openDialog()"
-                class="flex">
+                onclick="openDialog()" class="flex">
                 <svg xmlns="http://www.w3.org/2000/svg"
                     style="width: 24px; height: 24px; vertical-align: middle; margin-right: 8px;" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
@@ -128,31 +127,32 @@
     </main>
 
     <script>
-        // Sample data for Recently Posted and Your Posted Blogs
         let recentlyPostedData = [];
-        let yourPostedBlogsData = [];
+        let userBlogsData = [];
+
         async function fetchData() {
-                const authToken = localStorage.getItem("preplane-authHeader");
+            const authToken = localStorage.getItem("preplane-authHeader");
+            const userData = localStorage.getItem("preplane-currentSession");
 
-                const response = await fetch('/api/threads/', {
-                    method: 'GET',
-                    headers: {
-                        "Authorization": authToken,
-                        'Content-Type': 'application/json'
-                    },
-                });
-                recentlyPostedData = await response.json();
-                const responseNew = await fetch('/api/threads/user/1', { /* Currently fetching only the blogs of User{1} will be changed to our own user */
-                    method: 'GET',
-                    headers: {
-                        "Authorization": authToken,
-                        'Content-Type': 'application/json'
-                    },
-                });
-                yourPostedBlogsData = await responseNew.json();
+            const response = await fetch('/api/threads/', {
+                method: 'GET',
+                headers: {
+                    "Authorization": authToken,
+                    'Content-Type': 'application/json'
+                },
+            });
+            recentlyPostedData = await response.json();
+            const responseNew = await fetch(`/api/threads/user/${userData.id}`, {
+                method: 'GET',
+                headers: {
+                    "Authorization": authToken,
+                    'Content-Type': 'application/json'
+                },
+            });
+            userBlogsData = await responseNew.json();
 
-                populateData();
-            }
+            populateData();
+        }
 
         // Function to populate Recently Posted and Your Posted Blogs
         function populateData() {
@@ -176,7 +176,7 @@
                 recentlyPostedContainer.appendChild(postItem);
             });
 
-            yourPostedBlogsData.forEach((item) => {
+            userBlogsData.forEach((item) => {
                 const blogItem = document.createElement("li");
                 blogItem.innerHTML = `
                 <li class="flex justify-between py-3 text-gray-700 border-b">

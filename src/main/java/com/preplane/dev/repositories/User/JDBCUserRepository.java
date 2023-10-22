@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.preplane.dev.assets.SQLResult;
 import com.preplane.dev.models.User;
 import com.preplane.dev.rowMappers.CountMapper;
-import com.preplane.dev.rowMappers.User.UserRowMapper;
+import com.preplane.dev.rowMappers.UserRowMapper;
 
 import org.springframework.jdbc.core.RowMapper;
 

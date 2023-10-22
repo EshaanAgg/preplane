@@ -4,6 +4,8 @@ This repository contains all the entities represented as a class in Java so that
 
 ### List of Models
 
-- [] User
-- [] Problem
-- [] Thread
+- [x] User
+- [x] Problem
+- [x] Thread
+- [x] Tag
+- [x] Coding Submission

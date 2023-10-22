@@ -3,7 +3,7 @@ package com.preplane.dev.repositories.Problem;
 import com.preplane.dev.assets.SQLResult;
 import com.preplane.dev.models.Problem;
 import com.preplane.dev.models.Tag;
-import com.preplane.dev.rowMappers.Tag.TagRowMapper;
+import com.preplane.dev.rowMappers.TagRowMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

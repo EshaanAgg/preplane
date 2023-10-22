@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.preplane.dev.assets.SQLResult;
 import com.preplane.dev.models.Tag;
-import com.preplane.dev.rowMappers.Tag.TagRowMapper;
+import com.preplane.dev.rowMappers.TagRowMapper;
 
 @Repository
 public class JDBCTagRepository implements TagRepository {
