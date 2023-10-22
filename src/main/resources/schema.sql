@@ -214,3 +214,30 @@ VALUES
     (3, 'Thread Title 3', 'Content of thread 3', '2023-10-22 11:00:00', 1),
     (4, 'Thread Title 4', 'Content of thread 4', '2023-10-22 11:30:00', 1),
     (5, 'Thread Title 5', 'Content of thread 5', '2023-10-22 12:00:00', 1);
+
+-- Create a procedure to insert code submissions for a user
+DELIMITER //
+CREATE PROCEDURE InsertSubmissions()
+BEGIN
+    DECLARE i INT DEFAULT 0;
+    
+    WHILE i < 100 DO
+        SET @problem_id = FLOOR(1 + (RAND() * 18));        
+        SET @submission_time = NOW() - INTERVAL FLOOR(1 + (RAND() * 30)) DAY;
+        SET @compiler_verdict = ELT(1 + FLOOR(RAND() * 6), 'AC', 'WA', 'MLE', 'TLE', 'CE', 'IN_QUEUE');
+        SET @code = CONCAT('Sample code for problem ', @problem_id);
+        SET @execution_time = RAND() * 5.0;
+        SET @execution_memory = 32 + (RAND() * 480);
+
+        -- Insert the submission into the coding_submission table
+        INSERT INTO coding_submission (problem_id, user_id, submission_time, compiler_verdict, code, execution_time, execution_memory)
+        VALUES (@problem_id, 1, @submission_time, @compiler_verdict, @code, @execution_time, @execution_memory);
+        
+        SET i = i + 1;
+    END WHILE;
+END;
+//
+DELIMITER ;
+
+-- Call the stored procedure to insert submissions
+CALL InsertSubmissions();

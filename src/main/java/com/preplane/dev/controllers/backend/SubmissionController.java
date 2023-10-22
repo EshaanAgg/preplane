@@ -37,7 +37,7 @@ public class SubmissionController {
 
         try {
             var response = codeSubmissionRepository
-                    .updateVerdict(verdict.submissionId, verdict.verict, verdict.executionTime,
+                    .updateVerdict(verdict.submissionId, verdict.verdict, verdict.executionTime,
                             verdict.executionMemory);
             return new ResponseEntity<>(response.response, HttpStatus.OK);
         } catch (Exception e) {

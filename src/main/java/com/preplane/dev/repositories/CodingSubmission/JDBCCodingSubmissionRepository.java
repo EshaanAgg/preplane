@@ -48,7 +48,7 @@ public class JDBCCodingSubmissionRepository implements CodingSubmissionRepositor
         var result = new SQLResult<Integer>();
 
         try {
-            int rowCount = template.update(sqlQuery, submissionId, verdict, time, memory);
+            int rowCount = template.update(sqlQuery, verdict, time, memory, submissionId);
             result.response = rowCount;
 
             if (rowCount == 1) {
