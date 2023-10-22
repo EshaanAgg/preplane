@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Preplane | Premium</title>
+    <!-- Fonts and icons -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+    <!-- Font Awesome Icons -->
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <!-- Nucleo Icons -->
+    <link href="css/style.css" rel="stylesheet" />
+    <!-- Main Styling -->
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+
+</head>
+
+<body class="m-0 font-sans antialiased font-normal text-base leading-default bg-gray-50 text-slate-500">
+
+  <div th:replace="fragments/sidenav :: sidenav">This content will be replaced by the `sidenav` fragment</div>
+
+  <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
+    <!-- Navbar -->
+    <div th:replace="fragments/navbar :: navbar" th:with="name=${title}">This content will be replaced by the
+      `navbar`
+      fragment</div>
+
+    <div class="w-full px-6 py-6 mx-auto">
+      <!-- content -->
+      <div class="flex justify-center items-center space-x-6">
+        <!-- Golden Card -->
+        <div class="p-6 rounded-lg border shadow-xl w-85 text-center"
+        style="background-image: radial-gradient(circle, #fde68a 50%, transparent 120%); margin: 30px; border-color: #fde68a; width: 20rem;transform: 0.2s;" onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';">
+            <h2 class="text-2xl font-semibold text-gray-700">Golden Plan</h2>
+            <p class="text-3xl font-bold text-gray-700 my-4">$29<span class="text-lg">/month</span></p>
+            <p class="text-gray-700">Access to premium content</p>
+            <p class="text-gray-700">Unlimited practice</p>
+            <p class="text-gray-700">24/7 support</p>
+            <button class="bg-white text-gold py-2 px-4 mt-4 rounded-full">Choose Plan</button>
+        </div>
+        <!-- Silver Card -->
+        <div class="p-6 rounded-lg shadow-lg w-85 text-center"
+        style="background-image: radial-gradient(circle, #e9ecef 50%, transparent 120%); margin: 30px; border-color: #e9ecef; width: 20rem;transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';">
+            <h2 class="text-2xl font-semibold text-gray-700">Silver Plan</h2>
+            <p class="text-3xl font-bold text-gray-700 my-4">$19<span class="text-lg">/month</span></p>
+            <p class="text-gray-700">Access to premium content</p>
+            <p class="text-gray-700">Limited practice</p>
+            <p class="text-gray-700">Email support</p>
+            <button class="bg-white text-black py-2 px-4 mt-4 rounded-full">Choose Plan</button>
+        </div>
+    </div>
+      
+
+    <div class="mt-12">
+        <h3 class="text-2xl text-gray-700 font-semibold text-center">Testimonials</h3>
+        <div class="flex space-y-4 items-center mt-6">
+          <!-- Testimonial Card 1 -->
+          <div class="bg-white p-6 rounded-lg shadow-xl w-64" style="margin: 10px;">
+              <p class="text-gray-700">"I love the Golden Plan! It has helped me improve my skills immensely."</p>
+              <p class="text-gray-700 font-semibold mt-2">- John Doe</p>
+          </div>
+  
+          <!-- Testimonial Card 2 -->
+          <div class="bg-white p-6 rounded-lg shadow-xl w-64 mt-6" style="margin-left: 10px; margin-right: 10px; margin-bottom: 10px; margin-top: 6rem;">
+              <p class="text-gray-700">"The Silver Plan was perfect for my budget, and it still offers valuable resources."</p>
+              <p class="text-gray-700 font-semibold mt-2">- Jane Smith</p>
+          </div>
+  
+          <!-- Testimonial Card 3 -->
+          <div class="bg-white p-6 rounded-lg shadow-xl w-60" style="margin: 10px;">
+              <p class="text-gray-700">"The premium plan is worth every penny! It provides me with the best resources and support I could ever ask for."</p>
+              <p class="text-gray-700 font-semibold mt-2">- Sarah Johnson</p>
+          </div>
+      </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+  </main>
+  
+</body>
+<!-- plugin for scrollbar  -->
+<script src="../assets/js/plugins/perfect-scrollbar.min.js" async></script>
+<!-- github button -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<!-- main script file  -->
+<script src="../assets/js/soft-ui-dashboard-tailwind.js?v=1.0.5" async></script>
+
+</html>

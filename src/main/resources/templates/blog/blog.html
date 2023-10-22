@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Preplane | Blog</title>
+    <!-- Fonts and icons -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+    <!-- Font Awesome Icons -->
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <!-- Nucleo Icons -->
+    <link href="css/style.css" rel="stylesheet" />
+    <!-- Main Styling -->
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+
+</head>
+
+<body class="m-0 font-sans antialiased font-normal text-base leading-default bg-gray-50 text-slate-500">
+    <div th:replace="fragments/sidenav :: sidenav">This content will be replaced by the `sidenav` fragment</div>
+        <!-- Blog Content -->
+        <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
+            <div th:replace="fragments/navbar :: navbar" th:with="name=${title}">This content will be replaced by the
+                `navbar`
+                fragment</div>
+            <div class="max-w-2xl mx-auto bg-white rounded-md p-4 shadow-lg">
+                <h1 class="text-2xl font-bold" id="blogTitle"></h1>
+                <div class="text-gray-600 text-sm mt-2">
+                    <span class="mr-4" id="authorInfo">Author: Jane Smith</span>
+                    <span class="mr-4" id="dateInfo">Date Added: October 21, 2023</span>
+                </div>
+                <p class="mt-4" id="blogContent"></p>
+                <div class="flex justify-between items-center mt-4">
+                    <div class="flex items-center">
+                        <button class="flex items-center text-green-600 mr-4" id="upvoting">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6V3M12 3c-3.866 0-7 3.134-7 7s3.134 7 7 7 7-3.134 7-7-3.134-7-7-7z" />
+                            </svg>
+                            Upvote
+                        </button>
+                        <button class="flex items-center text-red-600" id="downvoting">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 21v-2M12 21c4.418-0.002 8-3.582 8-7.998 0-4.416-3.582-8-7.998-8-4.415 0-7.997 3.584-7.997 7.998C4.003 17.418 7.585 21 12 21z" />
+                            </svg>
+                            Downvote
+                        </button>
+                    </div>
+                    <div class="flex items-center">
+                        <button class="flex items-center text-gray-600" id="toggleComments">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                            Show Comments
+                        </button>
+                    </div>
+                </div>
+    
+                <!-- Comment Section -->
+                <div class="mt-4 p-4 bg-gray-200 rounded-md hidden" id="commentsSection">
+                    <div id="comments"></div>
+                </div>
+    
+                    <!--submitform-->
+                    <div class="mt-2">
+                        <div class="mt-2">
+                            <textarea id="commentText" placeholder="Your Comment" class="w-full border p-2 rounded"></textarea>
+                        </div>
+                        <button id="submitComment" onclick="submitForm()"
+                            class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Add Comment</button>
+                    </div>
+                
+            </div>
+        </main>
+    
+    
+</body>
+<script>
+    // Blog post object
+    const blogPost = {
+        title: "Problem Solving in Competitive Programming",
+        author: "Jane Smith",
+        date: "October 21, 2023",
+        content: "Competitive programming is a fascinating realm of problem solving, algorithms, and coding. Its not just a sport but a way to enhance your logical thinking, coding skills, and algorithmic abilities. To excel in competitive programming, one must master various data structures and algorithms. These include sorting, searching, dynamic programming, and more. Participating in coding contests is where you apply your knowledge and skills. Contests challenge you to manage your time efficiently and decide which problems to tackle within the given time frame. Effective time management is a skill that competitive programming nurtures.",
+    };
+
+    // Comments array
+    const comments = [
+        {
+            author: "John Doe",
+            text: "Great blog post! Competitive programming has helped me become a better problem solver and coder."
+        },
+        {
+            author: "James T",
+            text: "Great blog post!"
+        }
+    ];
+
+    // Function to populate the blog content
+    function populateBlogContent(blog) {
+        document.getElementById('blogTitle').textContent = blog.title;
+        document.getElementById('authorInfo').textContent = `Author: ${blog.author}`;
+        document.getElementById('dateInfo').textContent = `Date Added: ${blog.date}`;
+        document.getElementById('blogContent').textContent = blog.content;
+    }
+
+    // Function to populate comments
+    function populateComments(commentArray) {
+        const commentsContainer = document.getElementById('comments');
+        commentsContainer.innerHTML = "";
+        commentArray.forEach(comment => {
+            const commentDiv = document.createElement('div');
+            commentDiv.innerHTML = `
+                <div class="text-gray-500" >${comment.author} says:</div>
+                <p class="mt-2">${comment.text}</p>
+            `;
+            commentsContainer.appendChild(commentDiv);
+        });
+    }
+    function submitComment(){
+
+    }
+    function upvoting(){
+
+    }
+    function downvoting(){
+
+    }
+
+    // Populate blog content and comments
+    populateBlogContent(blogPost);
+    populateComments(comments);
+
+    const toggleCommentsButton = document.getElementById('toggleComments');
+    const commentsSection = document.getElementById('commentsSection');
+    const commentForm = document.getElementById('commentForm');
+    const submitCommentButton = document.getElementById('submitComment');
+
+    let isCommentsVisible = false;
+
+    toggleCommentsButton.addEventListener('click', () => {
+        if (isCommentsVisible) {
+            commentsSection.classList.add('hidden');
+            toggleCommentsButton.innerText = 'Show Comments';
+        } else {
+            commentsSection.classList.remove('hidden');
+            toggleCommentsButton.innerText = 'Hide Comments';
+        }
+        isCommentsVisible = !isCommentsVisible;
+    });
+
+    submitCommentButton.addEventListener('click', () => {
+        const commentAuthor = document.getElementById('commentAuthor').value;
+        const commentText = document.getElementById('commentText').value;
+
+        if (commentAuthor && commentText) {
+            const newComment = {
+                author: commentAuthor,
+                text: commentText,
+            };
+
+            comments.push(newComment);
+            populateComments(comments);
+
+            // Clear the input fields
+            document.getElementById('commentAuthor').value = '';
+            document.getElementById('commentText').value = '';
+        }
+    });
+</script>
+
+<!-- plugin for scrollbar  -->
+<script src="../assets/js/plugins/perfect-scrollbar.min.js" async></script>
+<!-- github button -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<!-- main script file  -->
+<script src="../assets/js/soft-ui-dashboard-tailwind.js?v=1.0.5" async></script>
+
+</html>
