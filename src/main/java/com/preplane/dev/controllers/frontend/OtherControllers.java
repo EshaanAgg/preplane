@@ -14,6 +14,14 @@ public class OtherControllers {
     public String problems() {
         return "problems/problems";
     }
+    @GetMapping("/premium")
+    public String premium() {
+        return "premium/premium";
+    }
+    @GetMapping("/blog")
+    public String blog() {
+        return "blog/blog";
+    }
 
     
 }
