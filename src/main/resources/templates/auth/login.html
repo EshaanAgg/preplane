@@ -176,7 +176,7 @@
       else if (data.error) showErrorMessages([data.message])
       else {
         localStorage.setItem("preplane-authHeader", `Bearer ${data.token}`);
-        localStorage.setItem("preplane-curentSession", JSON.stringify(data));
+        localStorage.setItem("preplane-currentSession", JSON.stringify(data));
         window.location.href = "../";
       }
     }).catch((err) => {

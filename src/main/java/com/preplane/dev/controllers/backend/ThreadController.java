@@ -1,4 +1,4 @@
-package com.preplane.dev.controllers.backend.Thread;
+package com.preplane.dev.controllers.backend;
 
 import com.preplane.dev.models.Thread;
 import com.preplane.dev.models.User;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/api/threads")
 public class ThreadController {
@@ -27,7 +26,7 @@ public class ThreadController {
 
     @GetMapping("/")
     public ResponseEntity<List<Thread>> getAllThreads(@RequestParam Optional<Integer> limit,
-                                                      @RequestParam Optional<Integer> offset) {
+            @RequestParam Optional<Integer> offset) {
 
         try {
             int lim = limit.orElse(50);
@@ -35,6 +34,16 @@ public class ThreadController {
 
             var response = threadRepository.findAll(lim, off);
             return new ResponseEntity<>(response.response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Thread>> getThreadsByUserId(@PathVariable("userId") int userId) {
+        try {
+            var response = threadRepository.findByUserId(userId);
+            return new ResponseEntity<>(response.response, response.statusCode);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -67,7 +76,8 @@ public class ThreadController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Thread> updateThread(@PathVariable("id") int id, @RequestBody Thread thread, @AuthenticationPrincipal User loggedInUser) {
+    public ResponseEntity<Thread> updateThread(@PathVariable("id") int id, @RequestBody Thread thread,
+            @AuthenticationPrincipal User loggedInUser) {
         try {
             var existingThreadResponse = threadRepository.findById(id);
             if (existingThreadResponse.statusCode == HttpStatus.OK) {

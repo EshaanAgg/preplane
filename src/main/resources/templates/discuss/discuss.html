@@ -28,8 +28,7 @@
             <!-- content -->
             <button id="openDialog"
                 style="background-color: rgba(159, 30, 182,0.5); color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;margin-left: 87%;"
-                onclick="openDialog()"
-                class="flex">
+                onclick="openDialog()" class="flex">
                 <svg xmlns="http://www.w3.org/2000/svg"
                     style="width: 24px; height: 24px; vertical-align: middle; margin-right: 8px;" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
@@ -128,51 +127,32 @@
     </main>
 
     <script>
-        // Sample data for Recently Posted and Your Posted Blogs
-        const recentlyPostedData = [
-            {
-                title: "Your Blog 3",
-                user: "user9235oR",
-                createdDate: "July 26, 2023 7:54 PM",
-                lastReplyUser: "User1",
-                lastReplyDate: "August 8, 2023 1:24 PM",
-            },
-            {
-                title: "Sample Title 1",
-                user: "User1",
-                createdDate: "August 15, 2023 9:00 AM",
-                lastReplyUser: "User2",
-                lastReplyDate: "August 16, 2023 3:45 PM",
-            },
-            {
-                title: "Sample Title 2",
-                user: "User3",
-                createdDate: "August 10, 2023 3:30 PM",
-                lastReplyUser: "User4",
-                lastReplyDate: "August 12, 2023 11:10 AM",
-            },
-        ];
+        let recentlyPostedData = [];
+        let userBlogsData = [];
 
-        const yourPostedBlogsData = [
-            {
-                title: "Your Blog 3",
-                postedDate: "23 March '23",
-                upvotes: 238,
-                lastCommentBy: "User1",
-            },
-            {
-                title: "Your Blog 1",
-                postedDate: "16 March '23",
-                upvotes: 122,
-                lastCommentBy: "User2",
-            },
-            {
-                title: "Your Blog 2",
-                postedDate: "12 March '23",
-                upvotes: 98,
-                lastCommentBy: "User5",
-            },
-        ];
+        async function fetchData() {
+            const authToken = localStorage.getItem("preplane-authHeader");
+            const userData = localStorage.getItem("preplane-currentSession");
+
+            const response = await fetch('/api/threads/', {
+                method: 'GET',
+                headers: {
+                    "Authorization": authToken,
+                    'Content-Type': 'application/json'
+                },
+            });
+            recentlyPostedData = await response.json();
+            const responseNew = await fetch(`/api/threads/user/${userData.id}`, {
+                method: 'GET',
+                headers: {
+                    "Authorization": authToken,
+                    'Content-Type': 'application/json'
+                },
+            });
+            userBlogsData = await responseNew.json();
+
+            populateData();
+        }
 
         // Function to populate Recently Posted and Your Posted Blogs
         function populateData() {
@@ -185,28 +165,28 @@
                 <li class="flex items-center justify-between p-2 text-gray-700 border-b">
                     <div>
                         <h6 class="text-xl font-semibold text-gray-800">${item.title}</h6>
-                        <p class="text-sm text-gray-500">${item.user} - ${item.createdDate}</p>
+                        <p class="text-sm text-gray-500">${item.user} - ${item.createdAt}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-500">Last Reply by ${item.lastReplyUser}</p>
-                        <p class="text-sm text-gray-500">${item.lastReplyDate}</p>
+                        <p class="text-sm text-gray-500">Last Reply by </p>
+                        <p class="text-sm text-gray-500">Last reply time</p>
                     </div>
                 </li>
             `;
                 recentlyPostedContainer.appendChild(postItem);
             });
 
-            yourPostedBlogsData.forEach((item) => {
+            userBlogsData.forEach((item) => {
                 const blogItem = document.createElement("li");
                 blogItem.innerHTML = `
                 <li class="flex justify-between py-3 text-gray-700 border-b">
                     <div>
                         <h6 class="text-lg font-semibold text-gray-800">${item.title}</h6>
-                        <p class="text-sm text-gray-500">${item.postedDate}</p>
+                        <p class="text-sm text-gray-500">${item.createdAt}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-500">${item.upvotes} Upvotes</p>
-                        <p class="text-sm text-gray-500">Last Comment by ${item.lastCommentBy}</p>
+                        <p class="text-sm text-gray-500">Upvotes</p>
+                        <p class="text-sm text-gray-500">Last Comment by Last Comment By</p>
                     </div>
                 </li>
             `;
@@ -215,7 +195,7 @@
         }
 
         // Call the function to populate the data
-        populateData();
+        fetchData();
     </script>
     <script>
         function openDialog() {

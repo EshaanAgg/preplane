@@ -2,21 +2,24 @@ package com.preplane.dev.models;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 public class Problem {
     private int problemId;
     private String title;
     private String statement;
-    private int author;//Foreign Key from Users
+    private int author;// Foreign Key from Users
     private String authorsSolution;
     private String testcases;
     private double timeLimit;
     private double memoryLimit;
+    private List<Tag> tags;
 
     public Problem() {
     }
 
-    public Problem(String title, String statement, int author, String authorsSolution, String testcases, double timeLimit, double memoryLimit) {
+    public Problem(String title, String statement, int author, String authorsSolution, String testcases,
+            double timeLimit, double memoryLimit) {
         this.title = title;
         this.statement = statement;
         this.author = author;
@@ -90,6 +93,14 @@ public class Problem {
         this.memoryLimit = memoryLimit;
     }
 
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public List<Tag> getTags() {
+        return this.tags;
+    }
+
     public Map<String, Object> toMap() {
         Map<String, Object> parameters = new HashMap<>();
 
@@ -101,6 +112,7 @@ public class Problem {
         parameters.put("testcases", this.testcases);
         parameters.put("timeLimit", this.timeLimit);
         parameters.put("memoryLimit", this.memoryLimit);
+        parameters.put("tags", this.tags);
 
         return parameters;
     }
@@ -115,7 +127,8 @@ public class Problem {
                 "  authorsSolution = '" + this.authorsSolution + "\',\n" +
                 "  testcases = '" + this.testcases + "\',\n" +
                 "  timeLimit = " + this.timeLimit + ",\n" +
-                "  memoryLimit = " + this.memoryLimit + "\n" +
+                "  memoryLimit = " + this.memoryLimit + ",\n" +
+                "  tags = " + this.tags + "\n" +
                 "}";
     }
 }

@@ -1,4 +1,4 @@
-package com.preplane.dev.rowMappers.User;
+package com.preplane.dev.rowMappers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
