@@ -1,9 +1,12 @@
 package com.preplane.dev.repositories.Problem;
 
 import com.preplane.dev.assets.SQLResult;
+import com.preplane.dev.models.CodingSubmission;
 import com.preplane.dev.models.Problem;
 import com.preplane.dev.models.Tag;
+import com.preplane.dev.rowMappers.CodingSubmissionRowMapper;
 import com.preplane.dev.rowMappers.TagRowMapper;
+import com.preplane.dev.security.Auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -108,11 +111,23 @@ public class JDBCProblemRepository implements ProblemRepository {
         try {
             List<Problem> problems = template.query(sqlQuery, new ProblemRowMapper(), limit, offset);
             for (var problem : problems) {
+
                 var tagResponse = this.findTagsForProblem(problem.getProblemId());
                 if (tagResponse.statusCode != HttpStatus.OK) {
                     problem.setTags(null);
+                    System.out.println("[ERROR] Fetching the tags failed for a problem");
+                    System.out.println(tagResponse.message);
                 } else {
                     problem.setTags(tagResponse.response);
+                }
+
+                var submissionResponse = this.findSubmissionsForProblem(problem.getProblemId());
+                if (submissionResponse.statusCode != HttpStatus.OK) {
+                    problem.setSubmissions(null);
+                    System.out.println("[ERROR] Fetching the submissions failed for a problem");
+                    System.out.println(submissionResponse.message);
+                } else {
+                    problem.setSubmissions(submissionResponse.response);
                 }
             }
 
@@ -129,28 +144,6 @@ public class JDBCProblemRepository implements ProblemRepository {
             result.message = "There was an error in fetching the problems. Error Message: " + e.getMessage();
             result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
         }
-        return result;
-    }
-
-
-    @Transactional
-    // Made for internal use
-    // Used to find all the tags for a particular problemId
-    public SQLResult<List<Tag>> findTagsForProblem(int problemId) {
-        String sqlQuery = "SELECT * FROM tags WHERE tag_id IN (SELECT tag_id FROM coding_tag WHERE problem_id = ?)";
-        var result = new SQLResult<List<Tag>>();
-
-        try {
-            List<Tag> tags = template.query(sqlQuery, new TagRowMapper(), problemId);
-            result.message = "Fetched tags successfully";
-            result.response = tags;
-            result.statusCode = HttpStatus.OK;
-        } catch (Exception e) {
-            result.message = "There was an error in fetching the tags for this problem. Error Message: "
-                    + e.getMessage();
-            result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-
         return result;
     }
 
@@ -179,6 +172,49 @@ public class JDBCProblemRepository implements ProblemRepository {
         return result;
     }
 
+    // Made for internal use
+    // Finds all the tags for a particular problem
+    @Transactional
+    private SQLResult<List<Tag>> findTagsForProblem(int problemId) {
+        String sqlQuery = "SELECT * FROM tags WHERE tag_id IN (SELECT tag_id FROM coding_tag WHERE problem_id = ?)";
+        var result = new SQLResult<List<Tag>>();
+
+        try {
+            List<Tag> tags = template.query(sqlQuery, new TagRowMapper(), problemId);
+            result.message = "Fetched tags successfully";
+            result.response = tags;
+            result.statusCode = HttpStatus.OK;
+        } catch (Exception e) {
+            result.message = "There was an error in fetching the tags for this problem. Error Message: "
+                    + e.getMessage();
+            result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return result;
+    }
+
+    // Made for internal use
+    // Finds all the submissions made by the logged in user for a particular problem
+    // The submissions are sorted as latest first
+    @Transactional
+    private SQLResult<List<CodingSubmission>> findSubmissionsForProblem(int problemId) {
+        String sqlQuery = "SELECT * FROM coding_submission WHERE problem_id = ? AND user_id = ? ORDER BY submission_time DESC";
+        var result = new SQLResult<List<CodingSubmission>>();
+
+        try {
+            List<CodingSubmission> submissions = template.query(sqlQuery, new CodingSubmissionRowMapper(), problemId,
+                    Auth.getCurrentUserId());
+            result.message = "Fetched the submissions successfully";
+            result.response = submissions;
+            result.statusCode = HttpStatus.OK;
+        } catch (Exception e) {
+            result.message = "There was an error in fetching the submissions for this problem. Error Message: "
+                    + e.getMessage();
+            result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return result;
+    }
 }
 
 class ProblemRowMapper implements RowMapper<Problem> {
@@ -186,6 +222,7 @@ class ProblemRowMapper implements RowMapper<Problem> {
     @Transactional
     public Problem mapRow(ResultSet rs, int rowNum) throws SQLException {
         Problem problem = new Problem();
+
         problem.setProblemId(rs.getInt("problem_id"));
         problem.setTitle(rs.getString("title"));
         problem.setStatement(rs.getString("statement"));

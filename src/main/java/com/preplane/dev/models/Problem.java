@@ -14,6 +14,7 @@ public class Problem {
     private double timeLimit;
     private double memoryLimit;
     private List<Tag> tags;
+    private List<CodingSubmission> submissions;
 
     public Problem() {
     }
@@ -101,6 +102,14 @@ public class Problem {
         return this.tags;
     }
 
+    public List<CodingSubmission> getSubmissions() {
+        return this.submissions;
+    }
+
+    public void setSubmissions(List<CodingSubmission> submissions) {
+        this.submissions = submissions;
+    }
+
     public Map<String, Object> toMap() {
         Map<String, Object> parameters = new HashMap<>();
 
@@ -113,6 +122,7 @@ public class Problem {
         parameters.put("timeLimit", this.timeLimit);
         parameters.put("memoryLimit", this.memoryLimit);
         parameters.put("tags", this.tags);
+        parameters.put("submissions", this.submissions);
 
         return parameters;
     }
@@ -128,6 +138,7 @@ public class Problem {
                 "  testcases = '" + this.testcases + "\',\n" +
                 "  timeLimit = " + this.timeLimit + ",\n" +
                 "  memoryLimit = " + this.memoryLimit + ",\n" +
+                "  submissions = " + this.submissions + ",\n" +
                 "  tags = " + this.tags + "\n" +
                 "}";
     }

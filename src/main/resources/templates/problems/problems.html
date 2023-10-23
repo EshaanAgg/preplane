@@ -46,29 +46,26 @@
                                                 <select id="difficulty"
                                                     class="p-2 border h-12 rounded border-gradient ml-2 mr-2"
                                                     style="border: 2px solid rgba(159, 30, 182,0.5); width: 150px;">
-                                                    <option value="" disabled selected>Difficulty</option>
+                                                    <option value="" selected>All Difficulties</option>
                                                     <option value="easy">Easy</option>
                                                     <option value="medium">Medium</option>
                                                     <option value="hard">Hard</option>
                                                 </select>
+
                                                 <select id="status"
                                                     class="p-2 border h-12 rounded border-gradient ml-2 mr-2"
                                                     style="border: 2px solid rgba(159, 30, 182,0.5); width: 150px;">
-                                                    <option value="" disabled selected>Status</option>
-                                                    <option value="ToDo">ToDo</option>
-                                                    <option value="Solved">Solved</option>
-                                                    <option value="Attempted">Attempted</option>
-                                                    <!-- Add more options as needed -->
+                                                    <option value="" selected>Status</option>
+                                                    <option value="todo">Todo</option>
+                                                    <option value="solved">Solved</option>
+                                                    <option value="attempted">Attempted</option>
                                                 </select>
+
                                                 <select id="tags"
                                                     class="p-2 border h-12 rounded border-gradient ml-2 mr-4"
                                                     style="border: 2px solid rgba(159, 30, 182,0.5); width: 150px;">
-                                                    <option value="" disabled selected>Tags</option>
-                                                    <option value="Array">Array</option>
-                                                    <option value="String">String</option>
-                                                    <option value="LinkedList">Linked List</option>
-                                                    <!-- Add more options as needed -->
                                                 </select>
+
                                                 <div class="flex space-x-2 mb-4">
                                                     <div class="relative w-full xl:w-full flex items-center border border-gradient"
                                                         style="width:300px;">
@@ -173,12 +170,46 @@
         </div>
 
         <script>
+            const allTopics = new Set();
+
             let problemData = [];
+            let filteredProblemData = [];
             let tagsProgressData = [];
+
+            const difficultySelect = document.getElementById('difficulty');
+            const statusSelect = document.getElementById('status');
+            const topicSelect = document.getElementById('tags');
+
+            // Utility function to get the date in a human readable format
+            function timeAgo(date) {
+                const now = new Date();
+                const diff = now - date;
+                const seconds = Math.floor(diff / 1000);
+                const minutes = Math.floor(seconds / 60);
+                const hours = Math.floor(minutes / 60);
+                const days = Math.floor(hours / 24);
+
+                if (days > 1) {
+                    return days + " days ago";
+                } else if (days === 1) {
+                    return "1 day ago";
+                } else if (hours > 1) {
+                    return hours + " hours ago";
+                } else if (hours === 1) {
+                    return "1 hour ago";
+                } else if (minutes > 1) {
+                    return minutes + " minutes ago";
+                } else if (minutes === 1) {
+                    return "1 minute ago";
+                } else {
+                    return "just now";
+                }
+            }
 
             async function fetchData() {
                 const authToken = localStorage.getItem("preplane-authHeader");
 
+                // Make the API call and store the data related to the problems
                 const response = await fetch('/api/problems/', {
                     method: 'GET',
                     headers: {
@@ -187,15 +218,51 @@
                     },
                 });
                 problemData = await response.json();
+                filteredProblemData = problemData;
+
+                // Calculate all the data related to the tags progress data for display
+                problemData.forEach((problem) => problem.tags.forEach((tag) => {
+                    if (tag.type == "TOPIC") allTopics.add(tag.name);
+                }))
+
+                allTopics.forEach((topic) => {
+                    tagsProgressData.push({
+                        tag: topic,
+                        currentlySolved: 0,
+                        totalProblems: 0,
+                        progress: 0
+                    })
+                })
+
+                problemData.forEach((problem) => {
+                    let correctCount = problem.submissions.filter((sub) => sub.compilerVerdict == "AC").length;
+                    let totalCount = problem.submissions.length;
+
+                    problem.tags.forEach((tag) => {
+                        if (tag.type == "TOPIC") {
+                            for (let i = 0; i < tagsProgressData.length; i++)
+                                if (tagsProgressData[i].tag == tag.name) {
+                                    tagsProgressData[i].currentlySolved += correctCount;
+                                    tagsProgressData[i].totalProblems += totalCount;
+                                }
+                        }
+                    })
+                })
+
+                for (let i = 0; i < tagsProgressData.length; i++)
+                    tagsProgressData[i].progress = Math.round((100 * tagsProgressData[i].currentlySolved) / tagsProgressData[i].totalProblems);
 
                 populateData();
             }
 
-            async function populateData() {
+            function populateData() {
+                topicSelect.innerHTML = '<option value="" selected>All Tags</option>'
+                allTopics.forEach((topic) => topicSelect.innerHTML += `<option value=${topic}>${topic}</option>`)
 
-                // Populate Problems Table
                 const problemsTableBody = document.getElementById("problemsTableBody");
-                problemData.forEach((problem) => {
+                problemsTableBody.innerHTML = "";
+
+                filteredProblemData.slice(0, Math.min(10, problemData.length)).forEach((problem) => {
                     problemsTableBody.innerHTML += `
             <tr>
               <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
@@ -207,7 +274,7 @@
                   </div>
                   <div class="flex flex-col justify-center">
                     <h6 class="mb-0 text-sm leading-normal">${problem.title}</h6>
-                    <p class="mb-0 text-xs leading-tight text-slate-400">SUCESS RATE TO BE ADDED</p>
+                    <p class="mb-0 text-xs leading-tight text-slate-400">${problem.statement.slice(0, 50)}...</p>
                   </div>
                 </div>
               </td>
@@ -228,7 +295,12 @@
               </td >
               <td
                 class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                <span class="text-xs font-semibold leading-tight text-slate-400">LAST SUBMISSION DATA</span>
+                <span class="text-xs font-semibold leading-tight text-slate-400">
+                    ${problem.submissions.length == 0
+                            ? 'Not attempted'
+                            : `${problem.submissions[0].compilerVerdict}: ${timeAgo(new Date(problem.submissions[0].submissionTime))}`
+                        }    
+                </span>
               </td>
               <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                 <button
@@ -242,9 +314,11 @@
 
                 // Populate Tags Progress Table
                 const tagsProgressTableBody = document.getElementById("tagsProgressTableBody");
+                tagsProgressTableBody.innerHTML = "";
+
                 tagsProgressData.forEach((tagProgress) => {
                     tagsProgressTableBody.innerHTML += `
-                    < tr >
+            <tr>
               <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                 <div class="flex px-2">
                   <div>
@@ -269,8 +343,8 @@
                   <span class="mr-2 text-xs font-semibold leading-tight">${tagProgress.progress}%</span>
                   <div>
                     <div class="text-xs h-0.75 w-30 m-0 flex overflow-visible rounded-lg bg-gray-200">
-                      <div
-                        class="duration-600 ease-soft bg-gradient-to-tl from-blue-600 to-cyan-400 -mt-0.38 -ml-px flex h-1.5 w-3/5 flex-col justify-center overflow-hidden whitespace-nowrap rounded bg-fuchsia-300 text-center text-white transition-all"
+                      <div id="progress_bar_${tagProgress.tag}"
+                        class="duration-600 ease-soft bg-gradient-to-tl from-blue-600 to-cyan-400 -mt-0.38 -ml-px flex h-1.5 flex-col justify-center overflow-hidden whitespace-nowrap rounded bg-fuchsia-300 text-center text-white transition-all"
                         role="progressbar" aria-valuenow="${tagProgress.progress}" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
@@ -283,19 +357,60 @@
               </td>
             </tr >
           `;
+
+                    // Update the progress bar widths
+                    document.getElementById(`progress_bar_${tagProgress.tag}`).style.width = `${tagProgress.progress}%`;
                 });
             }
 
+            function filterProblems() {
+                // Filtering by difficulty
+                const selectedDifficulty = difficultySelect.value;
+                if (selectedDifficulty !== '')
+                    filteredProblemData = problemData.filter(
+                        problem => problem.tags.some(
+                            (tag) => tag.type == "DIFFICULTY" && tag.name.toLowerCase() === selectedDifficulty
+                        )
+                    );
+                else filteredProblemData = problemData;
+
+                // Filtering by status
+                const selectedStatus = statusSelect.value;
+                if (selectedStatus == 'todo')
+                    filteredProblemData = filteredProblemData.filter(
+                        (problem) => problem.submissions.length == 0
+                    )
+                else if (selectedStatus == 'solved')
+                    filteredProblemData = filteredProblemData.filter(
+                        (problem) => problem.submissions.some(
+                            (submission) => submission.compilerVerdict == "AC"
+                        )
+                    )
+                else if (selectedStatus == 'attempted')
+                    filteredProblemData = filteredProblemData.filter(
+                        (problem) =>
+                            !problem.submissions.some((submission) => submission.compilerVerdict == "AC")
+                            &&
+                            problem.submissions.length != 0
+                    )
+
+
+                // Filter by topic
+                const selectedTopic = topicSelect.value;
+                if (selectedTopic != '')
+                    filteredProblemData = filteredProblemData.filter((problem) =>
+                        problem.tags.some((tag) => tag.type == "TOPIC" && tag.name == selectedTopic)
+                    )
+
+                populateData();
+            }
+
+            difficultySelect.addEventListener('change', filterProblems);
+            statusSelect.addEventListener('change', filterProblems);
+            topicSelect.addEventListener('change', filterProblems);
+
             fetchData();
         </script>
-
-        <!-- plugin for scrollbar -->
-        <script src="../assets/js/plugins/perfect-scrollbar.min.js" async></script>
-        <!-- github button -->
-        <script async defer src="https://buttons.github.io/buttons.js"></script>
-        <!-- main script file  -->
-        <script src="../assets/js/soft-ui-dashboard-tailwind.js?v=1.0.5" async></script>
-
 </body>
 
 </html>
