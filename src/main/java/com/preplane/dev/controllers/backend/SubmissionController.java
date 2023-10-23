@@ -19,6 +19,12 @@ public class SubmissionController {
     @Autowired
     private JDBCCodingSubmissionRepository codeSubmissionRepository;
 
+    @GetMapping("/user/{userId}/problem/{problemId}/submissions")
+    public ResponseEntity<?> getSubmissionsByUserAndProblem(@PathVariable("userId") int userId, @PathVariable("problemId") int problemId) {
+    var response = codeSubmissionRepository.findSubmissionsByUserAndProblem(userId, problemId);
+    return new ResponseEntity<>(response.response, response.statusCode);
+}
+
     @PutMapping("/")
     public ResponseEntity<?> submitCode(@Valid @RequestBody CodeSubmission submission) {
 

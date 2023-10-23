@@ -1,5 +1,7 @@
 package com.preplane.dev.repositories.CodingSubmission;
 
+import java.util.List;
+
 import com.preplane.dev.assets.SQLResult;
 import com.preplane.dev.models.CodingSubmission;
 
@@ -11,4 +13,7 @@ public interface CodingSubmissionRepository {
     // Used to update the verdict of a submission after the code has been submitted
     // and tested against the supplied test cases
     SQLResult<Integer> updateVerdict(int submissionId, String verdict, double time, double memory);
+
+    SQLResult<List<CodingSubmission>> findSubmissionsByUserAndProblem(int userId, int problemId);
 }
+
