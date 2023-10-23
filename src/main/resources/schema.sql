@@ -241,3 +241,7 @@ DELIMITER ;
 
 -- Call the stored procedure to insert submissions
 CALL InsertSubmissions();
+
+INSERT INTO comments (content, updated_at, user_id, thread_id) VALUES ('Comment 1', '2023-10-23 12:00:00', 1, 1);
+INSERT INTO comments (content, updated_at, user_id, thread_id) VALUES ('Comment 2', '2023-10-23 12:15:00', 1, 1);
+INSERT INTO comments (content, updated_at, user_id, thread_id) VALUES ('Comment 3', '2023-10-23 12:30:00', 1, 1);

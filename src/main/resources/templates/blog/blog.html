@@ -83,7 +83,7 @@
 </body>
 <script>
     // Blog post object
-    const blogPost = {
+    let blogPost = {
         title: "Problem Solving in Competitive Programming",
         author: "Jane Smith",
         date: "October 21, 2023",
@@ -91,24 +91,41 @@
     };
 
     // Comments array
-    const comments = [
-        {
-            author: "John Doe",
-            text: "Great blog post! Competitive programming has helped me become a better problem solver and coder."
-        },
-        {
-            author: "James T",
-            text: "Great blog post!"
-        }
-    ];
-
-    // Function to populate the blog content
+    let comments = [];
     function populateBlogContent(blog) {
         document.getElementById('blogTitle').textContent = blog.title;
-        document.getElementById('authorInfo').textContent = `Author: ${blog.author}`;
-        document.getElementById('dateInfo').textContent = `Date Added: ${blog.date}`;
+        document.getElementById('authorInfo').textContent = `Author: ${blog.user_created}`;
+        document.getElementById('dateInfo').textContent = `Date Added: ${blog.created_at}`;
         document.getElementById('blogContent').textContent = blog.content;
     }
+    async function fetchData() {
+            const authToken = localStorage.getItem("preplane-authHeader");
+            const userData = localStorage.getItem("preplane-currentSession");
+            const id = 1;
+            const url = `/api/threads/${id}`;
+            const urlnew=`/api/comments/thread/${id}`;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    "Authorization": authToken,
+                    'Content-Type': 'application/json'
+                },
+            });
+            const responseNew = await fetch(urlnew,{
+                method: 'GET',
+                headers: {
+                    "Authorization": authToken,
+                    'Content-Type': 'application/json'
+                },
+            });
+            blogPost = await response.json();
+            comments = await responseNew.json();
+            console.log(blogPost)
+
+            populateBlogContent(blogPost);
+            populateComments(comments);
+        }
+    // Function to populate the blog content
 
     // Function to populate comments
     function populateComments(commentArray) {
@@ -117,8 +134,8 @@
         commentArray.forEach(comment => {
             const commentDiv = document.createElement('div');
             commentDiv.innerHTML = `
-                <div class="text-gray-500" >${comment.author} says:</div>
-                <p class="mt-2">${comment.text}</p>
+                <div class="text-gray-500" >${comment.user_id} says:</div>
+                <p class="mt-2">${comment.content}</p>
             `;
             commentsContainer.appendChild(commentDiv);
         });
@@ -134,8 +151,8 @@
     }
 
     // Populate blog content and comments
-    populateBlogContent(blogPost);
     populateComments(comments);
+    fetchData();
 
     const toggleCommentsButton = document.getElementById('toggleComments');
     const commentsSection = document.getElementById('commentsSection');

@@ -2,6 +2,7 @@ package com.preplane.dev.controllers.frontend;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class OtherControllers {
@@ -18,8 +19,8 @@ public class OtherControllers {
     public String premium() {
         return "premium/premium";
     }
-    @GetMapping("/blog")
-    public String blog() {
+    @GetMapping("/blog/{id}")
+    public String blog(@PathVariable String id) {
         return "blog/blog";
     }
 
