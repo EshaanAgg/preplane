@@ -45,6 +45,18 @@ public class ProblemController {
         return new ResponseEntity<>(response.response, response.statusCode);
     }
 
+    @GetMapping("/tag/{tag}")
+    public ResponseEntity<List<Problem>> getProblemsByTag(@PathVariable("tag") String tag) {
+    try {
+        // Call a method from your repository to get problems by tag
+        var response = problemRepository.findByTag(tag);
+        return new ResponseEntity<>(response.response, HttpStatus.OK);
+    } catch (Exception e) {
+        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    }
+
+
     @PostMapping("/")
     public ResponseEntity<Problem> createProblem(@RequestBody Problem problem) {
         try {

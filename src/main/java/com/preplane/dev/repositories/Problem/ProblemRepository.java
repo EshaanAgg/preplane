@@ -15,4 +15,6 @@ public interface ProblemRepository {
     SQLResult<Integer> deleteById(int problemId);
 
     SQLResult<List<Problem>> findAll(int limit, int offset);
+
+    SQLResult<List<Problem>> findByTag(String tag);
 }

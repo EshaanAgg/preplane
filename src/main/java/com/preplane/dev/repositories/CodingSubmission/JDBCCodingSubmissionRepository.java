@@ -1,5 +1,7 @@
 package com.preplane.dev.repositories.CodingSubmission;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -8,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.preplane.dev.assets.SQLResult;
 import com.preplane.dev.models.CodingSubmission;
+import com.preplane.dev.rowMappers.CodingSubmissionRowMapper;
 
 @Repository
 public class JDBCCodingSubmissionRepository implements CodingSubmissionRepository {
@@ -40,6 +43,30 @@ public class JDBCCodingSubmissionRepository implements CodingSubmissionRepositor
 
         return result;
     }
+
+    @Override
+    public SQLResult<List<CodingSubmission>> findSubmissionsByUserAndProblem(int userId, int problemId) {
+    String sqlQuery = "SELECT * FROM coding_submission WHERE user_id = ? AND problem_id = ?";
+    var result = new SQLResult<List<CodingSubmission>>();
+
+    try {
+        List<CodingSubmission> submissions = template.query(sqlQuery, new CodingSubmissionRowMapper(), userId, problemId);
+        result.response = submissions;
+
+        if (!submissions.isEmpty()) {
+            result.message = "Submissions fetched successfully.";
+            result.statusCode = HttpStatus.OK;
+        } else {
+            result.message = "There are no submissions available for the user and problem.";
+            result.statusCode = HttpStatus.NO_CONTENT;
+        }
+    } catch (Exception e) {
+        result.message = "There was an error in fetching the submissions. Error Message: " + e.getMessage();
+        result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+    }
+
+    return result;
+}
 
     @Transactional
     @Override

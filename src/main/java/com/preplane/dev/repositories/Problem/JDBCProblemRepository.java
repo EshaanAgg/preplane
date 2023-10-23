@@ -132,6 +132,7 @@ public class JDBCProblemRepository implements ProblemRepository {
         return result;
     }
 
+
     @Transactional
     // Made for internal use
     // Used to find all the tags for a particular problemId
@@ -147,6 +148,31 @@ public class JDBCProblemRepository implements ProblemRepository {
         } catch (Exception e) {
             result.message = "There was an error in fetching the tags for this problem. Error Message: "
                     + e.getMessage();
+            result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public SQLResult<List<Problem>> findByTag(String tag) {
+        String sqlQuery = "SELECT * FROM coding_problem WHERE tag = ?";
+        var result = new SQLResult<List<Problem>>();
+
+        try {
+            List<Problem> problems = template.query(sqlQuery, new ProblemRowMapper(), tag);
+            result.response = problems;
+
+            if (!problems.isEmpty()) {
+                result.message = "Problems fetched by tag successfully.";
+                result.statusCode = HttpStatus.OK;
+            } else {
+                result.message = "No problems available for the specified tag.";
+                result.statusCode = HttpStatus.NO_CONTENT;
+            }
+        } catch (Exception e) {
+            result.message = "Error while fetching problems by tag. Error Message: " + e.getMessage();
             result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
