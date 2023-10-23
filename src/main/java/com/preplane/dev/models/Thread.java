@@ -8,6 +8,7 @@ public class Thread {
     private String content;
     private Date createdAt;
     private int userCreated; // Foreign Key from Users
+    private User creator;
 
     public Thread() {
     }
@@ -16,6 +17,14 @@ public class Thread {
         this.title = title;
         this.content = content;
         this.userCreated = userCreated;
+    }
+
+    public User getCreator() {
+        return this.creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
 
     public int getThreadId() {

@@ -2,6 +2,9 @@ package com.preplane.dev.repositories.Comment;
 
 import com.preplane.dev.assets.SQLResult;
 import com.preplane.dev.models.Comment;
+import com.preplane.dev.models.User;
+import com.preplane.dev.rowMappers.UserRowMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -106,12 +109,52 @@ public class JDBCCommentRepository implements CommentRepository {
             if (!comments.isEmpty()) {
                 result.message = "Comments fetched successfully.";
                 result.statusCode = HttpStatus.OK;
+
+                for (Comment comment : result.response) {
+                    var creatorResponse = getUserById(comment.getUserId());
+                    if (creatorResponse.statusCode != HttpStatus.OK) {
+                        comment.setCreator(null);
+                        System.out.println("[ERROR] Fetching the users failed for a comment");
+                        System.out.println(creatorResponse.message);
+                    } else {
+                        comment.setCreator(creatorResponse.response);
+                    }
+
+                }
+
             } else {
                 result.message = "There are no comments available for this thread.";
                 result.statusCode = HttpStatus.NO_CONTENT;
             }
         } catch (Exception e) {
             result.message = "There was an error in fetching the comments. Error Message: " + e.getMessage();
+            result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return result;
+    }
+
+    // Made for internal use
+    // Used to fetch the user object for the given comment
+    @Transactional
+    private SQLResult<User> getUserById(int userId) {
+        String sqlQuery = "SELECT * FROM user WHERE user_id = ?";
+        var result = new SQLResult<User>();
+
+        try {
+            var response = template.query(sqlQuery, new UserRowMapper(), userId);
+
+            if (!response.isEmpty()) {
+                result.message = "User fetched successfully.";
+                result.statusCode = HttpStatus.OK;
+                result.response = response.get(0);
+            } else {
+                result.message = "There is no user with such the provided ID.";
+                result.statusCode = HttpStatus.BAD_REQUEST;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            result.message = "There was an error in fetching the user. Error Message: " + e.getMessage();
             result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 

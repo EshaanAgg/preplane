@@ -2,6 +2,9 @@ package com.preplane.dev.repositories.Thread;
 
 import com.preplane.dev.assets.SQLResult;
 import com.preplane.dev.models.Thread;
+import com.preplane.dev.models.User;
+import com.preplane.dev.rowMappers.UserRowMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -60,6 +63,15 @@ public class JDBCThreadRepository implements ThreadRepository {
             var response = template.query(sqlQuery, this.threadMapper, threadId);
 
             if (!response.isEmpty()) {
+                var creatorResponse = getUserById(response.get(0).getUserCreated());
+                if (creatorResponse.statusCode != HttpStatus.OK) {
+                    response.get(0).setCreator(null);
+                    System.out.println("[ERROR] Fetching the users failed for a thread");
+                    System.out.println(creatorResponse.message);
+                } else {
+                    response.get(0).setCreator(creatorResponse.response);
+                }
+
                 result.message = "Thread fetched successfully.";
                 result.statusCode = HttpStatus.OK;
                 result.response = response.get(0);
@@ -103,28 +115,27 @@ public class JDBCThreadRepository implements ThreadRepository {
     @Override
     @Transactional
     public SQLResult<List<Thread>> findByUserId(int userId) {
-    String sqlQuery = "SELECT * FROM thread WHERE user_created = ?";
-    var result = new SQLResult<List<Thread>>();
+        String sqlQuery = "SELECT * FROM thread WHERE user_created = ?";
+        var result = new SQLResult<List<Thread>>();
 
-    try {
-        List<Thread> threads = template.query(sqlQuery, new ThreadRowMapper(), userId);
-        result.response = threads;
+        try {
+            List<Thread> threads = template.query(sqlQuery, new ThreadRowMapper(), userId);
+            result.response = threads;
 
-        if (!threads.isEmpty()) {
-            result.message = "Threads fetched successfully.";
-            result.statusCode = HttpStatus.OK;
-        } else {
-            result.message = "No threads available for the specified user.";
-            result.statusCode = HttpStatus.NO_CONTENT;
+            if (!threads.isEmpty()) {
+                result.message = "Threads fetched successfully.";
+                result.statusCode = HttpStatus.OK;
+            } else {
+                result.message = "No threads available for the specified user.";
+                result.statusCode = HttpStatus.NO_CONTENT;
+            }
+        } catch (Exception e) {
+            result.message = "Error fetching threads. Error Message: " + e.getMessage();
+            result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
         }
-    } catch (Exception e) {
-        result.message = "Error fetching threads. Error Message: " + e.getMessage();
-        result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        return result;
     }
-
-    return result;
-}
-
 
     @Override
     @Transactional
@@ -150,6 +161,34 @@ public class JDBCThreadRepository implements ThreadRepository {
 
         return result;
     }
+
+    // Made for internal use
+    // Used to fetch the user object for the given thread
+    @Transactional
+    private SQLResult<User> getUserById(int userId) {
+        String sqlQuery = "SELECT * FROM user WHERE user_id = ?";
+        var result = new SQLResult<User>();
+
+        try {
+            var response = template.query(sqlQuery, new UserRowMapper(), userId);
+
+            if (!response.isEmpty()) {
+                result.message = "User fetched successfully.";
+                result.statusCode = HttpStatus.OK;
+                result.response = response.get(0);
+            } else {
+                result.message = "There is no user with such the provided ID.";
+                result.statusCode = HttpStatus.BAD_REQUEST;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            result.message = "There was an error in fetching the user. Error Message: " + e.getMessage();
+            result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return result;
+    }
+
 }
 
 class ThreadRowMapper implements RowMapper<Thread> {

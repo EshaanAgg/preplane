@@ -6,13 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Preplane | Blog</title>
-    <!-- Fonts and icons -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
-    <!-- Font Awesome Icons -->
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-    <!-- Nucleo Icons -->
-    <link href="css/style.css" rel="stylesheet" />
-    <!-- Main Styling -->
+    <link href="../css/style.css" rel="stylesheet" />
     <script src="https://unpkg.com/@popperjs/core@2"></script>
 
 </head>
@@ -24,7 +20,9 @@
         <div th:replace="fragments/navbar :: navbar" th:with="name=${title}">This content will be replaced by the
             `navbar`
             fragment</div>
+
         <div class="max-w-2xl mx-auto bg-white rounded-md p-4 shadow-lg">
+            <div class="hidden" id="blog_id" th:text="${id}"></div>
             <h1 class="text-2xl font-bold" id="blogTitle"></h1>
             <div class="text-gray-600 text-sm mt-2">
                 <span class="mr-4" id="authorInfo">Author: Jane Smith</span>
@@ -33,7 +31,7 @@
             <p class="mt-4" id="blogContent"></p>
             <div class="flex justify-between items-center mt-4">
                 <div class="flex items-center">
-                    <button class="flex items-center text-green-600 mr-4" id="upvoting">
+                    <button class="flex items-center text-green-600 mr-4" id="upvoteBlogPost">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -41,7 +39,7 @@
                         </svg>
                         Upvote
                     </button>
-                    <button class="flex items-center text-red-600" id="downvoting">
+                    <button class="flex items-center text-red-600" id="downvoteBlogPost">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -66,7 +64,7 @@
                 <div id="comments"></div>
             </div>
 
-            <!--submitform-->
+            <!--Submit Form-->
             <div class="mt-2">
                 <div class="mt-2">
                     <textarea id="commentText" placeholder="Your Comment" class="w-full border p-2 rounded"></textarea>
@@ -81,77 +79,65 @@
 
 </body>
 <script>
-    // Blog post object
-    let blogPost = {
-        title: "Problem Solving in Competitive Programming",
-        author: "Jane Smith",
-        date: "October 21, 2023",
-        content: "Competitive programming is a fascinating realm of problem solving, algorithms, and coding. Its not just a sport but a way to enhance your logical thinking, coding skills, and algorithmic abilities. To excel in competitive programming, one must master various data structures and algorithms. These include sorting, searching, dynamic programming, and more. Participating in coding contests is where you apply your knowledge and skills. Contests challenge you to manage your time efficiently and decide which problems to tackle within the given time frame. Effective time management is a skill that competitive programming nurtures.",
-    };
 
-    // Comments array
-    let comments = [];
+    // Function to populate the blog content
     function populateBlogContent(blog) {
         document.getElementById('blogTitle').textContent = blog.title;
-        document.getElementById('authorInfo').textContent = `Author: ${blog.user_created}`;
-        document.getElementById('dateInfo').textContent = `Date Added: ${blog.created_at}`;
-        document.getElementById('blogContent').textContent = blog.content;
+        document.getElementById('authorInfo').textContent = `Author: ${blog.creator.firstName} ${blog.creator.lastName}`;
+        document.getElementById('dateInfo').textContent = `Date Added: ${blog.createdAt || `Sometime ago...`}`;
+        document.getElementById('blogContent').innerHTML = blog.content;
     }
-    async function fetchData() {
-        const authToken = localStorage.getItem("preplane-authHeader");
-        const userData = localStorage.getItem("preplane-currentSession");
-        const id = 1;
-        const url = `/api/threads/${id}`;
-        const urlnew = `/api/comments/thread/${id}`;
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                "Authorization": authToken,
-                'Content-Type': 'application/json'
-            },
-        });
-        const responseNew = await fetch(urlnew, {
-            method: 'GET',
-            headers: {
-                "Authorization": authToken,
-                'Content-Type': 'application/json'
-            },
-        });
-        blogPost = await response.json();
-        comments = await responseNew.json();
-        console.log(blogPost)
-
-        populateBlogContent(blogPost);
-        populateComments(comments);
-    }
-    // Function to populate the blog content
 
     // Function to populate comments
-    function populateComments(commentArray) {
+    function populateComments(commentsArray) {
         const commentsContainer = document.getElementById('comments');
         commentsContainer.innerHTML = "";
-        commentArray.forEach(comment => {
+        commentsArray.forEach(comment => {
             const commentDiv = document.createElement('div');
             commentDiv.innerHTML = `
-                <div class="text-gray-500" >${comment.user_id} says:</div>
+                <div class="text-gray-500">${comment.creator.firstName} ${comment.creator.lastName}says:</div>
                 <p class="mt-2">${comment.content}</p>
             `;
             commentsContainer.appendChild(commentDiv);
         });
     }
-    function submitComment() {
 
+    async function fetchData() {
+        const authToken = localStorage.getItem("preplane-authHeader");
+
+        const id = document.getElementById("blog_id").textContent;
+        const blogUrl = `/api/threads/${id}`;
+        const commentsUrl = `/api/comments/thread/${id}`;
+
+        const blogResponse = await fetch(blogUrl, {
+            method: 'GET',
+            headers: {
+                "Authorization": authToken,
+                'Content-Type': 'application/json'
+            },
+        });
+
+        const commentResponse = await fetch(commentsUrl, {
+            method: 'GET',
+            headers: {
+                "Authorization": authToken,
+                'Content-Type': 'application/json'
+            },
+        });
+
+        blogPost = await blogResponse.json();
+        comments = await commentResponse.json();
+
+        populateBlogContent(blogPost);
+        populateComments(comments);
     }
-    function upvoting() {
 
-    }
-    function downvoting() {
+    function submitComment() { }
 
-    }
+    function upvoteBlogPost() { }
 
-    // Populate blog content and comments
-    populateComments(comments);
-    fetchData();
+    function downvoteBlogPost() { }
+
 
     const toggleCommentsButton = document.getElementById('toggleComments');
     const commentsSection = document.getElementById('commentsSection');
@@ -181,21 +167,16 @@
                 text: commentText,
             };
 
-            comments.push(newComment);
-            populateComments(comments);
+            // TODO
+            // Need to add logic to add the comment to the backend and then rerender the whole page
 
             // Clear the input fields
             document.getElementById('commentAuthor').value = '';
             document.getElementById('commentText').value = '';
         }
     });
-</script>
 
-<!-- plugin for scrollbar  -->
-<script src="../assets/js/plugins/perfect-scrollbar.min.js" async></script>
-<!-- github button -->
-<script async defer src="https://buttons.github.io/buttons.js"></script>
-<!-- main script file  -->
-<script src="../assets/js/soft-ui-dashboard-tailwind.js?v=1.0.5" async></script>
+    fetchData();
+</script>
 
 </html>

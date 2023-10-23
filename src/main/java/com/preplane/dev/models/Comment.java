@@ -8,6 +8,7 @@ public class Comment {
     private Timestamp updatedAt;
     private int userId;
     private int threadId;
+    private User creator;
 
     public int getCommentId() {
         return commentId;
@@ -15,6 +16,14 @@ public class Comment {
 
     public void setCommentId(int commentId) {
         this.commentId = commentId;
+    }
+
+    public User getCreator() {
+        return this.creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
 
     public String getContent() {
