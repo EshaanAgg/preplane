@@ -18,55 +18,56 @@
     <div th:replace="fragments/navbar :: navbar" th:with="name=${title}">This content will be replaced by the `navbar`
       fragment</div>
 
-      <div class="flex flex-wrap mt-6 px-2 ml-4">
-        <div class="w-full px-3 mb-6 lg:mb-0 lg:w-7/12 lg:flex-none ml-2" style="width:60%;">
-          <div class="relative flex flex-col min-w-0 break-words bg-white shadow-soft-xl rounded-2xl bg-clip-border">
-            <div class="flex-auto p-4">
-              <div class="flex flex-wrap">
-                <div class="max-w-full px-4 lg:w-1/2 lg:flex-none">
-                  <div class="flex flex-col h-full">
-                    <p class="pt-2 mb-1 font-semibold" id="username"></p>
-                    <h5 class="font-bold" id="name"></h5> </br>
-                    
-                    <p class="leading-normal">
-                     <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 512 512" style="padding-left: 2px; padding-right: 10px;"><path d="M352 256c0 22.2-1.2 43.6-3.3 64H163.3c-2.2-20.4-3.3-41.8-3.3-64s1.2-43.6 3.3-64H348.7c2.2 20.4 3.3 41.8 3.3 64zm28.8-64H503.9c5.3 20.5 8.1 41.9 8.1 64s-2.8 43.5-8.1 64H380.8c2.1-20.6 3.2-42 3.2-64s-1.1-43.4-3.2-64zm112.6-32H376.7c-10-63.9-29.8-117.4-55.3-151.6c78.3 20.7 142 77.5 171.9 151.6zm-149.1 0H167.7c6.1-36.4 15.5-68.6 27-94.7c10.5-23.6 22.2-40.7 33.5-51.5C239.4 3.2 248.7 0 256 0s16.6 3.2 27.8 13.8c11.3 10.8 23 27.9 33.5 51.5c11.6 26 20.9 58.2 27 94.7zm-209 0H18.6C48.6 85.9 112.2 29.1 190.6 8.4C165.1 42.6 145.3 96.1 135.3 160zM8.1 192H131.2c-2.1 20.6-3.2 42-3.2 64s1.1 43.4 3.2 64H8.1C2.8 299.5 0 278.1 0 256s2.8-43.5 8.1-64zM194.7 446.6c-11.6-26-20.9-58.2-27-94.6H344.3c-6.1 36.4-15.5 68.6-27 94.6c-10.5 23.6-22.2 40.7-33.5 51.5C272.6 508.8 263.3 512 256 512s-16.6-3.2-27.8-13.8c-11.3-10.8-23-27.9-33.5-51.5zM135.3 352c10 63.9 29.8 117.4 55.3 151.6C112.2 482.9 48.6 426.1 18.6 352H135.3zm358.1 0c-30 74.1-93.6 130.9-171.9 151.6c25.5-34.2 45.2-87.7 55.3-151.6H493.4z"/></svg>
-                      <span class="font-semibold" id="lastActive"></span>
-                    </p>
-                    <p class="leading-normal">
-                      <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 640 512" style="padding-right: 8px;"><path d="M392.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm80.6 120.1c-12.5 12.5-12.5 32.8 0 45.3L562.7 256l-89.4 89.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l112-112c12.5-12.5 12.5-32.8 0-45.3l-112-112c-12.5-12.5-32.8-12.5-45.3 0zm-306.7 0c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3l112 112c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256l89.4-89.4c12.5-12.5 12.5-32.8 0-45.3z"/></svg>
-                      <span class="font-semibold" id="problemsSolved"></span>
-                    </p>
-                    <p class="leading-normal">
-                      <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 512 512" style="padding-left: 4px; padding-right: 10px;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM232 344V280H168c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H280v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/></svg>
-                      <span class="font-semibold" id="problemsAdded"></span>
-                    </p>
-                    <p class="leading-normal">
-                      <svg xmlns="http://www.w3.org/2000/svg" height="1.6em" viewBox="0 0 384 512" style="padding-left: 6px; padding-right: 10px;"><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM112 256H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
-                      <span class="font-semibold" id="blogsAdded"></span>
-                    </p>
-                    
-                  </div>
-                </div>
-                <div class="max-w-full px-3 mt-12 ml-auto text-center lg:mt-0 lg:w-5/12 lg:flex-none">
-                  <div class="h-full bg-gradient-to-tl rounded-xl">
-                    <div class="relative flex items-center justify-center h-full">
-                     <div id="imageContainer"></div>
-                    </div>
-                  </div>
+    <div class="flex flex-wrap mt-6 px-2 ml-4">
+      <div class="w-full px-3 mb-6 lg:mb-0 lg:w-7/12 lg:flex-none ml-2" style="width:60%;">
+        <div class="relative flex flex-col min-w-0 break-words bg-white shadow-soft-xl rounded-2xl bg-clip-border">
+          <div class="flex-auto p-4">
+            <div class="flex flex-wrap">
+              <div class="max-w-full px-4 lg:w-1/2 lg:flex-none">
+                <div class="flex flex-col h-full">
+                  <p class="pt-2 mb-1 font-semibold" id="username"></p>
+                  <h5 class="font-bold" id="name"></h5> </br>
+
+                  <p class="leading-normal">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 512 512"
+                      style="padding-left: 2px; padding-right: 10px;">
+                      <path
+                        d="M352 256c0 22.2-1.2 43.6-3.3 64H163.3c-2.2-20.4-3.3-41.8-3.3-64s1.2-43.6 3.3-64H348.7c2.2 20.4 3.3 41.8 3.3 64zm28.8-64H503.9c5.3 20.5 8.1 41.9 8.1 64s-2.8 43.5-8.1 64H380.8c2.1-20.6 3.2-42 3.2-64s-1.1-43.4-3.2-64zm112.6-32H376.7c-10-63.9-29.8-117.4-55.3-151.6c78.3 20.7 142 77.5 171.9 151.6zm-149.1 0H167.7c6.1-36.4 15.5-68.6 27-94.7c10.5-23.6 22.2-40.7 33.5-51.5C239.4 3.2 248.7 0 256 0s16.6 3.2 27.8 13.8c11.3 10.8 23 27.9 33.5 51.5c11.6 26 20.9 58.2 27 94.7zm-209 0H18.6C48.6 85.9 112.2 29.1 190.6 8.4C165.1 42.6 145.3 96.1 135.3 160zM8.1 192H131.2c-2.1 20.6-3.2 42-3.2 64s1.1 43.4 3.2 64H8.1C2.8 299.5 0 278.1 0 256s2.8-43.5 8.1-64zM194.7 446.6c-11.6-26-20.9-58.2-27-94.6H344.3c-6.1 36.4-15.5 68.6-27 94.6c-10.5 23.6-22.2 40.7-33.5 51.5C272.6 508.8 263.3 512 256 512s-16.6-3.2-27.8-13.8c-11.3-10.8-23-27.9-33.5-51.5zM135.3 352c10 63.9 29.8 117.4 55.3 151.6C112.2 482.9 48.6 426.1 18.6 352H135.3zm358.1 0c-30 74.1-93.6 130.9-171.9 151.6c25.5-34.2 45.2-87.7 55.3-151.6H493.4z" />
+                    </svg>
+                    <span class="font-semibold" id="lastActive"></span>
+                  </p>
+                  <p class="leading-normal">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 640 512"
+                      style="padding-right: 8px;">
+                      <path
+                        d="M392.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm80.6 120.1c-12.5 12.5-12.5 32.8 0 45.3L562.7 256l-89.4 89.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l112-112c12.5-12.5 12.5-32.8 0-45.3l-112-112c-12.5-12.5-32.8-12.5-45.3 0zm-306.7 0c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3l112 112c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256l89.4-89.4c12.5-12.5 12.5-32.8 0-45.3z" />
+                    </svg>
+                    <span class="font-semibold" id="problemsSolved"></span>
+                  </p>
+                  <p class="leading-normal">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 512 512"
+                      style="padding-left: 4px; padding-right: 10px;">
+                      <path
+                        d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM232 344V280H168c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H280v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
+                    </svg>
+                    <span class="font-semibold" id="problemsAdded"></span>
+                  </p>
+                  <p class="leading-normal">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1.6em" viewBox="0 0 384 512"
+                      style="padding-left: 6px; padding-right: 10px;">
+                      <path
+                        d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM112 256H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16z" />
+                    </svg>
+                    <span class="font-semibold" id="blogsAdded"></span>
+                  </p>
+
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="w-full max-w-full px-12 lg:w-4/12 pl-4 ml-6" >
-          <div class="border-black/12.5 shadow-soft-xl relative flex h-full min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border p-4">
-            <div class="relative h-full overflow-hidden bg-cover rounded-xl">
-              <span class="absolute top-0 left-0 w-full h-full bg-center bg-cover bg-gradient-to-tl"></span>
-              <div class="relative z-10 flex flex-col flex-auto h-full p-4">
-                <h5 class="mb-6 font-bold text-black text-center" id="problems"></h5>
-                <div class="flex lg:w-7/12">
-                  <canvas style="transform: translate(35%, 2%);" id="myChart"></canvas>
+              <div class="max-w-full px-3 mt-12 ml-auto text-center lg:mt-0 lg:w-5/12 lg:flex-none">
+                <div class="h-full bg-gradient-to-tl rounded-xl">
+                  <div class="relative flex items-center justify-center h-full">
+                    <div id="imageContainer"></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -74,40 +75,74 @@
         </div>
       </div>
 
-      <div class="flex flex-wrap mt-6 ml-6 mr-6">
-        <div class="w-full px-3 mb-6 lg:mb-0 lg:flex-none">
+      <div class="w-full max-w-full px-12 lg:w-4/12 pl-4 ml-6">
+        <div
+          class="border-black/12.5 shadow-soft-xl relative flex h-full min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border p-4">
+          <div class="relative h-full overflow-hidden bg-cover rounded-xl">
+            <span class="absolute top-0 left-0 w-full h-full bg-center bg-cover bg-gradient-to-tl"></span>
+            <div class="relative z-10 flex flex-col flex-auto h-full p-4">
+              <h5 class="mb-6 font-bold text-black text-center" id="problems"></h5>
+              <div class="flex lg:w-7/12">
+                <canvas style="transform: translate(35%, 2%);" id="myChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap mt-6 ml-6 mr-6">
+      <div class="w-full px-3 mb-6 lg:mb-0 lg:flex-none">
+        <div class="relative flex flex-col min-w-0 break-words bg-white shadow-soft-xl rounded-2xl bg-clip-border">
+          <div class="flex-auto p-4">
+            <div class="flex flex-wrap">
+              <div class="max-w-full px-4 lg:flex-none">
+                <div class="flex flex-col h-full">
+                  <h5 class="ml-2 pt-2 mb-6 text-black" id="submissions"></h5>
+                  <div class="graph">
+                    <ul class="months">
+                      <li>Jan</li>
+                      <li>Feb</li>
+                      <li>Mar</li>
+                      <li>Apr</li>
+                      <li>May</li>
+                      <li>Jun</li>
+                      <li>Jul</li>
+                      <li>Aug</li>
+                      <li>Sep</li>
+                      <li>Oct</li>
+                      <li>Nov</li>
+                      <li>Dec</li>
+                    </ul>
+                    <ul class="days">
+                      <li>Sun</li>
+                      <li>Mon</li>
+                      <li>Tue</li>
+                      <li>Wed</li>
+                      <li>Thu</li>
+                      <li>Fri</li>
+                      <li>Sat</li>
+                    </ul>
+                    <ul class="squares">
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap mt-6 mr-6">
+        <div class="w-full px-3 mb-6 lg:mb-0  lg:flex-none">
           <div class="relative flex flex-col min-w-0 break-words bg-white shadow-soft-xl rounded-2xl bg-clip-border">
             <div class="flex-auto p-4">
               <div class="flex flex-wrap">
                 <div class="max-w-full px-4 lg:flex-none">
                   <div class="flex flex-col h-full">
-                    <h5 class="ml-2 pt-2 mb-6 text-black" id="submissions"></h5>
-                    <div class="graph">
-                      <ul class="months">
-                        <li>Jan</li>
-                        <li>Feb</li>
-                        <li>Mar</li>
-                        <li>Apr</li>
-                        <li>May</li>
-                        <li>Jun</li>
-                        <li>Jul</li>
-                        <li>Aug</li>
-                        <li>Sep</li>
-                        <li>Oct</li>
-                        <li>Nov</li>
-                        <li>Dec</li>
-                      </ul>
-                      <ul class="days">
-                        <li>Sun</li>
-                        <li>Mon</li>
-                        <li>Tue</li>
-                        <li>Wed</li>
-                        <li>Thu</li>
-                        <li>Fri</li>
-                        <li>Sat</li>
-                      </ul>
-                      <ul class="squares">
-                      </ul>
+                    <h5 class="ml-2 pt-2 mb-6 text-black">Tags solved</h5>
+                    <div>
+                      <canvas style="width: 1100px" id="tagsChart"></canvas>
                     </div>
                   </div>
                 </div>
@@ -116,142 +151,125 @@
           </div>
         </div>
 
-        <div class="flex flex-wrap mt-6 mr-6">
-          <div class="w-full px-3 mb-6 lg:mb-0  lg:flex-none">
-            <div class="relative flex flex-col min-w-0 break-words bg-white shadow-soft-xl rounded-2xl bg-clip-border">
-              <div class="flex-auto p-4">
-                <div class="flex flex-wrap">
-                  <div class="max-w-full px-4 lg:flex-none">
-                    <div class="flex flex-col h-full">
-                      <h5 class="ml-2 pt-2 mb-6 text-black">Tags solved</h5>
-                      <div>
-                        <canvas style="width: 1100px" id="tagsChart"></canvas>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-      
-      <script>
+        <script>
 
-        //random user data for mock population
-        const user = {
-          username: "johndoe",
-          firstname: "John",
-          lastname: "Doe",
+          //random user data for mock population
+          const user = {
+            username: "johndoe",
+            firstname: "John",
+            lastname: "Doe",
 
-          problemsSolved: 100,
-          problemsAdded: 10,
+            problemsSolved: 100,
+            problemsAdded: 10,
 
-          //problem specifics via group by tags
-          easy: 45, medium: 30, hard: 25,
+            //problem specifics via group by tags
+            easy: 45, medium: 30, hard: 25,
 
-          //topic specific count via group by topic tags
-          dataset: [10, 15, 5, 12, 25, 30, 25, 5, 10, 8, 2, 1, 1, 1, 2],
+            //topic specific count via group by topic tags
+            dataset: [10, 15, 5, 12, 25, 30, 25, 5, 10, 8, 2, 1, 1, 1, 2],
 
-          //to be fetched using last login time
-          lastActive: "1 month",
+            //to be fetched using last login time
+            lastActive: "1 month",
 
-          blogsAdded: 2,
-          avatar: "./assets/img/user.png",
-        };
+            blogsAdded: 2,
+            avatar: "./assets/img/user.png",
+          };
 
-        function renderAvatar(user) {
-          let imageAlt = "avatar";
-          let imageClass = "relative z-20 w-full pt-6";
-          let imageElement = document.createElement("img");
+          function renderAvatar(user) {
+            let imageAlt = "avatar";
+            let imageClass = "relative z-20 w-full pt-6";
+            let imageElement = document.createElement("img");
 
-          imageElement.src = user.avatar;
-          imageElement.alt = imageAlt;
-          imageElement.className = imageClass;
+            imageElement.src = user.avatar;
+            imageElement.alt = imageAlt;
+            imageElement.className = imageClass;
 
-          let container = document.getElementById("imageContainer");
-          container.appendChild(imageElement);
-        }
-
-        function profile(user) {
-          document.getElementById("username").textContent = "@" + user.username;
-          document.getElementById("name").textContent = user.firstname + " " + user.lastname;
-          document.getElementById("lastActive").textContent = "Last active: " + user.lastActive + " ago";
-          document.getElementById("problemsSolved").textContent = "Problems solved: " + user.problemsSolved;
-          document.getElementById("problemsAdded").textContent = "Problems added: " + user.problemsAdded;
-          document.getElementById("blogsAdded").textContent = "Blogs added: " + user.blogsAdded;
-        }
-
-        function pieChart(user) {
-          document.getElementById("problems").textContent = "Problems solved: " + user.problemsSolved;
-
-          //pie chart for easy, medium and hard problems
-          let ctx = document.getElementById("myChart").getContext('2d');
-          let myChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-              labels: ["Easy", "Medium", "Hard"],
-              datasets: [{
-                backgroundColor: [
-                  "#2ecc71",
-                  "#FFC72C",
-                  "#E52B50"
-                ],
-                data: [user.easy, user.medium, user.hard]
-              },],
-            },
-            options: {
-              plugins: {
-                legend: {
-                  display: true,
-                  position: "bottom", 
-                },
-              },
-            },
-          });
-        }
-
-        function activityTracker(user) {
-          document.getElementById("submissions").textContent = user.problemsSolved + " submissions in the last year";
-
-          const squares = document.querySelector('.squares');
-          for (let i = 1; i < 365; i++) {
-            const level = Math.floor(Math.random() * 3);  
-            squares.insertAdjacentHTML('beforeend', `<li data-level="${level}"></li>`);
+            let container = document.getElementById("imageContainer");
+            container.appendChild(imageElement);
           }
-        }
 
-        function topicTags(user) {
-          //bar chart for topic specific solves
-          ctx = document.getElementById("tagsChart").getContext('2d');
-          myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-              labels: ["Implementation", "Greedy", "Math", "Constructive algorithms", "Brute force", "Sortings", "Strings", "DP", "Binary search", "Number theory", "DFS", "Trees", "DSU", "Interactive", "Combinatorics"],
-              datasets: [{
-                label: "Tags",
-                backgroundColor: [
-                "#E52B50", "#3498DB", "#2ECC71", "#F1C40F", "#E74C3C", "#9B59B6", "#E67E22", "#95A5A6", "#34495E", "#D35400", "#8E44AD", "#1ABC9C", "#27AE60", "#2980B9", "#F39C12",
-                ],
-                data: user.dataset,
-              },],
-            },
+          function profile(user) {
+            document.getElementById("username").textContent = "@" + user.username;
+            document.getElementById("name").textContent = user.firstname + " " + user.lastname;
+            document.getElementById("lastActive").textContent = "Last active: " + user.lastActive + " ago";
+            document.getElementById("problemsSolved").textContent = "Problems solved: " + user.problemsSolved;
+            document.getElementById("problemsAdded").textContent = "Problems added: " + user.problemsAdded;
+            document.getElementById("blogsAdded").textContent = "Blogs added: " + user.blogsAdded;
+          }
 
-            options: {
-              plugins: {
-                legend: {
-                  display: false,
+          function pieChart(user) {
+            document.getElementById("problems").textContent = "Problems solved: " + user.problemsSolved;
+
+            //pie chart for easy, medium and hard problems
+            let ctx = document.getElementById("myChart").getContext('2d');
+            let myChart = new Chart(ctx, {
+              type: 'doughnut',
+              data: {
+                labels: ["Easy", "Medium", "Hard"],
+                datasets: [{
+                  backgroundColor: [
+                    "#2ecc71",
+                    "#FFC72C",
+                    "#E52B50"
+                  ],
+                  data: [user.easy, user.medium, user.hard]
+                },],
+              },
+              options: {
+                plugins: {
+                  legend: {
+                    display: true,
+                    position: "bottom",
+                  },
                 },
               },
-            },
-          });
-        }
+            });
+          }
 
-        renderAvatar(user);
-        profile(user);
-        pieChart(user);
-        activityTracker(user);
-        topicTags(user);
+          function activityTracker(user) {
+            document.getElementById("submissions").textContent = user.problemsSolved + " submissions in the last year";
 
-    </script>
+            const squares = document.querySelector('.squares');
+            for (let i = 1; i < 365; i++) {
+              const level = Math.floor(Math.random() * 3);
+              squares.insertAdjacentHTML('beforeend', `<li data-level="${level}"></li>`);
+            }
+          }
+
+          function topicTags(user) {
+            //bar chart for topic specific solves
+            ctx = document.getElementById("tagsChart").getContext('2d');
+            myChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: ["Implementation", "Greedy", "Math", "Constructive algorithms", "Brute force", "Sortings", "Strings", "DP", "Binary search", "Number theory", "DFS", "Trees", "DSU", "Interactive", "Combinatorics"],
+                datasets: [{
+                  label: "Tags",
+                  backgroundColor: [
+                    "#E52B50", "#3498DB", "#2ECC71", "#F1C40F", "#E74C3C", "#9B59B6", "#E67E22", "#95A5A6", "#34495E", "#D35400", "#8E44AD", "#1ABC9C", "#27AE60", "#2980B9", "#F39C12",
+                  ],
+                  data: user.dataset,
+                },],
+              },
+
+              options: {
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
+                },
+              },
+            });
+          }
+
+          renderAvatar(user);
+          profile(user);
+          pieChart(user);
+          activityTracker(user);
+          topicTags(user);
+
+        </script>
   </main>
 </body>
+
 </html>

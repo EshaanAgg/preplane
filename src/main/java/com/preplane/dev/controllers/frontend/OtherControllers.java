@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import org.springframework.web.bind.annotation.PostMapping;
 
-import org.springframework.web.bind.annotation.PathVariable;
-
 @Controller
 public class OtherControllers {
 
@@ -15,14 +13,17 @@ public class OtherControllers {
     public String discuss() {
         return "discuss/discuss";
     }
+
     @GetMapping("/problems")
     public String problems() {
         return "problems/problems";
     }
+
     @GetMapping("/premium")
     public String premium() {
         return "premium/premium";
     }
+
     @GetMapping("/blog/{id}")
     public String blog(@PathVariable String id) {
         return "blog/blog";
@@ -32,5 +33,5 @@ public class OtherControllers {
     public String paymentSuccess() {
         return "premium/success";
     }
-    
+
 }

@@ -207,33 +207,33 @@
         }
 
         function submitForm() {
-        
-        var postTitle = document.getElementById("postTitle").value;
-        var message = document.getElementById("message").value;
 
-        var formData = new FormData();
-        formData.append("thread_id",1);// not to be set as 1
-        formData.append("title", postTitle);
-        formData.append("content", message);
-        formData.append("created_at",Date.now());
-        formData.append("user_created",userData.id);
+            var postTitle = document.getElementById("postTitle").value;
+            var message = document.getElementById("message").value;
 
-        fetch('api/threads/', {
-            method: 'POST',
-            body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert("Form submitted successfully!");
-            console.log(response);
-            console.log(data);
-        })
-        .catch(error => {
-            console.error('API Error:', error);
-            alert("Form submission failed. Please try again.");
-        });
-        closeDialog();
-    }
+            var formData = new FormData();
+            formData.append("thread_id", 1);// not to be set as 1
+            formData.append("title", postTitle);
+            formData.append("content", message);
+            formData.append("created_at", Date.now());
+            formData.append("user_created", userData.id);
+
+            fetch('api/threads/', {
+                method: 'POST',
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert("Form submitted successfully!");
+                    console.log(response);
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('API Error:', error);
+                    alert("Form submission failed. Please try again.");
+                });
+            closeDialog();
+        }
     </script>
 </body>
 

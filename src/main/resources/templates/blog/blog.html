@@ -19,67 +19,66 @@
 
 <body class="m-0 font-sans antialiased font-normal text-base leading-default bg-gray-50 text-slate-500">
     <div th:replace="fragments/sidenav :: sidenav">This content will be replaced by the `sidenav` fragment</div>
-        <!-- Blog Content -->
-        <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
-            <div th:replace="fragments/navbar :: navbar" th:with="name=${title}">This content will be replaced by the
-                `navbar`
-                fragment</div>
-            <div class="max-w-2xl mx-auto bg-white rounded-md p-4 shadow-lg">
-                <h1 class="text-2xl font-bold" id="blogTitle"></h1>
-                <div class="text-gray-600 text-sm mt-2">
-                    <span class="mr-4" id="authorInfo">Author: Jane Smith</span>
-                    <span class="mr-4" id="dateInfo">Date Added: October 21, 2023</span>
-                </div>
-                <p class="mt-4" id="blogContent"></p>
-                <div class="flex justify-between items-center mt-4">
-                    <div class="flex items-center">
-                        <button class="flex items-center text-green-600 mr-4" id="upvoting">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6V3M12 3c-3.866 0-7 3.134-7 7s3.134 7 7 7 7-3.134 7-7-3.134-7-7-7z" />
-                            </svg>
-                            Upvote
-                        </button>
-                        <button class="flex items-center text-red-600" id="downvoting">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 21v-2M12 21c4.418-0.002 8-3.582 8-7.998 0-4.416-3.582-8-7.998-8-4.415 0-7.997 3.584-7.997 7.998C4.003 17.418 7.585 21 12 21z" />
-                            </svg>
-                            Downvote
-                        </button>
-                    </div>
-                    <div class="flex items-center">
-                        <button class="flex items-center text-gray-600" id="toggleComments">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 9l-7 7-7-7" />
-                            </svg>
-                            Show Comments
-                        </button>
-                    </div>
-                </div>
-    
-                <!-- Comment Section -->
-                <div class="mt-4 p-4 bg-gray-200 rounded-md hidden" id="commentsSection">
-                    <div id="comments"></div>
-                </div>
-    
-                    <!--submitform-->
-                    <div class="mt-2">
-                        <div class="mt-2">
-                            <textarea id="commentText" placeholder="Your Comment" class="w-full border p-2 rounded"></textarea>
-                        </div>
-                        <button id="submitComment" onclick="submitForm()"
-                            class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Add Comment</button>
-                    </div>
-                
+    <!-- Blog Content -->
+    <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
+        <div th:replace="fragments/navbar :: navbar" th:with="name=${title}">This content will be replaced by the
+            `navbar`
+            fragment</div>
+        <div class="max-w-2xl mx-auto bg-white rounded-md p-4 shadow-lg">
+            <h1 class="text-2xl font-bold" id="blogTitle"></h1>
+            <div class="text-gray-600 text-sm mt-2">
+                <span class="mr-4" id="authorInfo">Author: Jane Smith</span>
+                <span class="mr-4" id="dateInfo">Date Added: October 21, 2023</span>
             </div>
-        </main>
-    
-    
+            <p class="mt-4" id="blogContent"></p>
+            <div class="flex justify-between items-center mt-4">
+                <div class="flex items-center">
+                    <button class="flex items-center text-green-600 mr-4" id="upvoting">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6V3M12 3c-3.866 0-7 3.134-7 7s3.134 7 7 7 7-3.134 7-7-3.134-7-7-7z" />
+                        </svg>
+                        Upvote
+                    </button>
+                    <button class="flex items-center text-red-600" id="downvoting">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 21v-2M12 21c4.418-0.002 8-3.582 8-7.998 0-4.416-3.582-8-7.998-8-4.415 0-7.997 3.584-7.997 7.998C4.003 17.418 7.585 21 12 21z" />
+                        </svg>
+                        Downvote
+                    </button>
+                </div>
+                <div class="flex items-center">
+                    <button class="flex items-center text-gray-600" id="toggleComments">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                        Show Comments
+                    </button>
+                </div>
+            </div>
+
+            <!-- Comment Section -->
+            <div class="mt-4 p-4 bg-gray-200 rounded-md hidden" id="commentsSection">
+                <div id="comments"></div>
+            </div>
+
+            <!--submitform-->
+            <div class="mt-2">
+                <div class="mt-2">
+                    <textarea id="commentText" placeholder="Your Comment" class="w-full border p-2 rounded"></textarea>
+                </div>
+                <button id="submitComment" onclick="submitForm()"
+                    class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Add Comment</button>
+            </div>
+
+        </div>
+    </main>
+
+
 </body>
 <script>
     // Blog post object
@@ -99,32 +98,32 @@
         document.getElementById('blogContent').textContent = blog.content;
     }
     async function fetchData() {
-            const authToken = localStorage.getItem("preplane-authHeader");
-            const userData = localStorage.getItem("preplane-currentSession");
-            const id = 1;
-            const url = `/api/threads/${id}`;
-            const urlnew=`/api/comments/thread/${id}`;
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    "Authorization": authToken,
-                    'Content-Type': 'application/json'
-                },
-            });
-            const responseNew = await fetch(urlnew,{
-                method: 'GET',
-                headers: {
-                    "Authorization": authToken,
-                    'Content-Type': 'application/json'
-                },
-            });
-            blogPost = await response.json();
-            comments = await responseNew.json();
-            console.log(blogPost)
+        const authToken = localStorage.getItem("preplane-authHeader");
+        const userData = localStorage.getItem("preplane-currentSession");
+        const id = 1;
+        const url = `/api/threads/${id}`;
+        const urlnew = `/api/comments/thread/${id}`;
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                "Authorization": authToken,
+                'Content-Type': 'application/json'
+            },
+        });
+        const responseNew = await fetch(urlnew, {
+            method: 'GET',
+            headers: {
+                "Authorization": authToken,
+                'Content-Type': 'application/json'
+            },
+        });
+        blogPost = await response.json();
+        comments = await responseNew.json();
+        console.log(blogPost)
 
-            populateBlogContent(blogPost);
-            populateComments(comments);
-        }
+        populateBlogContent(blogPost);
+        populateComments(comments);
+    }
     // Function to populate the blog content
 
     // Function to populate comments
@@ -140,13 +139,13 @@
             commentsContainer.appendChild(commentDiv);
         });
     }
-    function submitComment(){
+    function submitComment() {
 
     }
-    function upvoting(){
+    function upvoting() {
 
     }
-    function downvoting(){
+    function downvoting() {
 
     }
 
