@@ -29,6 +29,7 @@ CREATE TABLE thread (
     created_at DATETIME DEFAULT NOW(),
     user_created INT NOT NULL,
     upvotes INT NOT NULL DEFAULT 0,
+    downvotes INT NOT NULL DEFAULT 0,
     PRIMARY KEY (thread_id),
     FOREIGN KEY (user_created) REFERENCES user(user_id) ON DELETE CASCADE
 );

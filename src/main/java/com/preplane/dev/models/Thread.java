@@ -10,6 +10,7 @@ public class Thread {
     private int userCreated; // Foreign Key from Users
     private User creator;
     private int upvotes;
+    private int downvotes;
 
     public Thread() {
     }
@@ -72,8 +73,16 @@ public class Thread {
         return upvotes;
     }
 
+    public int getDownvotes() {
+        return downvotes;
+    }
+
     public void setUpvotes(int upvotes) {
         this.upvotes = upvotes;
+    }
+
+    public void setDownvotes(int downvotes) {
+        this.downvotes = downvotes;
     }
 
     @Override
@@ -85,6 +94,7 @@ public class Thread {
                 "  createdAt = " + this.createdAt + ",\n" +
                 "  userCreated = " + this.userCreated + "\n" +
                 "  upvotes = " + this.upvotes + "\n" +
+                "  downvotes = " + this.downvotes + "\n" +
                 "}";
     }
 }
