@@ -15,4 +15,6 @@ public interface ThreadRepository {
     SQLResult<List<Thread>> findAll(int limit, int offset);
 
     SQLResult<List<Thread>> findByUserId(int userId);
+
+    void upvoteThread(int threadId);
 }

@@ -105,6 +105,22 @@ public class ThreadController {
         }
     }
 
+    @PutMapping("/upvote/{id}")
+    public ResponseEntity<Thread> upvoteThread(@PathVariable("id") int id) {
+        try {
+            var existingThreadResponse = threadRepository.findById(id);
+            if (existingThreadResponse.statusCode == HttpStatus.OK) {
+                threadRepository.upvoteThread(id);
+                Thread existingThread = threadRepository.findById(id).response;
+                return new ResponseEntity<>(existingThread, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteThread(@PathVariable("id") int id, @AuthenticationPrincipal User loggedInUser) {
