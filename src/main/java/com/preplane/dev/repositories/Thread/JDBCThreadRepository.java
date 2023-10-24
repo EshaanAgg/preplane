@@ -189,6 +189,18 @@ public class JDBCThreadRepository implements ThreadRepository {
         return result;
     }
 
+    @Override
+    @Transactional
+    public void upvoteThread(int threadId) {
+        String sqlQuery = "UPDATE thread SET upvotes = upvotes + 1 WHERE thread_id = ?";
+        try {
+            template.update(sqlQuery, threadId);
+        } catch (Exception e) {
+            System.out.println("There was an error in upvoting the thread");
+            System.out.println(e);
+        }
+    }
+
 }
 
 class ThreadRowMapper implements RowMapper<Thread> {
@@ -199,6 +211,7 @@ class ThreadRowMapper implements RowMapper<Thread> {
         thread.setTitle(rs.getString("title"));
         thread.setContent(rs.getString("content"));
         thread.setUserCreated(rs.getInt("user_created"));
+        thread.setUpvotes(rs.getInt("upvotes"));
         return thread;
     }
 }

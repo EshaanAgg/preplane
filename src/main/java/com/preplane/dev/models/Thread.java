@@ -9,6 +9,7 @@ public class Thread {
     private Date createdAt;
     private int userCreated; // Foreign Key from Users
     private User creator;
+    private int upvotes;
 
     public Thread() {
     }
@@ -67,6 +68,14 @@ public class Thread {
         this.userCreated = userCreated;
     }
 
+    public int getUpvotes() {
+        return upvotes;
+    }
+
+    public void setUpvotes(int upvotes) {
+        this.upvotes = upvotes;
+    }
+
     @Override
     public String toString() {
         return "Thread {\n" +
@@ -75,6 +84,7 @@ public class Thread {
                 "  content = '" + this.content + "',\n" +
                 "  createdAt = " + this.createdAt + ",\n" +
                 "  userCreated = " + this.userCreated + "\n" +
+                "  upvotes = " + this.upvotes + "\n" +
                 "}";
     }
 }
