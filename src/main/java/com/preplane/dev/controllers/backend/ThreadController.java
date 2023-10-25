@@ -5,6 +5,7 @@ import com.preplane.dev.models.User;
 import com.preplane.dev.models.VoteThread;
 import com.preplane.dev.repositories.Thread.JDBCThreadRepository;
 import com.preplane.dev.repositories.ThreadVoting.JDBCThreadVotingRepository;
+import com.preplane.dev.security.Auth;
 import com.preplane.dev.security.services.ThreadAuthorizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -112,11 +113,11 @@ public class ThreadController {
     }
 
     @PutMapping("/upvote/{id}")
-    public ResponseEntity<Thread> upvoteThread(@PathVariable("id") int id, @AuthenticationPrincipal User loggedInUser) {
+    public ResponseEntity<Thread> upvoteThread(@PathVariable("id") int id) {
         try {
-            var existingThreadResponse = voteThreadRepository.check(id, 2);
+            var existingThreadResponse = voteThreadRepository.check(id, Auth.getCurrentUser().getId());
             if (existingThreadResponse.statusCode == HttpStatus.OK && existingThreadResponse.response) {
-                var voteThread = new VoteThread(id, loggedInUser.getId(), 1);
+                var voteThread = new VoteThread(id, Auth.getCurrentUser().getId(), 1);
                 var check = voteThreadRepository.save(voteThread);
                 if(check.statusCode == HttpStatus.CREATED) {
                     threadRepository.upvoteThread(id);
@@ -135,11 +136,11 @@ public class ThreadController {
     }
 
     @PutMapping("/downvote/{id}")
-    public ResponseEntity<Thread> downvoteThread(@PathVariable("id") int id, @AuthenticationPrincipal User loggedInUser) {
+    public ResponseEntity<Thread> downvoteThread(@PathVariable("id") int id) {
         try {
-            var existingThreadResponse = voteThreadRepository.check(id, 2);
+            var existingThreadResponse = voteThreadRepository.check(id, Auth.getCurrentUser().getId());
             if (existingThreadResponse.statusCode == HttpStatus.OK && existingThreadResponse.response) {
-                var voteThread = new VoteThread(id, loggedInUser.getId(), -1);
+                var voteThread = new VoteThread(id, Auth.getCurrentUser().getId(), -1);
                 var check = voteThreadRepository.save(voteThread);
                 if(check.statusCode == HttpStatus.CREATED) {
                     threadRepository.downvoteThread(id);
