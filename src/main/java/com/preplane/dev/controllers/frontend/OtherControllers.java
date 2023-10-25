@@ -31,6 +31,11 @@ public class OtherControllers {
         return "blog/blog";
     }
 
+    @GetMapping("/")
+    public String landing() {
+        return "landing/landing";
+    }
+
     @PostMapping("/payment/success")
     public String paymentSuccess() {
         return "premium/success";
