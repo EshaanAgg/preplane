@@ -2,10 +2,13 @@ package com.preplane.dev.controllers.backend;
 
 import com.preplane.dev.models.Thread;
 import com.preplane.dev.models.User;
+import com.preplane.dev.models.VoteThread;
 import com.preplane.dev.repositories.Thread.JDBCThreadRepository;
+import com.preplane.dev.repositories.ThreadVoting.JDBCThreadVotingRepository;
 import com.preplane.dev.security.services.ThreadAuthorizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +23,9 @@ public class ThreadController {
 
     @Autowired
     private JDBCThreadRepository threadRepository;
+
+    @Autowired
+    private JDBCThreadVotingRepository voteThreadRepository;
 
     @Autowired
     private ThreadAuthorizationService threadAuthorizationService;
@@ -106,13 +112,20 @@ public class ThreadController {
     }
 
     @PutMapping("/upvote/{id}")
-    public ResponseEntity<Thread> upvoteThread(@PathVariable("id") int id) {
+    public ResponseEntity<Thread> upvoteThread(@PathVariable("id") int id, @AuthenticationPrincipal User loggedInUser) {
         try {
-            var existingThreadResponse = threadRepository.findById(id);
-            if (existingThreadResponse.statusCode == HttpStatus.OK) {
-                threadRepository.upvoteThread(id);
-                Thread existingThread = threadRepository.findById(id).response;
-                return new ResponseEntity<>(existingThread, HttpStatus.OK);
+            var existingThreadResponse = voteThreadRepository.check(id, 2);
+            if (existingThreadResponse.statusCode == HttpStatus.OK && existingThreadResponse.response) {
+                var voteThread = new VoteThread(id, loggedInUser.getId(), 1);
+                var check = voteThreadRepository.save(voteThread);
+                if(check.statusCode == HttpStatus.CREATED) {
+                    threadRepository.upvoteThread(id);
+                    Thread existingThread = threadRepository.findById(id).response;
+                    return new ResponseEntity<>(existingThread, HttpStatus.OK);
+                }
+                else{
+                    return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+                }
             } else {
                 return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             }
@@ -122,13 +135,20 @@ public class ThreadController {
     }
 
     @PutMapping("/downvote/{id}")
-    public ResponseEntity<Thread> downvoteThread(@PathVariable("id") int id) {
+    public ResponseEntity<Thread> downvoteThread(@PathVariable("id") int id, @AuthenticationPrincipal User loggedInUser) {
         try {
-            var existingThreadResponse = threadRepository.findById(id);
-            if (existingThreadResponse.statusCode == HttpStatus.OK) {
-                threadRepository.downvoteThread(id);
-                Thread existingThread = threadRepository.findById(id).response;
-                return new ResponseEntity<>(existingThread, HttpStatus.OK);
+            var existingThreadResponse = voteThreadRepository.check(id, 2);
+            if (existingThreadResponse.statusCode == HttpStatus.OK && existingThreadResponse.response) {
+                var voteThread = new VoteThread(id, loggedInUser.getId(), -1);
+                var check = voteThreadRepository.save(voteThread);
+                if(check.statusCode == HttpStatus.CREATED) {
+                    threadRepository.downvoteThread(id);
+                    Thread existingThread = threadRepository.findById(id).response;
+                    return new ResponseEntity<>(existingThread, HttpStatus.OK);
+                }
+                else{
+                    return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+                }
             } else {
                 return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             }

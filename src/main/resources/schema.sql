@@ -34,6 +34,15 @@ CREATE TABLE thread (
     FOREIGN KEY (user_created) REFERENCES user(user_id) ON DELETE CASCADE
 );
 
+create table user_thread(
+    thread_id INT NOT NULL,
+    user_id INT NOT NULL,
+    vote INT NOT NULL,
+    PRIMARY KEY (thread_id, user_id),
+    FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (thread_id) REFERENCES thread(thread_id) ON DELETE CASCADE
+);
+
 CREATE TABLE comments (
     comment_id INT AUTO_INCREMENT NOT NULL,
     content VARCHAR(2048) NOT NULL,
