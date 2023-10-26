@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scsale=1.0" />
+    <title>Preplane | Profile</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="css/style.css" rel="stylesheet" />
+</head>
+
+<body class="m-0 font-sans text-base antialiased font-normal leading-default bg-gray-50 text-slate-500">
+    <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
+        
+
+        <div class="flex flex-wrap mt-6 px-2 ml-4">
+            <div class="hidden" id="submisson_id" th:text="${id}"></div>
+            <p id="verdict"></p>
+            <p id="memory"></p>
+            <p id="timeLimit"></p>
+            <p id="submissonTime"></p>
+            <code id="code">
+            </code>
+
+        </div>
+
+
+    </main>
+</body>
+<script>
+    function formatSubmissionTime(submissionTime) {
+            const formattedTime = new Date(submissionTime).toLocaleString();
+            return formattedTime;
+        }
+
+    async function fetchData() {
+        const authToken = localStorage.getItem("preplane-authHeader");
+
+        const id = document.getElementById("submisson_id").textContent;
+        
+        const submissionsUrl = `/api/submit/${id}`;
+        const submissionsResponse = await fetch(submissionsUrl, {
+            method: 'GET',
+            headers: {
+                "Authorization": authToken,
+                'Content-Type': 'application/json'
+            },
+        });
+        submisson = await submissionsResponse.json();
+        console.log(submisson);
+        document.getElementById('verdict').innerHTML = "Status : "+submisson.compilerVerdict;
+        document.getElementById('timeLimit').innerHTML = "Execution Time : " + submisson.executionTime;
+        document.getElementById('memory').innerHTML = "Execution Memory : " + submisson.executionMemory;
+        document.getElementById('submissonTime').innerHTML = "Submitted On : " + formatSubmissionTime(submisson.executionMemory);
+        document.getElementById('code').innerHTML = submisson.code;
+
+    }
+    fetchData();
+</script>
+
+</html>

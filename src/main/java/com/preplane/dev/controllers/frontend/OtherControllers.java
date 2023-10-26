@@ -47,4 +47,10 @@ public class OtherControllers {
         return "problems/problem";
     }
 
+    @GetMapping("/submisson/{id}")
+    public String submisson(@PathVariable String id, Model model) {
+        model.addAttribute("id", id);
+        return "submisson/submisson";
+    }
+
 }

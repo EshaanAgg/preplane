@@ -102,32 +102,10 @@
             <div class="w-full px-4 sm:px-6 md:px-8 py-6 mx-auto">
                 <div class="max-w-xl mx-auto bg-white p-4 md:p-6 rounded-lg shadow-md">
                     <h2 class="text-xl sm:text-2xl font-semibold text-center mb-4">Submissions</h2>
-
-                    <!-- Submission Items -->
-                    <div class="space-y-4">
-                        <!-- Submission Item 1 -->
-                        <div class="border border-gray-200 p-4 rounded-lg flex items-center justify-between">
-                            <div>
-                                <p class="text-sm sm:text-base font-semibold text-gray-600">Submission ID: 12345</p>
-                                <p class="text-xs sm:text-sm text-gray-500">Submitted: 2 days ago</p>
-                            </div>
-                            <div>
-                                <span
-                                    class="px-2 py-1 bg-green-100 text-green-700 text-xs sm:text-sm font-semibold rounded-md">Correct</span>
-                            </div>
-                        </div>
-
-                        <!-- Submission Item 2 -->
-                        <div class="border border-gray-200 p-4 rounded-lg flex items-center justify-between">
-                            <div>
-                                <p class="text-sm sm:text-base font-semibold text-gray-600">Submission ID: 12346</p>
-                                <p class="text-xs sm:text-sm text-gray-500">Submitted: 1 day ago</p>
-                            </div>
-                            <div>
-                                <span
-                                    class="px-2 py-1 bg-red-100 text-red-700 text-xs sm:text-sm font-semibold rounded-md">Incorrect</span>
-                            </div>
-                        </div>
+    
+                    <!-- Submission Items Container -->
+                    <div class="space-y-4" id="submission-container">
+                        <!-- JavaScript will populate submission items here -->
                     </div>
                 </div>
             </div>
@@ -170,9 +148,24 @@
         const authToken = localStorage.getItem("preplane-authHeader");
 
         const id = document.getElementById("problem_id").textContent;
-        const url = `/api/problems/${id}`;
-
-        const problemResponse = await fetch(url, {
+        const problemUrl = `/api/problems/${id}`;
+        const tagUrl = `/api/problems/tagProblem/${id}`;
+        const submissionsUrl = `/api/submit/problem/${id}`;
+        const problemResponse = await fetch(problemUrl, {
+            method: 'GET',
+            headers: {
+                "Authorization": authToken,
+                'Content-Type': 'application/json'
+            },
+        });
+        const tagResponse = await fetch(tagUrl, {
+            method: 'GET',
+            headers: {
+                "Authorization": authToken,
+                'Content-Type': 'application/json'
+            },
+        });
+        const submissionsResponse = await fetch(submissionsUrl, {
             method: 'GET',
             headers: {
                 "Authorization": authToken,
@@ -180,20 +173,54 @@
             },
         });
         problem = await problemResponse.json();
-
-        populatePage(problem);
+        tags = await tagResponse.json();
+        submissons = await submissionsResponse.json();
+        populatePage(problem,tags,submissons);
+        populateSubmissionItems(submissons);
     }
         // Function to update the HTML elements with data from the object
-        function populatePage(problemData) {
+        function populatePage(problemData,tags) {
+            console.log(tags);
+            let tagNames = tags.filter(tag => tag.type != 'COMPANY').map(tag => tag.name).join(', ');
+            let companyTagNames = tags.filter(tag => tag.type === 'COMPANY').map(tag => tag.name).join(', ');
+            
             document.getElementById('problemName').textContent = problemData.title;
-            document.getElementById('timeLimit').textContent = problemData.time_limit;
-            /* document.getElementById('companies').textContent = problemData.companies; */
-            /* document.getElementById('tags').textContent = problemData.tags; */
-            document.getElementById('input').textContent = problemData.testcases;
-            document.getElementById('editorial-code').textContent=problemData.authors_solution;
+            document.getElementById('timeLimit').innerHTML = problemData.timeLimit+" second";
+            document.getElementById('companies').textContent = companyTagNames;
+            document.getElementById('tags').innerHTML = tagNames;
+            document.getElementById('input').innerHTML = problemData.testcases;
+            document.getElementById('editorial-code').textContent=problemData.authorsSolution;
             /* document.getElementById('output').textContent = problemData.output; */
             // Use innerHTML to insert the HTML content, including paragraphs
             document.getElementById('problemStatement').innerHTML = problemData.statement;
+        }
+
+        function formatSubmissionTime(submissionTime) {
+            const formattedTime = new Date(submissionTime).toLocaleString();
+            return formattedTime;
+        }
+        function populateSubmissionItems(submissionsData) {
+            console.log(submissionsData);
+            const submissionContainer = document.getElementById('submission-container');
+            
+            submissionsData.forEach(submission => {
+                const submissionItem = document.createElement('div');
+                submissionItem.className = 'border border-gray-200 p-4 rounded-lg flex items-center justify-between';
+                
+                submissionItem.innerHTML = `
+                    <div>
+                        <p class="text-sm sm:text-base font-semibold text-gray-600">Submission ID: ${submission.submissionId}</p>
+                        <p class="text-xs sm:text-sm text-gray-500">Submitted:${formatSubmissionTime(submission.submissionTime)}</p>
+                    </div>
+                    <div>
+                        <span class="px-2 py-1 ${
+                            submission.compilerVerdict === 'AC' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                        } text-xs sm:text-sm font-semibold rounded-md">${submission.compilerVerdict}</span>
+                    </div>
+                `;
+                
+                submissionContainer.appendChild(submissionItem);
+            });
         }
         fetchData();
 

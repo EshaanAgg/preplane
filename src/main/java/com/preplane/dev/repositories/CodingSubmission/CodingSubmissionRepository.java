@@ -15,5 +15,10 @@ public interface CodingSubmissionRepository {
     SQLResult<Integer> updateVerdict(int submissionId, String verdict, double time, double memory);
 
     SQLResult<List<CodingSubmission>> findSubmissionsByUserAndProblem(int userId, int problemId);
+
+    SQLResult<List<CodingSubmission>> findSubmissionsByProblem(int problemId) ;
+
+    SQLResult<CodingSubmission> findSubmissionById(int submissionId) ;
 }
+
 
