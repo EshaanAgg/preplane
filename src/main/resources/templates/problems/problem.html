@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${id}"></title>
+    <!-- Fonts and icons -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+    <!-- Font Awesome Icons -->
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <!-- Nucleo Icons -->
+    <link href="../css/style.css" rel="stylesheet" />
+    <!-- Main Styling -->
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+
+</head>
+
+<body class="m-0 font-sans antialiased font-normal text-base leading-default bg-gray-50 text-slate-500">
+    <div th:replace="fragments/sidenav :: sidenav">This content will be replaced by the `sidenav` fragment</div>
+    <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
+        <!-- Navbar -->
+        <div th:replace="fragments/navbar :: navbar" th:with="name=${title}">This content will be replaced by the
+            `navbar`
+            fragment</div>
+
+        <div class="flex space-x-4">
+            <div class="hidden" id="problem_id" th:text="${id}"></div>
+            <button class="tab-btn active: hover:bg-gray-200" onclick="showTab('problem-description')">Problem
+                Description</button>
+            <button class="tab-btn hover:bg-gray-200" onclick="showTab('editorial')">Editorial</button>
+            <button class="tab-btn hover:bg-gray-200" onclick="showTab('submissions')">Submissions</button>
+        </div>
+        <section id="problem-description" class="tab-content">
+            <!-- Problem description content here -->
+            <div class="w-full px-6 py-6 mx-auto">
+                <div class="flex flex-wrap -mx-3">
+                    <div class="max-w-xl w-full bg-white p-6 rounded-lg shadow-md">
+                        <h1 class="text-xl md:text-2xl lg:text-2xl xl:text-3xl font-semibold text-center mb-1"
+                            id="problemName">Problem Name</h1>
+                        <div class="flex items-center justify-center">
+                            <div class="text-black mr-2">Time Limit:</div>
+                            <div class="text-gray-500" id="timeLimit">2 seconds</div>
+                        </div>
+                        <div class="flex items-center justify-center">
+                            <div class="text-black mr-2">Companies:</div>
+                            <div class="text-gray-500" id="companies">Microsoft Google</div>
+                        </div>
+                        <div class="flex items-center justify-center mb-4">
+                            <div class="text-black mr-2">Tags:</div>
+                            <div class="text-gray-500" id="tags">Greedy DP</div>
+                        </div>
+                        <div class="prose">
+                            <div id="problemStatement">
+                                <!-- Problem statement content will be inserted here -->
+                            </div>
+                            <div id="input">
+                                <!-- input statement -->
+                            </div>
+                            <div id="output">
+                                <!-- Output -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="editorial" class="tab-content">
+            <div class="w-full px-4 sm:px-6 md:px-8 py-6 mx-auto">
+                <div class="max-w-2xl mx-auto bg-white p-4 md:p-6 rounded-lg shadow-md">
+                    <h2 class="text-2xl sm:text-2xl font-semibold text-center mb-4">Editorial</h2>
+
+                    <!-- Approach -->
+                    <div class="mb-4">
+                        <h3 class="text-lg font-semibold mb-2">Approach:</h3>
+                        <p class="text-gray-600">
+                            <!-- Editorial approach content goes here -->
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non eros nec arcu auctor
+                            hendrerit.
+                        </p>
+                    </div>
+
+                    <!-- Solution Code -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">Solution Code:</h3>
+                        <pre class="rounded-md bg-gray-100 p-2 text-gray-800 overflow-x-auto">
+                            <code id="editorial-code">
+                                // Editorial solution code goes here
+                                function solveProblem() {
+                                    // Your code here
+                                }
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="submissions" class="tab-content">
+            <div class="w-full px-4 sm:px-6 md:px-8 py-6 mx-auto">
+                <div class="max-w-xl mx-auto bg-white p-4 md:p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl sm:text-2xl font-semibold text-center mb-4">Submissions</h2>
+    
+                    <!-- Submission Items Container -->
+                    <div class="space-y-4" id="submission-container">
+                        <!-- JavaScript will populate submission items here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+    <script>
+        function showTab(tabName) {
+            // Get all tab content elements
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            // Get all tab buttons
+            const tabBtns = document.querySelectorAll('.tab-btn');
+
+            // Hide all tab content
+            tabContents.forEach((content) => {
+                content.style.display = 'none';
+            });
+
+            // Deactivate all tab buttons
+            tabBtns.forEach((btn) => {
+                btn.classList.remove('active', 'text-blue');
+            });
+
+            // Show the selected tab content
+            document.getElementById(tabName).style.display = 'block';
+
+            // Activate the selected tab button and apply hover effect
+            event.currentTarget.classList.add('active', 'text-blue');
+        
+        }
+        showTab('problem-description');
+    </script>
+
+    <script>
+        // Your data object with problem details
+        async function fetchData() {
+        const authToken = localStorage.getItem("preplane-authHeader");
+
+        const id = document.getElementById("problem_id").textContent;
+        const problemUrl = `/api/problems/${id}`;
+        const tagUrl = `/api/problems/tagProblem/${id}`;
+        const submissionsUrl = `/api/submit/problem/${id}`;
+        const problemResponse = await fetch(problemUrl, {
+            method: 'GET',
+            headers: {
+                "Authorization": authToken,
+                'Content-Type': 'application/json'
+            },
+        });
+        const tagResponse = await fetch(tagUrl, {
+            method: 'GET',
+            headers: {
+                "Authorization": authToken,
+                'Content-Type': 'application/json'
+            },
+        });
+        const submissionsResponse = await fetch(submissionsUrl, {
+            method: 'GET',
+            headers: {
+                "Authorization": authToken,
+                'Content-Type': 'application/json'
+            },
+        });
+        problem = await problemResponse.json();
+        tags = await tagResponse.json();
+        submissons = await submissionsResponse.json();
+        populatePage(problem,tags,submissons);
+        populateSubmissionItems(submissons);
+    }
+        // Function to update the HTML elements with data from the object
+        function populatePage(problemData,tags) {
+            console.log(tags);
+            let tagNames = tags.filter(tag => tag.type != 'COMPANY').map(tag => tag.name).join(', ');
+            let companyTagNames = tags.filter(tag => tag.type === 'COMPANY').map(tag => tag.name).join(', ');
+            
+            document.getElementById('problemName').textContent = problemData.title;
+            document.getElementById('timeLimit').innerHTML = problemData.timeLimit+" second";
+            document.getElementById('companies').textContent = companyTagNames;
+            document.getElementById('tags').innerHTML = tagNames;
+            document.getElementById('input').innerHTML = problemData.testcases;
+            document.getElementById('editorial-code').textContent=problemData.authorsSolution;
+            /* document.getElementById('output').textContent = problemData.output; */
+            // Use innerHTML to insert the HTML content, including paragraphs
+            document.getElementById('problemStatement').innerHTML = problemData.statement;
+        }
+
+        function formatSubmissionTime(submissionTime) {
+            const formattedTime = new Date(submissionTime).toLocaleString();
+            return formattedTime;
+        }
+        function populateSubmissionItems(submissionsData) {
+            console.log(submissionsData);
+            const submissionContainer = document.getElementById('submission-container');
+            
+            submissionsData.forEach(submission => {
+                const submissionItem = document.createElement('div');
+                submissionItem.className = 'border border-gray-200 p-4 rounded-lg flex items-center justify-between';
+                
+                submissionItem.innerHTML = `
+                    <div>
+                        <p class="text-sm sm:text-base font-semibold text-gray-600">Submission ID: ${submission.submissionId}</p>
+                        <p class="text-xs sm:text-sm text-gray-500">Submitted:${formatSubmissionTime(submission.submissionTime)}</p>
+                    </div>
+                    <div>
+                        <span class="px-2 py-1 ${
+                            submission.compilerVerdict === 'AC' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                        } text-xs sm:text-sm font-semibold rounded-md">${submission.compilerVerdict}</span>
+                    </div>
+                `;
+                
+                submissionContainer.appendChild(submissionItem);
+            });
+        }
+        fetchData();
+
+        // Call the function to populate the page
+        
+    </script>
+
+
+
+</body>
+
+</html>

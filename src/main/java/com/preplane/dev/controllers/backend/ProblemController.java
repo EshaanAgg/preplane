@@ -2,6 +2,7 @@ package com.preplane.dev.controllers.backend;
 
 import com.preplane.dev.models.Problem;
 import com.preplane.dev.models.User;
+import com.preplane.dev.models.Tag;
 import com.preplane.dev.repositories.Problem.JDBCProblemRepository;
 import com.preplane.dev.security.services.ProblemAuthorizationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,17 @@ public class ProblemController {
     try {
         // Call a method from your repository to get problems by tag
         var response = problemRepository.findByTag(tag);
+        return new ResponseEntity<>(response.response, HttpStatus.OK);
+    } catch (Exception e) {
+        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    }
+
+    @GetMapping("/tagProblem/{id}")
+    public ResponseEntity<List<Tag>> findTagsForProblem(@PathVariable("id") int id) {
+    try {
+        // Call a method from your repository to get problems by tag
+        var response = problemRepository.findTagsForProblem(id);
         return new ResponseEntity<>(response.response, HttpStatus.OK);
     } catch (Exception e) {
         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

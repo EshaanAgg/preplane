@@ -174,8 +174,9 @@ public class JDBCProblemRepository implements ProblemRepository {
 
     // Made for internal use
     // Finds all the tags for a particular problem
+    @Override
     @Transactional
-    private SQLResult<List<Tag>> findTagsForProblem(int problemId) {
+    public SQLResult<List<Tag>> findTagsForProblem(int problemId) {
         String sqlQuery = "SELECT * FROM tags WHERE tag_id IN (SELECT tag_id FROM coding_tag WHERE problem_id = ?)";
         var result = new SQLResult<List<Tag>>();
 

@@ -1,12 +1,15 @@
 package com.preplane.dev.controllers.backend;
 
 import com.preplane.dev.models.CodingSubmission;
+import com.preplane.dev.models.Tag;
 import com.preplane.dev.payload.submission.CodeSubmission;
 import com.preplane.dev.payload.submission.CodeVerdict;
 import com.preplane.dev.repositories.CodingSubmission.JDBCCodingSubmissionRepository;
 import com.preplane.dev.security.Auth;
 
 import jakarta.validation.Valid;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,4 +53,28 @@ public class SubmissionController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/problem/{id}")
+    public ResponseEntity<List<CodingSubmission>> findSubmissionsByProblem(@PathVariable("id") int id) {
+    try {
+        // Call a method from your repository to get problems by tag
+        var response = codeSubmissionRepository.findSubmissionsByProblem(id);
+        return new ResponseEntity<>(response.response, HttpStatus.OK);
+    } catch (Exception e) {
+        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CodingSubmission> findSubmissionById (@PathVariable("id") int id) {
+    try {
+        // Call a method from your repository to get problems by tag
+        var response = codeSubmissionRepository.findSubmissionById(id);
+        return new ResponseEntity<>(response.response, HttpStatus.OK);
+    } catch (Exception e) {
+        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    }
+
+    
 }

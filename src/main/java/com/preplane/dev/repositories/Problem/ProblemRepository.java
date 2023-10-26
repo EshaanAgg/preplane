@@ -2,6 +2,7 @@ package com.preplane.dev.repositories.Problem;
 
 import com.preplane.dev.assets.SQLResult;
 import com.preplane.dev.models.Problem;
+import com.preplane.dev.models.Tag;
 
 import java.util.List;
 
@@ -17,4 +18,6 @@ public interface ProblemRepository {
     SQLResult<List<Problem>> findAll(int limit, int offset);
 
     SQLResult<List<Problem>> findByTag(String tag);
+
+    SQLResult<List<Tag>>findTagsForProblem(int problemId);
 }
