@@ -11,9 +11,17 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.preplane.dev.assets.SQLResult;
+import com.preplane.dev.models.CodingSubmission;
+import com.preplane.dev.models.Problem;
 import com.preplane.dev.models.User;
+import com.preplane.dev.models.Thread;
+import com.preplane.dev.rowMappers.CodingSubmissionRowMapper;
 import com.preplane.dev.rowMappers.CountMapper;
+import com.preplane.dev.rowMappers.ProblemRowMapper;
+import com.preplane.dev.rowMappers.TagRowMapper;
+import com.preplane.dev.rowMappers.ThreadRowMapper;
 import com.preplane.dev.rowMappers.UserRowMapper;
+import com.preplane.dev.security.Auth;
 
 import org.springframework.jdbc.core.RowMapper;
 
@@ -51,6 +59,51 @@ public class JDBCUserRepository implements UserRepository {
         } catch (Exception e) {
             System.out.println(e);
             result.message = "There was an error in creating the user. Error Message: " + e.getMessage();
+            result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public SQLResult<User> me() {
+        String sqlQuery = "SELECT * FROM user WHERE user_id = ?";
+        var result = new SQLResult<User>();
+
+        try {
+            var response = template.query(sqlQuery, this.mapper, Auth.getCurrentUser().getId());
+
+            if (!response.isEmpty()) {
+                result.message = "User fetched successfully.";
+                result.statusCode = HttpStatus.OK;
+
+                var user = response.get(0);
+
+                var submissionsResult = findSubmissions(user.getId());
+                if (submissionsResult.statusCode != HttpStatus.OK) {
+                    System.out.println("There was an error in fetching the submissions.");
+                    System.out.println(submissionsResult.message);
+                }
+                user.submissions = submissionsResult.response;
+                for (var sub : user.submissions)
+                    sub.problem = findProblem(sub.getProblemId());
+
+                var threadsResult = findThreads(user.getId());
+                if (threadsResult.statusCode != HttpStatus.OK) {
+                    System.out.println("There was an error in fetching the threads for this user.");
+                    System.out.println(threadsResult.message);
+                }
+                user.threads = threadsResult.response;
+
+                result.response = user;
+            } else {
+                result.message = "There is no user with such the provided ID.";
+                result.statusCode = HttpStatus.BAD_REQUEST;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            result.message = "There was an error in fetching the user. Error Message: " + e.getMessage();
             result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
@@ -173,5 +226,63 @@ public class JDBCUserRepository implements UserRepository {
             return Optional.empty();
 
         return Optional.of(users.get(0));
+    }
+
+    // Private Internal Helpers
+    private SQLResult<List<CodingSubmission>> findSubmissions(int userId) {
+        String sqlQuery = "SELECT * FROM coding_submission WHERE user_id = ?";
+        var result = new SQLResult<List<CodingSubmission>>();
+
+        try {
+            List<CodingSubmission> submissions = template.query(sqlQuery, new CodingSubmissionRowMapper(), userId);
+            result.response = submissions;
+
+            if (!submissions.isEmpty()) {
+                result.message = "Submissions fetched successfully.";
+                result.statusCode = HttpStatus.OK;
+            } else {
+                result.message = "There are no submissions available for the user and problem.";
+                result.statusCode = HttpStatus.NO_CONTENT;
+            }
+        } catch (Exception e) {
+            result.message = "There was an error in fetching the submissions. Error Message: " + e.getMessage();
+            result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return result;
+    }
+
+    private SQLResult<List<Thread>> findThreads(int userId) {
+        String sqlQuery = "SELECT * FROM thread WHERE user_created = ?";
+        var result = new SQLResult<List<Thread>>();
+
+        try {
+            List<Thread> threads = template.query(sqlQuery, new ThreadRowMapper(), userId);
+            result.response = threads;
+
+            if (!threads.isEmpty()) {
+                result.message = "Threads fetched successfully.";
+                result.statusCode = HttpStatus.OK;
+            } else {
+                result.message = "No threads available for the specified user.";
+                result.statusCode = HttpStatus.NO_CONTENT;
+            }
+        } catch (Exception e) {
+            result.message = "Error fetching threads. Error Message: " + e.getMessage();
+            result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return result;
+    }
+
+    private Problem findProblem(int problemId) {
+        String sqlQuery = "SELECT * FROM coding_problem WHERE problem_id = ?";
+        List<Problem> problems = template.query(sqlQuery, new ProblemRowMapper(), problemId);
+        var problem = problems.get(0);
+
+        sqlQuery = "SELECT * FROM tags WHERE tag_id IN (SELECT tag_id FROM coding_tag WHERE problem_id = ?)";
+        problem.setTags(template.query(sqlQuery, new TagRowMapper(), problemId));
+
+        return problem;
     }
 }

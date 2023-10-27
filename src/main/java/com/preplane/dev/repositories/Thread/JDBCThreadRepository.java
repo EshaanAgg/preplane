@@ -3,6 +3,7 @@ package com.preplane.dev.repositories.Thread;
 import com.preplane.dev.assets.SQLResult;
 import com.preplane.dev.models.Thread;
 import com.preplane.dev.models.User;
+import com.preplane.dev.rowMappers.ThreadRowMapper;
 import com.preplane.dev.rowMappers.UserRowMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 @Repository
@@ -211,19 +210,5 @@ public class JDBCThreadRepository implements ThreadRepository {
             System.out.println("There was an error in downvoting the thread");
             System.out.println(e);
         }
-    }
-}
-
-class ThreadRowMapper implements RowMapper<Thread> {
-    @Override
-    public Thread mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Thread thread = new Thread();
-        thread.setThreadId(rs.getInt("thread_id"));
-        thread.setTitle(rs.getString("title"));
-        thread.setContent(rs.getString("content"));
-        thread.setUserCreated(rs.getInt("user_created"));
-        thread.setUpvotes(rs.getInt("upvotes"));
-        thread.setDownvotes(rs.getInt("downvotes"));
-        return thread;
     }
 }

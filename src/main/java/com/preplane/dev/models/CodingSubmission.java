@@ -20,6 +20,7 @@ public class CodingSubmission {
     private String code;
     private double executionTime;
     private double executionMemory;
+    public Problem problem;
 
     public CodingSubmission() {
     }
@@ -104,6 +105,7 @@ public class CodingSubmission {
                 "  compilerVerdict = " + compilerVerdict + ",\n" +
                 "  code = '" + code + "',\n" +
                 "  executionTime = " + executionTime + ",\n" +
+                "  problem = " + problemId + ",\n" +
                 "  executionMemory = " + executionMemory + "\n" +
                 "}";
     }

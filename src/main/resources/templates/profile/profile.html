@@ -50,7 +50,7 @@
                       <path
                         d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM232 344V280H168c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H280v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
                     </svg>
-                    <span class="font-semibold" id="problemsAdded"></span>
+                    <span class="font-semibold" id="problemsAttempted"></span>
                   </p>
                   <p class="leading-normal">
                     <svg xmlns="http://www.w3.org/2000/svg" height="1.6em" viewBox="0 0 384 512"
@@ -153,27 +153,138 @@
 
         <script>
 
-          //random user data for mock population
-          const user = {
-            username: "johndoe",
-            firstname: "John",
-            lastname: "Doe",
+          // Converts HSL to HEX
+          function hslToHex(h, s, l) {
+            h /= 360;
+            s /= 100;
+            l /= 100;
+            const c = (1 - Math.abs(2 * l - 1)) * s;
+            const x = c * (1 - Math.abs((h * 6) % 2 - 1));
+            const m = l - c / 2;
+            let r, g, b;
 
-            problemsSolved: 100,
-            problemsAdded: 10,
+            if (0 <= h && h < 1) {
+              [r, g, b] = [c, x, 0];
+            } else if (1 <= h && h < 2) {
+              [r, g, b] = [x, c, 0];
+            } else if (2 <= h && h < 3) {
+              [r, g, b] = [0, c, x];
+            } else if (3 <= h && h < 4) {
+              [r, g, b] = [0, x, c];
+            } else if (4 <= h && h < 5) {
+              [r, g, b] = [x, 0, c];
+            } else if (5 <= h && h < 6) {
+              [r, g, b] = [c, 0, x];
+            }
 
-            //problem specifics via group by tags
-            easy: 45, medium: 30, hard: 25,
+            r = Math.round((r + m) * 255).toString(16).padStart(2, '0');
+            g = Math.round((g + m) * 255).toString(16).padStart(2, '0');
+            b = Math.round((b + m) * 255).toString(16).padStart(2, '0');
 
-            //topic specific count via group by topic tags
-            dataset: [10, 15, 5, 12, 25, 30, 25, 5, 10, 8, 2, 1, 1, 1, 2],
+            return `#${r}${g}${b}`;
+          }
 
-            //to be fetched using last login time
-            lastActive: "1 month",
+          // Generates `length` number of uniformly distributed colours
+          function generateBackgroundColors(length) {
+            const colors = [];
+            const saturation = 90;
+            const lightness = 50;
 
-            blogsAdded: 2,
-            avatar: "./assets/img/user.png",
-          };
+            for (let i = 0; i < length; i++) {
+              const hue = (i * 360) / length;
+              const color = hslToHex(hue, saturation, lightness);
+              colors.push(color);
+            }
+
+            return colors;
+          }
+
+          // Utility function to get the date in a human readable format
+          function timeAgo(date) {
+            const now = new Date();
+            const diff = now - date;
+            const seconds = Math.floor(diff / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+
+            if (days > 1) {
+              return days + " days ago";
+            } else if (days === 1) {
+              return "1 day ago";
+            } else if (hours > 1) {
+              return hours + " hours ago";
+            } else if (hours === 1) {
+              return "1 hour ago";
+            } else if (minutes > 1) {
+              return minutes + " minutes ago";
+            } else if (minutes === 1) {
+              return "1 minute ago";
+            } else {
+              return "just now";
+            }
+          }
+
+          async function fetchData() {
+            const authToken = localStorage.getItem("preplane-authHeader");
+
+            const response = await fetch('/api/users/me', {
+              method: 'GET',
+              headers: {
+                "Authorization": authToken,
+                'Content-Type': 'application/json'
+              },
+            });
+
+            userData = await response.json();
+
+            // Populate the general data
+            user = userData;
+
+            // Calculate the problem data that the user interacted with
+            let allProblems = new Set()
+            let correctProblems = new Set()
+
+            userData.submissions.forEach((submission) => {
+              if (submission.compilerVerdict === "AC") correctProblems.add(submission.problem)
+              allProblems.add(submission.problem)
+            })
+
+            let allProblesArr = Array.from(allProblems)
+            let correctProblemArr = Array.from(correctProblems)
+
+            user.problemsSolved = correctProblemArr.length;
+            user.problemsAttempted = allProblesArr.length;
+
+            // Group the problems solved by difficulty
+            user.easy = correctProblemArr.filter((problem) => problem.tags === null || problem.tags.some((tag) => tag.type === "DIFFICULTY" && tag.name == "Easy"));
+            user.medium = correctProblemArr.filter((problem) => problem.tags.some((tag) => tag.type === "DIFFICULTY" && tag.name == "Medium"));
+            user.hard = correctProblemArr.filter((problem) => problem.tags.some((tag) => tag.type === "DIFFICULTY" && tag.name == "Hard"));
+
+            // Add the additonal data related to the user
+            if (user.avatar == null || user.avatar == undefined) user.avatar = "./assets/img/user.png";
+            user.blogsAdded = user.thread?.length || 0;
+            user.lastActive = timeAgo(new Date(user.lastLoginAt))
+
+
+            // Render the topic data
+            const tagFrequency = {};
+
+            correctProblemArr.forEach((problem) => {
+              problem.tags.forEach((tag) => {
+                if (tag.type === "TOPIC") tagFrequency[tag.name] = (tagFrequency[tag] || 0) + 1;
+              });
+            });
+
+            user.topicLabels = Object.keys(tagFrequency);
+            user.topicFreq = Object.values(tagFrequency);
+
+            renderAvatar(user);
+            renderProfile(user);
+            renderPieChart(user);
+            renderActivityTracker(user);
+            renderTopicTags(user);
+          }
 
           function renderAvatar(user) {
             let imageAlt = "avatar";
@@ -188,16 +299,16 @@
             container.appendChild(imageElement);
           }
 
-          function profile(user) {
+          function renderProfile(user) {
             document.getElementById("username").textContent = "@" + user.username;
             document.getElementById("name").textContent = user.firstname + " " + user.lastname;
             document.getElementById("lastActive").textContent = "Last active: " + user.lastActive + " ago";
-            document.getElementById("problemsSolved").textContent = "Problems solved: " + user.problemsSolved;
-            document.getElementById("problemsAdded").textContent = "Problems added: " + user.problemsAdded;
+            document.getElementById("problemsSolved").textContent = "Problems Solved: " + user.problemsSolved;
+            document.getElementById("problemsAttempted").textContent = "Problems Attempted: " + user.problemsAttempted;
             document.getElementById("blogsAdded").textContent = "Blogs added: " + user.blogsAdded;
           }
 
-          function pieChart(user) {
+          function renderPieChart(user) {
             document.getElementById("problems").textContent = "Problems solved: " + user.problemsSolved;
 
             //pie chart for easy, medium and hard problems
@@ -226,7 +337,7 @@
             });
           }
 
-          function activityTracker(user) {
+          function renderActivityTracker(user) {
             document.getElementById("submissions").textContent = user.problemsSolved + " submissions in the last year";
 
             const squares = document.querySelector('.squares');
@@ -236,19 +347,17 @@
             }
           }
 
-          function topicTags(user) {
-            //bar chart for topic specific solves
+          function renderTopicTags(user) {
+            // Bar chart for topic specific solves
             ctx = document.getElementById("tagsChart").getContext('2d');
             myChart = new Chart(ctx, {
               type: 'bar',
               data: {
-                labels: ["Implementation", "Greedy", "Math", "Constructive algorithms", "Brute force", "Sortings", "Strings", "DP", "Binary search", "Number theory", "DFS", "Trees", "DSU", "Interactive", "Combinatorics"],
+                labels: user.topicLabels,
                 datasets: [{
                   label: "Tags",
-                  backgroundColor: [
-                    "#E52B50", "#3498DB", "#2ECC71", "#F1C40F", "#E74C3C", "#9B59B6", "#E67E22", "#95A5A6", "#34495E", "#D35400", "#8E44AD", "#1ABC9C", "#27AE60", "#2980B9", "#F39C12",
-                  ],
-                  data: user.dataset,
+                  backgroundColor: generateBackgroundColors(user.topicFreq.length),
+                  data: user.topicFreq,
                 },],
               },
 
@@ -262,11 +371,7 @@
             });
           }
 
-          renderAvatar(user);
-          profile(user);
-          pieChart(user);
-          activityTracker(user);
-          topicTags(user);
+          fetchData();
 
         </script>
   </main>

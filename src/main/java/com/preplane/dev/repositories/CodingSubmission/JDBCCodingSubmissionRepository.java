@@ -10,9 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.preplane.dev.assets.SQLResult;
 import com.preplane.dev.models.CodingSubmission;
-import com.preplane.dev.models.Comment;
 import com.preplane.dev.rowMappers.CodingSubmissionRowMapper;
-import com.preplane.dev.rowMappers.CommentRowMapper;
 
 @Repository
 public class JDBCCodingSubmissionRepository implements CodingSubmissionRepository {
@@ -48,73 +46,76 @@ public class JDBCCodingSubmissionRepository implements CodingSubmissionRepositor
 
     @Override
     public SQLResult<List<CodingSubmission>> findSubmissionsByUserAndProblem(int userId, int problemId) {
-    String sqlQuery = "SELECT * FROM coding_submission WHERE user_id = ? AND problem_id = ?";
-    var result = new SQLResult<List<CodingSubmission>>();
+        String sqlQuery = "SELECT * FROM coding_submission WHERE user_id = ? AND problem_id = ?";
+        var result = new SQLResult<List<CodingSubmission>>();
 
-    try {
-        List<CodingSubmission> submissions = template.query(sqlQuery, new CodingSubmissionRowMapper(), userId, problemId);
-        result.response = submissions;
+        try {
+            List<CodingSubmission> submissions = template.query(sqlQuery, new CodingSubmissionRowMapper(), userId,
+                    problemId);
+            result.response = submissions;
 
-        if (!submissions.isEmpty()) {
-            result.message = "Submissions fetched successfully.";
-            result.statusCode = HttpStatus.OK;
-        } else {
-            result.message = "There are no submissions available for the user and problem.";
-            result.statusCode = HttpStatus.NO_CONTENT;
+            if (!submissions.isEmpty()) {
+                result.message = "Submissions fetched successfully.";
+                result.statusCode = HttpStatus.OK;
+            } else {
+                result.message = "There are no submissions available for the user and problem.";
+                result.statusCode = HttpStatus.NO_CONTENT;
+            }
+        } catch (Exception e) {
+            result.message = "There was an error in fetching the submissions. Error Message: " + e.getMessage();
+            result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
         }
-    } catch (Exception e) {
-        result.message = "There was an error in fetching the submissions. Error Message: " + e.getMessage();
-        result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        return result;
     }
 
-    return result;
-}
-public SQLResult<CodingSubmission> findSubmissionById(int submissionId) {
-    String sqlQuery = "SELECT * FROM coding_submission WHERE submission_id = ?";
-    var result = new SQLResult<CodingSubmission>();
+    public SQLResult<CodingSubmission> findSubmissionById(int submissionId) {
+        String sqlQuery = "SELECT * FROM coding_submission WHERE submission_id = ?";
+        var result = new SQLResult<CodingSubmission>();
 
-    try {
-        CodingSubmission submission = template.queryForObject(sqlQuery, new CodingSubmissionRowMapper(), submissionId);
-        if (submission != null) {
-            result.message = "Submission fetched successfully.";
-            result.statusCode = HttpStatus.OK;
-            result.response = submission;
-        } else {
-            result.message = "There is no submission with the provided ID.";
-            result.statusCode = HttpStatus.BAD_REQUEST;
+        try {
+            CodingSubmission submission = template.queryForObject(sqlQuery, new CodingSubmissionRowMapper(),
+                    submissionId);
+            if (submission != null) {
+                result.message = "Submission fetched successfully.";
+                result.statusCode = HttpStatus.OK;
+                result.response = submission;
+            } else {
+                result.message = "There is no submission with the provided ID.";
+                result.statusCode = HttpStatus.BAD_REQUEST;
+            }
+        } catch (Exception e) {
+            result.message = "There was an error in fetching the submission. Error Message: " + e.getMessage();
+            result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
         }
-    } catch (Exception e) {
-        result.message = "There was an error in fetching the submission. Error Message: " + e.getMessage();
-        result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        return result;
     }
 
-    return result;
-}
+    @Override
+    public SQLResult<List<CodingSubmission>> findSubmissionsByProblem(int problemId) {
+        String sqlQuery = "SELECT * FROM coding_submission WHERE problem_id = ?";
+        var result = new SQLResult<List<CodingSubmission>>();
 
-@Override
-public SQLResult<List<CodingSubmission>> findSubmissionsByProblem(int problemId) {
-    String sqlQuery = "SELECT * FROM coding_submission WHERE problem_id = ?";
-    var result = new SQLResult<List<CodingSubmission>>();
+        try {
+            List<CodingSubmission> submissions = template.query(sqlQuery, new CodingSubmissionRowMapper(), problemId);
+            result.response = submissions;
 
-    try {
-        List<CodingSubmission> submissions = template.query(sqlQuery, new CodingSubmissionRowMapper(), problemId);
-        result.response = submissions;
-
-        if (!submissions.isEmpty()) {
-            result.message = "Submissions for the problem fetched successfully.";
-            result.statusCode = HttpStatus.OK;
-        } else {
-            result.message = "There are no submissions available for the specified problem.";
-            result.statusCode = HttpStatus.NO_CONTENT;
+            if (!submissions.isEmpty()) {
+                result.message = "Submissions for the problem fetched successfully.";
+                result.statusCode = HttpStatus.OK;
+            } else {
+                result.message = "There are no submissions available for the specified problem.";
+                result.statusCode = HttpStatus.NO_CONTENT;
+            }
+        } catch (Exception e) {
+            result.message = "There was an error in fetching the submissions for the problem. Error Message: "
+                    + e.getMessage();
+            result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
         }
-    } catch (Exception e) {
-        result.message = "There was an error in fetching the submissions for the problem. Error Message: " + e.getMessage();
-        result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        return result;
     }
-
-    return result;
-}
-
 
     @Transactional
     @Override

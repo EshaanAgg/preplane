@@ -1,7 +1,6 @@
 package com.preplane.dev.controllers.backend;
 
 import com.preplane.dev.models.CodingSubmission;
-import com.preplane.dev.models.Tag;
 import com.preplane.dev.payload.submission.CodeSubmission;
 import com.preplane.dev.payload.submission.CodeVerdict;
 import com.preplane.dev.repositories.CodingSubmission.JDBCCodingSubmissionRepository;
@@ -23,10 +22,11 @@ public class SubmissionController {
     private JDBCCodingSubmissionRepository codeSubmissionRepository;
 
     @GetMapping("/user/{userId}/problem/{problemId}/submissions")
-    public ResponseEntity<?> getSubmissionsByUserAndProblem(@PathVariable("userId") int userId, @PathVariable("problemId") int problemId) {
-    var response = codeSubmissionRepository.findSubmissionsByUserAndProblem(userId, problemId);
-    return new ResponseEntity<>(response.response, response.statusCode);
-}
+    public ResponseEntity<?> getSubmissionsByUserAndProblem(@PathVariable("userId") int userId,
+            @PathVariable("problemId") int problemId) {
+        var response = codeSubmissionRepository.findSubmissionsByUserAndProblem(userId, problemId);
+        return new ResponseEntity<>(response.response, response.statusCode);
+    }
 
     @PutMapping("/")
     public ResponseEntity<?> submitCode(@Valid @RequestBody CodeSubmission submission) {
@@ -56,25 +56,24 @@ public class SubmissionController {
 
     @GetMapping("/problem/{id}")
     public ResponseEntity<List<CodingSubmission>> findSubmissionsByProblem(@PathVariable("id") int id) {
-    try {
-        // Call a method from your repository to get problems by tag
-        var response = codeSubmissionRepository.findSubmissionsByProblem(id);
-        return new ResponseEntity<>(response.response, HttpStatus.OK);
-    } catch (Exception e) {
-        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+        try {
+            // Call a method from your repository to get problems by tag
+            var response = codeSubmissionRepository.findSubmissionsByProblem(id);
+            return new ResponseEntity<>(response.response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CodingSubmission> findSubmissionById (@PathVariable("id") int id) {
-    try {
-        // Call a method from your repository to get problems by tag
-        var response = codeSubmissionRepository.findSubmissionById(id);
-        return new ResponseEntity<>(response.response, HttpStatus.OK);
-    } catch (Exception e) {
-        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    public ResponseEntity<CodingSubmission> findSubmissionById(@PathVariable("id") int id) {
+        try {
+            // Call a method from your repository to get problems by tag
+            var response = codeSubmissionRepository.findSubmissionById(id);
+            return new ResponseEntity<>(response.response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    
 }

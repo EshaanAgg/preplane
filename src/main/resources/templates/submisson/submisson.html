@@ -14,7 +14,7 @@
 
 <body class="m-0 font-sans text-base antialiased font-normal leading-default bg-gray-50 text-slate-500">
     <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
-        
+
 
         <div class="flex flex-wrap mt-6 px-2 ml-4">
             <div class="hidden" id="submisson_id" th:text="${id}"></div>
@@ -32,15 +32,15 @@
 </body>
 <script>
     function formatSubmissionTime(submissionTime) {
-            const formattedTime = new Date(submissionTime).toLocaleString();
-            return formattedTime;
-        }
+        const formattedTime = new Date(submissionTime).toLocaleString();
+        return formattedTime;
+    }
 
     async function fetchData() {
         const authToken = localStorage.getItem("preplane-authHeader");
 
         const id = document.getElementById("submisson_id").textContent;
-        
+
         const submissionsUrl = `/api/submit/${id}`;
         const submissionsResponse = await fetch(submissionsUrl, {
             method: 'GET',
@@ -51,7 +51,7 @@
         });
         submisson = await submissionsResponse.json();
         console.log(submisson);
-        document.getElementById('verdict').innerHTML = "Status : "+submisson.compilerVerdict;
+        document.getElementById('verdict').innerHTML = "Status : " + submisson.compilerVerdict;
         document.getElementById('timeLimit').innerHTML = "Execution Time : " + submisson.executionTime;
         document.getElementById('memory').innerHTML = "Execution Memory : " + submisson.executionMemory;
         document.getElementById('submissonTime').innerHTML = "Submitted On : " + formatSubmissionTime(submisson.executionMemory);

@@ -9,7 +9,6 @@ import com.preplane.dev.security.Auth;
 import com.preplane.dev.security.services.ThreadAuthorizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -119,12 +118,11 @@ public class ThreadController {
             if (existingThreadResponse.statusCode == HttpStatus.OK && existingThreadResponse.response) {
                 var voteThread = new VoteThread(id, Auth.getCurrentUser().getId(), 1);
                 var check = voteThreadRepository.save(voteThread);
-                if(check.statusCode == HttpStatus.CREATED) {
+                if (check.statusCode == HttpStatus.CREATED) {
                     threadRepository.upvoteThread(id);
                     Thread existingThread = threadRepository.findById(id).response;
                     return new ResponseEntity<>(existingThread, HttpStatus.OK);
-                }
-                else{
+                } else {
                     return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
                 }
             } else {
@@ -142,12 +140,11 @@ public class ThreadController {
             if (existingThreadResponse.statusCode == HttpStatus.OK && existingThreadResponse.response) {
                 var voteThread = new VoteThread(id, Auth.getCurrentUser().getId(), -1);
                 var check = voteThreadRepository.save(voteThread);
-                if(check.statusCode == HttpStatus.CREATED) {
+                if (check.statusCode == HttpStatus.CREATED) {
                     threadRepository.downvoteThread(id);
                     Thread existingThread = threadRepository.findById(id).response;
                     return new ResponseEntity<>(existingThread, HttpStatus.OK);
-                }
-                else{
+                } else {
                     return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
                 }
             } else {

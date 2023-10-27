@@ -17,7 +17,7 @@ public interface UserRepository {
 
     SQLResult<List<User>> findAll(int limit, int offset);
 
-    // Utility functions leading with data integrity
+    SQLResult<User> me();
 
     // This function must always be called with a userId that is assured to be in
     // the database as it does not perform the check for the same

@@ -2,10 +2,10 @@ package com.preplane.dev.models;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import java.util.Date;
 
 public class User {
     private int userId;
@@ -16,6 +16,8 @@ public class User {
     private Date lastLoginAt;
     private String avatar;
     private String role = "ROLE_USER";
+    public List<CodingSubmission> submissions;
+    public List<Thread> threads;
 
     @JsonIgnore
     private String password;
@@ -136,6 +138,8 @@ public class User {
         parameters.put("lastName", this.lastName);
         parameters.put("lastLoginAt", this.lastLoginAt);
         parameters.put("avatar", this.avatar);
+        parameters.put("submissions", this.submissions);
+        parameters.put("threads", this.threads);
 
         return parameters;
     }
@@ -149,6 +153,8 @@ public class User {
                 "  role = '" + this.role + "\',\n" +
                 "  firstName = '" + this.firstName + "\',\n" +
                 "  lastName = '" + this.lastName + "\',\n" +
+                "  submissions = '" + this.submissions + "\',\n" +
+                "  threads = '" + this.threads + "\',\n" +
                 "  avatar = '" + this.avatar + "\n" +
                 "}";
     }

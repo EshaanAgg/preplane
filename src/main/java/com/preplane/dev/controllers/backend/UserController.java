@@ -41,6 +41,17 @@ public class UserController {
         }
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<User> me() {
+
+        try {
+            var response = userRepository.me();
+            return new ResponseEntity<>(response.response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable("id") int id) {
         var response = userRepository.findById(id);
