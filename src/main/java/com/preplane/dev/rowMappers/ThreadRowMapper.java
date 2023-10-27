@@ -17,6 +17,7 @@ public class ThreadRowMapper implements RowMapper<Thread> {
         thread.setUserCreated(rs.getInt("user_created"));
         thread.setUpvotes(rs.getInt("upvotes"));
         thread.setDownvotes(rs.getInt("downvotes"));
+        thread.setCreatedAt(rs.getDate("created_at"));
 
         return thread;
     }

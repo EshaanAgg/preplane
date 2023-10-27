@@ -118,10 +118,14 @@ public class JDBCThreadRepository implements ThreadRepository {
         var result = new SQLResult<List<Thread>>();
 
         try {
-            List<Thread> threads = template.query(sqlQuery, new ThreadRowMapper(), userId);
-            result.response = threads;
+            List<Thread> response = template.query(sqlQuery, new ThreadRowMapper(), userId);
+            for (var thread : response) {
+                String query = "SELECT * FROM user WHERE user_id = ?";
+                thread.setCreator(template.query(query, new UserRowMapper(), thread.getUserCreated()).get(0));
+            }
+            result.response = response;
 
-            if (!threads.isEmpty()) {
+            if (!response.isEmpty()) {
                 result.message = "Threads fetched successfully.";
                 result.statusCode = HttpStatus.OK;
             } else {
@@ -144,6 +148,11 @@ public class JDBCThreadRepository implements ThreadRepository {
 
         try {
             var response = template.query(sqlQuery, this.threadMapper, limit, offset);
+
+            for (var thread : response) {
+                String query = "SELECT * FROM user WHERE user_id = ?";
+                thread.setCreator(template.query(query, new UserRowMapper(), thread.getUserCreated()).get(0));
+            }
             result.response = response;
 
             if (!response.isEmpty()) {

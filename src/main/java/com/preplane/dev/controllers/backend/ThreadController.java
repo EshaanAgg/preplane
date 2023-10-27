@@ -62,13 +62,13 @@ public class ThreadController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Thread> createThread(@RequestBody Thread thread, @AuthenticationPrincipal User loggedInUser) {
+    public ResponseEntity<Thread> createThread(@RequestBody Thread thread) {
         try {
             if (thread.getTitle() == null || thread.getContent() == null) {
                 return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             }
 
-            thread.setUserCreated(loggedInUser.getId());
+            thread.setUserCreated(Auth.getCurrentUserId());
 
             var response = threadRepository.save(thread);
             if (response.statusCode == HttpStatus.CREATED) {
@@ -82,15 +82,14 @@ public class ThreadController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Thread> updateThread(@PathVariable("id") int id, @RequestBody Thread thread,
-            @AuthenticationPrincipal User loggedInUser) {
+    public ResponseEntity<Thread> updateThread(@PathVariable("id") int id, @RequestBody Thread thread) {
         try {
             var existingThreadResponse = threadRepository.findById(id);
             if (existingThreadResponse.statusCode == HttpStatus.OK) {
                 Thread existingThread = existingThreadResponse.response;
 
                 // Check if the logged-in user is the author of the thread
-                if (existingThread.getUserCreated() == loggedInUser.getId()) {
+                if (existingThread.getUserCreated() == Auth.getCurrentUserId()) {
                     existingThread.setTitle(thread.getTitle());
                     existingThread.setContent(thread.getContent());
 
