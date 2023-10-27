@@ -65,6 +65,8 @@
                     </div>
                 </div>
             </div>
+            <input type="file" id="fileInput" accept=".cpp">
+            <button onclick="processFile(),makeSubmisson()">Submit Code</button>
         </section>
         <section id="editorial" class="tab-content">
             <div class="w-full px-4 sm:px-6 md:px-8 py-6 mx-auto">
@@ -102,13 +104,14 @@
             <div class="w-full px-4 sm:px-6 md:px-8 py-6 mx-auto">
                 <div class="max-w-xl mx-auto bg-white p-4 md:p-6 rounded-lg shadow-md">
                     <h2 class="text-xl sm:text-2xl font-semibold text-center mb-4">Submissions</h2>
-    
+
                     <!-- Submission Items Container -->
                     <div class="space-y-4" id="submission-container">
                         <!-- JavaScript will populate submission items here -->
                     </div>
                 </div>
             </div>
+
         </section>
 
     </main>
@@ -137,7 +140,7 @@
 
             // Activate the selected tab button and apply hover effect
             event.currentTarget.classList.add('active', 'text-blue');
-        
+
         }
         showTab('problem-description');
     </script>
@@ -145,51 +148,51 @@
     <script>
         // Your data object with problem details
         async function fetchData() {
-        const authToken = localStorage.getItem("preplane-authHeader");
+            const authToken = localStorage.getItem("preplane-authHeader");
 
-        const id = document.getElementById("problem_id").textContent;
-        const problemUrl = `/api/problems/${id}`;
-        const tagUrl = `/api/problems/tagProblem/${id}`;
-        const submissionsUrl = `/api/submit/problem/${id}`;
-        const problemResponse = await fetch(problemUrl, {
-            method: 'GET',
-            headers: {
-                "Authorization": authToken,
-                'Content-Type': 'application/json'
-            },
-        });
-        const tagResponse = await fetch(tagUrl, {
-            method: 'GET',
-            headers: {
-                "Authorization": authToken,
-                'Content-Type': 'application/json'
-            },
-        });
-        const submissionsResponse = await fetch(submissionsUrl, {
-            method: 'GET',
-            headers: {
-                "Authorization": authToken,
-                'Content-Type': 'application/json'
-            },
-        });
-        problem = await problemResponse.json();
-        tags = await tagResponse.json();
-        submissons = await submissionsResponse.json();
-        populatePage(problem,tags,submissons);
-        populateSubmissionItems(submissons);
-    }
+            const id = document.getElementById("problem_id").textContent;
+            const problemUrl = `/api/problems/${id}`;
+            const tagUrl = `/api/problems/tagProblem/${id}`;
+            const submissionsUrl = `/api/submit/problem/${id}`;
+            const problemResponse = await fetch(problemUrl, {
+                method: 'GET',
+                headers: {
+                    "Authorization": authToken,
+                    'Content-Type': 'application/json'
+                },
+            });
+            const tagResponse = await fetch(tagUrl, {
+                method: 'GET',
+                headers: {
+                    "Authorization": authToken,
+                    'Content-Type': 'application/json'
+                },
+            });
+            const submissionsResponse = await fetch(submissionsUrl, {
+                method: 'GET',
+                headers: {
+                    "Authorization": authToken,
+                    'Content-Type': 'application/json'
+                },
+            });
+            problem = await problemResponse.json();
+            tags = await tagResponse.json();
+            submissons = await submissionsResponse.json();
+            populatePage(problem, tags, submissons);
+            populateSubmissionItems(submissons);
+        }
         // Function to update the HTML elements with data from the object
-        function populatePage(problemData,tags) {
+        function populatePage(problemData, tags) {
             console.log(tags);
             let tagNames = tags.filter(tag => tag.type != 'COMPANY').map(tag => tag.name).join(', ');
             let companyTagNames = tags.filter(tag => tag.type === 'COMPANY').map(tag => tag.name).join(', ');
-            
+
             document.getElementById('problemName').textContent = problemData.title;
-            document.getElementById('timeLimit').innerHTML = problemData.timeLimit+" second";
+            document.getElementById('timeLimit').innerHTML = problemData.timeLimit + " second";
             document.getElementById('companies').textContent = companyTagNames;
             document.getElementById('tags').innerHTML = tagNames;
             document.getElementById('input').innerHTML = problemData.testcases;
-            document.getElementById('editorial-code').textContent=problemData.authorsSolution;
+            document.getElementById('editorial-code').textContent = problemData.authorsSolution;
             /* document.getElementById('output').textContent = problemData.output; */
             // Use innerHTML to insert the HTML content, including paragraphs
             document.getElementById('problemStatement').innerHTML = problemData.statement;
@@ -202,30 +205,90 @@
         function populateSubmissionItems(submissionsData) {
             console.log(submissionsData);
             const submissionContainer = document.getElementById('submission-container');
-            
+
             submissionsData.forEach(submission => {
                 const submissionItem = document.createElement('div');
                 submissionItem.className = 'border border-gray-200 p-4 rounded-lg flex items-center justify-between';
-                
+
                 submissionItem.innerHTML = `
                     <div>
                         <p class="text-sm sm:text-base font-semibold text-gray-600">Submission ID: ${submission.submissionId}</p>
                         <p class="text-xs sm:text-sm text-gray-500">Submitted:${formatSubmissionTime(submission.submissionTime)}</p>
                     </div>
                     <div>
-                        <span class="px-2 py-1 ${
-                            submission.compilerVerdict === 'AC' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                        } text-xs sm:text-sm font-semibold rounded-md">${submission.compilerVerdict}</span>
+                        <span class="px-2 py-1 ${submission.compilerVerdict === 'AC' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                    } text-xs sm:text-sm font-semibold rounded-md">${submission.compilerVerdict}</span>
                     </div>
                 `;
-                
+
                 submissionContainer.appendChild(submissionItem);
             });
         }
         fetchData();
 
         // Call the function to populate the page
+
+    </script>
+    <script>
         
+        let urlEncodedCode = "";
+
+        async function processFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            if (file) {
+                await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+
+                    reader.onload = function (event) {
+                        const cppCode = event.target.result;
+
+                        // URL encode the C++ code
+                        urlEncodedCode = encodeURIComponent(cppCode);
+                        resolve(); // Resolve the promise when encoding is done
+                    };
+
+                    reader.readAsText(file);
+                });
+            }
+        }
+
+
+
+
+        async function makeSubmisson() {
+            await processFile();
+            var accessToken = '7e0f7856d56e13249254e3805fc8bf1e';
+            var endpoint = '2f5a3efa.problems.sphere-engine.com';
+            const id = document.getElementById("problem_id").textContent;
+
+            var submissionData = {
+                problemCode: "PROB"+`${id}`,
+                compilerId: 1,
+                source: urlEncodedCode,
+            };
+            console.log(submissionData);
+            fetch(`https://${endpoint}/api/v3/submissions?access_token=${accessToken}`, {
+            method: 'POST',
+            body: new URLSearchParams(submissionData),
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data); // Handle the response data here
+        })
+        .catch(error => {
+            console.error('Error:', error); // Handle any errors here
+        });
+
+            
+        }
+
+
+
     </script>
 
 
