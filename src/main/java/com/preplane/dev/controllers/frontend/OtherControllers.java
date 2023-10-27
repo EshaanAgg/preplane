@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class OtherControllers {
 
-    @GetMapping("/discuss")
+    @GetMapping("/blog")
     public String discuss() {
-        return "discuss/discuss";
+        return "blog/discuss";
     }
 
     @GetMapping("/problems")

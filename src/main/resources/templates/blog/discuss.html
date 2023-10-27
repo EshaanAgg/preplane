@@ -39,7 +39,7 @@
             <div id="dialog-box"
                 style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; padding: 20px; border-radius: 5px; z-index: 100; box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); display: none;">
                 <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 20px;">Dialog Box Form</h2>
-                <form id="dialog-form" onsubmit="submitForm(); return false;">
+                <form id="addThreadForm">
                     <div style="margin-bottom: 10px;">
                         <label for="postTitle" style="font-size: 16px; font-weight: bold;">Post Title:</label>
                         <input type="text" id="postTitle" name="postTitle"
@@ -58,6 +58,7 @@
                         onclick="closeDialog()">Close</button>
                 </form>
             </div>
+
             <div class="flex flex-wrap -mx-3">
                 <div class="w-full max-w-full px-3 mt-6 md:w-7/12 md:flex-none">
                     <div
@@ -147,7 +148,7 @@
             const authToken = localStorage.getItem("preplane-authHeader");
             const userData = JSON.parse(localStorage.getItem("preplane-currentSession"));
 
-            const response = await fetch('/api/threads/', {
+            const allThreadResponse = await fetch('/api/threads/', {
                 method: 'GET',
                 headers: {
                     "Authorization": authToken,
@@ -155,17 +156,20 @@
                 },
             });
 
-            recentlyPostedData = await response.json();
+            recentlyPostedData = await allThreadResponse.json();
             filteredRecentPostData = recentlyPostedData;
 
-            const responseNew = await fetch(`/api/threads/user/${userData.id}`, {
+            const userBlogResponse = await fetch(`/api/threads/user/${userData.id}`, {
                 method: 'GET',
                 headers: {
                     "Authorization": authToken,
                     'Content-Type': 'application/json'
                 },
             });
-            userBlogsData = await responseNew.json();
+            userBlogsData = await userBlogResponse.json();
+            userBlogsData.sort(function (a, b) {
+                return (new Date(b.createdAt)) - (new Date(a.createdAt));
+            });
 
             populateData();
         }
@@ -183,7 +187,7 @@
                 postItem.innerHTML = `
                 <li class="flex items-center justify-between p-2 text-gray-700 border-b">
                     <div>
-                        <h6 class="text-xl font-semibold text-gray-800">${item.title}</h6>
+                        <a href="/blog/${item.threadId}" class="text-xl font-semibold text-gray-800">${item.title}</a>
                         <p class="text-sm text-gray-500">${item.creator.firstName} ${item.creator.lastName} - ${timeAgo(item.createdAt)}</p>
                     </div>
                     <div>
@@ -200,7 +204,7 @@
                 blogItem.innerHTML = `
                 <li class="flex justify-between py-3 text-gray-700 border-b">
                     <div>
-                        <h6 class="text-lg font-semibold text-gray-800">${item.title}</h6>
+                        <a class="text-lg font-semibold text-gray-800" href="/blog/${item.threadId}">${item.title}</a>
                         <p class="text-sm text-gray-500">${item.creator.firstName} ${item.creator.lastName}</p>
                     </div>
                     <div>
@@ -246,6 +250,7 @@
 
         fetchData();
     </script>
+
     <script>
         function openDialog() {
             var dialog = document.getElementById('dialog-box');
@@ -261,34 +266,36 @@
             overlay.style.display = 'none';
         }
 
-        function submitForm() {
-
-            var postTitle = document.getElementById("postTitle").value;
-            var message = document.getElementById("message").value;
-
-            var formData = new FormData();
-            formData.append("thread_id", 1);// not to be set as 1
-            formData.append("title", postTitle);
-            formData.append("content", message);
-            formData.append("created_at", Date.now());
-            formData.append("user_created", userData.id);
+        function addNewThread(vent) {
+            event.preventDefault()
+            const authToken = localStorage.getItem("preplane-authHeader");
 
             fetch('api/threads/', {
                 method: 'POST',
-                body: formData,
+                headers: {
+                    "Authorization": authToken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    title: document.getElementById("postTitle").value,
+                    content: document.getElementById("message").value,
+                }),
             })
-                .then(response => response.json())
-                .then(data => {
-                    alert("Form submitted successfully!");
-                    console.log(response);
-                    console.log(data);
+                .then(allThreadResponse => allThreadResponse.json())
+                .then((data) => {
+                    alert("Creation of thread was successful!");
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.error('API Error:', error);
-                    alert("Form submission failed. Please try again.");
+                    alert("Unable to create a new thread! Please try again.");
+                }).finally(() => {
+                    closeDialog();
+                    location.reload();
                 });
-            closeDialog();
         }
+
+        document.getElementById('addThreadForm').addEventListener('submit', addNewThread);
+
     </script>
 </body>
 
