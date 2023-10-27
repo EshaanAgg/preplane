@@ -3,12 +3,13 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scsale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Preplane | Profile</title>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@popperjs/core@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tinycolor2@1.6.0/cjs/tinycolor.min.js"></script>
   <link href="css/style.css" rel="stylesheet" />
 </head>
 
@@ -40,15 +41,15 @@
                     <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 640 512"
                       style="padding-right: 8px;">
                       <path
-                        d="M392.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm80.6 120.1c-12.5 12.5-12.5 32.8 0 45.3L562.7 256l-89.4 89.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l112-112c12.5-12.5 12.5-32.8 0-45.3l-112-112c-12.5-12.5-32.8-12.5-45.3 0zm-306.7 0c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3l112 112c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256l89.4-89.4c12.5-12.5 12.5-32.8 0-45.3z" />
+                        d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM232 344V280H168c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H280v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
                     </svg>
                     <span class="font-semibold" id="problemsSolved"></span>
                   </p>
                   <p class="leading-normal">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 512 512"
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 640 512"
                       style="padding-left: 4px; padding-right: 10px;">
                       <path
-                        d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM232 344V280H168c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H280v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
+                        d="M392.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm80.6 120.1c-12.5 12.5-12.5 32.8 0 45.3L562.7 256l-89.4 89.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l112-112c12.5-12.5 12.5-32.8 0-45.3l-112-112c-12.5-12.5-32.8-12.5-45.3 0zm-306.7 0c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3l112 112c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256l89.4-89.4c12.5-12.5 12.5-32.8 0-45.3z" />
                     </svg>
                     <span class="font-semibold" id="problemsAttempted"></span>
                   </p>
@@ -100,19 +101,7 @@
                 <div class="flex flex-col h-full">
                   <h5 class="ml-2 pt-2 mb-6 text-black" id="submissions"></h5>
                   <div class="graph">
-                    <ul class="months">
-                      <li>Jan</li>
-                      <li>Feb</li>
-                      <li>Mar</li>
-                      <li>Apr</li>
-                      <li>May</li>
-                      <li>Jun</li>
-                      <li>Jul</li>
-                      <li>Aug</li>
-                      <li>Sep</li>
-                      <li>Oct</li>
-                      <li>Nov</li>
-                      <li>Dec</li>
+                    <ul class="months" id="months">
                     </ul>
                     <ul class="days">
                       <li>Sun</li>
@@ -152,38 +141,6 @@
         </div>
 
         <script>
-
-          // Converts HSL to HEX
-          function hslToHex(h, s, l) {
-            h /= 360;
-            s /= 100;
-            l /= 100;
-            const c = (1 - Math.abs(2 * l - 1)) * s;
-            const x = c * (1 - Math.abs((h * 6) % 2 - 1));
-            const m = l - c / 2;
-            let r, g, b;
-
-            if (0 <= h && h < 1) {
-              [r, g, b] = [c, x, 0];
-            } else if (1 <= h && h < 2) {
-              [r, g, b] = [x, c, 0];
-            } else if (2 <= h && h < 3) {
-              [r, g, b] = [0, c, x];
-            } else if (3 <= h && h < 4) {
-              [r, g, b] = [0, x, c];
-            } else if (4 <= h && h < 5) {
-              [r, g, b] = [x, 0, c];
-            } else if (5 <= h && h < 6) {
-              [r, g, b] = [c, 0, x];
-            }
-
-            r = Math.round((r + m) * 255).toString(16).padStart(2, '0');
-            g = Math.round((g + m) * 255).toString(16).padStart(2, '0');
-            b = Math.round((b + m) * 255).toString(16).padStart(2, '0');
-
-            return `#${r}${g}${b}`;
-          }
-
           // Generates `length` number of uniformly distributed colours
           function generateBackgroundColors(length) {
             const colors = [];
@@ -192,7 +149,7 @@
 
             for (let i = 0; i < length; i++) {
               const hue = (i * 360) / length;
-              const color = hslToHex(hue, saturation, lightness);
+              const color = tinycolor({h: hue, s: saturation, l: lightness}).toHexString();
               colors.push(color);
             }
 
@@ -257,9 +214,9 @@
             user.problemsAttempted = allProblesArr.length;
 
             // Group the problems solved by difficulty
-            user.easy = correctProblemArr.filter((problem) => problem.tags === null || problem.tags.some((tag) => tag.type === "DIFFICULTY" && tag.name == "Easy"));
-            user.medium = correctProblemArr.filter((problem) => problem.tags.some((tag) => tag.type === "DIFFICULTY" && tag.name == "Medium"));
-            user.hard = correctProblemArr.filter((problem) => problem.tags.some((tag) => tag.type === "DIFFICULTY" && tag.name == "Hard"));
+            user.easy = correctProblemArr.filter((problem) => problem.tags === null || problem.tags.some((tag) => tag.type === "DIFFICULTY" && tag.name == "Easy")).length;
+            user.medium = correctProblemArr.filter((problem) => problem.tags.some((tag) => tag.type === "DIFFICULTY" && tag.name == "Medium")).length;
+            user.hard = correctProblemArr.filter((problem) => problem.tags.some((tag) => tag.type === "DIFFICULTY" && tag.name == "Hard")).length;
 
             // Add the additonal data related to the user
             if (user.avatar == null || user.avatar == undefined) user.avatar = "./assets/img/user.png";
@@ -301,8 +258,8 @@
 
           function renderProfile(user) {
             document.getElementById("username").textContent = "@" + user.username;
-            document.getElementById("name").textContent = user.firstname + " " + user.lastname;
-            document.getElementById("lastActive").textContent = "Last active: " + user.lastActive + " ago";
+            document.getElementById("name").textContent = user.firstName + " " + user.lastName;
+            document.getElementById("lastActive").textContent = "Last active: " + user.lastActive;
             document.getElementById("problemsSolved").textContent = "Problems Solved: " + user.problemsSolved;
             document.getElementById("problemsAttempted").textContent = "Problems Attempted: " + user.problemsAttempted;
             document.getElementById("blogsAdded").textContent = "Blogs added: " + user.blogsAdded;
@@ -311,7 +268,7 @@
           function renderPieChart(user) {
             document.getElementById("problems").textContent = "Problems solved: " + user.problemsSolved;
 
-            //pie chart for easy, medium and hard problems
+            // Pie chart for easy, medium and hard problems
             let ctx = document.getElementById("myChart").getContext('2d');
             let myChart = new Chart(ctx, {
               type: 'doughnut',
@@ -324,7 +281,7 @@
                     "#E52B50"
                   ],
                   data: [user.easy, user.medium, user.hard]
-                },],
+                }],
               },
               options: {
                 plugins: {
@@ -341,14 +298,44 @@
             document.getElementById("submissions").textContent = user.problemsSolved + " submissions in the last year";
 
             const squares = document.querySelector('.squares');
-            for (let i = 1; i < 365; i++) {
-              const level = Math.floor(Math.random() * 3);
+            const today = new Date();
+            const oneDay = 24 * 60 * 60 * 1000;
+
+            for (let i = 364; i >= 0; i--) {
+              const currentDate = new Date(today - i * oneDay);
+
+              // Count the number of submissions on the current day
+              const submissionsOnDay = user.submissions.filter((submission) => {
+                const submissionDate = new Date(submission.submissionTime);
+                return (
+                  submissionDate.getDate() === currentDate.getDate() &&
+                  submissionDate.getMonth() === currentDate.getMonth() &&
+                  submissionDate.getFullYear() === currentDate.getFullYear()
+                );
+              });
+
+              const level = submissionsOnDay.length;
               squares.insertAdjacentHTML('beforeend', `<li data-level="${level}"></li>`);
             }
+
+            // Populate the months in the correct order
+            const monthsList = document.querySelector('.months');
+            const currentMonth = today.getMonth();
+
+            const monthNames = [
+              'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+              'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+            ];
+
+            monthsList.innerHTML = '';
+            for (let i = 0; i < 12; i++)
+              monthsList.insertAdjacentHTML('beforeend', `<li>${monthNames[(i + currentMonth + 1) % 12]}</li>`);
           }
 
+          // Bar chart for topic specific solves
           function renderTopicTags(user) {
-            // Bar chart for topic specific solves
+            const bgColors = generateBackgroundColors(user.topicFreq.length);
+
             ctx = document.getElementById("tagsChart").getContext('2d');
             myChart = new Chart(ctx, {
               type: 'bar',
@@ -356,11 +343,10 @@
                 labels: user.topicLabels,
                 datasets: [{
                   label: "Tags",
-                  backgroundColor: generateBackgroundColors(user.topicFreq.length),
+                  backgroundColor: bgColors,
                   data: user.topicFreq,
-                },],
+                }],
               },
-
               options: {
                 plugins: {
                   legend: {
@@ -369,6 +355,7 @@
                 },
               },
             });
+
           }
 
           fetchData();
