@@ -110,11 +110,31 @@ public class ThreadController {
         }
     }
 
-    @PutMapping("/upvote/{id}")
+    @GetMapping("/status/{id}")
+    public ResponseEntity<Integer> getVotingStatus(@PathVariable("id") int id) {
+        try {
+            var existingThreadResponse = voteThreadRepository.check(id, Auth.getCurrentUser().getId());
+            return new ResponseEntity<>(existingThreadResponse.response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/remove-vote/{id}")
+    public ResponseEntity<Integer> removeVote(@PathVariable("id") int id) {
+        try {
+            var existingThreadResponse = voteThreadRepository.delete(id, Auth.getCurrentUser().getId());
+            return new ResponseEntity<>(existingThreadResponse.response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/upvote/{id}")
     public ResponseEntity<Thread> upvoteThread(@PathVariable("id") int id) {
         try {
             var existingThreadResponse = voteThreadRepository.check(id, Auth.getCurrentUser().getId());
-            if (existingThreadResponse.statusCode == HttpStatus.OK && existingThreadResponse.response) {
+            if (existingThreadResponse.statusCode == HttpStatus.OK && existingThreadResponse.response == 0) {
                 var voteThread = new VoteThread(id, Auth.getCurrentUser().getId(), 1);
                 var check = voteThreadRepository.save(voteThread);
                 if (check.statusCode == HttpStatus.CREATED) {
@@ -132,11 +152,11 @@ public class ThreadController {
         }
     }
 
-    @PutMapping("/downvote/{id}")
+    @PostMapping("/downvote/{id}")
     public ResponseEntity<Thread> downvoteThread(@PathVariable("id") int id) {
         try {
             var existingThreadResponse = voteThreadRepository.check(id, Auth.getCurrentUser().getId());
-            if (existingThreadResponse.statusCode == HttpStatus.OK && existingThreadResponse.response) {
+            if (existingThreadResponse.statusCode == HttpStatus.OK && existingThreadResponse.response == 0) {
                 var voteThread = new VoteThread(id, Auth.getCurrentUser().getId(), -1);
                 var check = voteThreadRepository.save(voteThread);
                 if (check.statusCode == HttpStatus.CREATED) {

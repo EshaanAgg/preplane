@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Preplane | Blog</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <link href="../css/style.css" rel="stylesheet" />
     <script src="https://unpkg.com/@popperjs/core@2"></script>
@@ -28,26 +29,27 @@
                 <span class="mr-4" id="authorInfo">Author: Jane Smith</span>
                 <span class="mr-4" id="dateInfo">Date Added: October 21, 2023</span>
             </div>
+            <div class="text-gray-600 text-sm mt-2">
+                <span class="mr-4" id="upvoteCount"></span>
+                <span class="mr-4" id="downvoteCount"></span>
+            </div>
+
             <p class="mt-4" id="blogContent"></p>
             <div class="flex justify-between items-center mt-4">
-                <div class="flex items-center">
-                    <button class="flex items-center text-green-600 mr-4" id="upvoteBlogPost">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 6V3M12 3c-3.866 0-7 3.134-7 7s3.134 7 7 7 7-3.134 7-7-3.134-7-7-7z" />
-                        </svg>
-                        Upvote
-                    </button>
-                    <button class="flex items-center text-red-600" id="downvoteBlogPost">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 21v-2M12 21c4.418-0.002 8-3.582 8-7.998 0-4.416-3.582-8-7.998-8-4.415 0-7.997 3.584-7.997 7.998C4.003 17.418 7.585 21 12 21z" />
-                        </svg>
-                        Downvote
-                    </button>
+
+                <!-- Upvote/Downvote thread section -->
+                <div class="flex items-center voting-component">
+                    <div class="voting-component">
+                        <button id="upvote" class="vote-button">
+                            <i class="far fa-thumbs-up"></i>
+                        </button>
+                        <button id="downvote" class="vote-button">
+                            <i class="far fa-thumbs-down"></i>
+                        </button>
+                    </div>
                 </div>
+
+                <!-- Show Comments Button -->
                 <div class="flex items-center">
                     <button class="flex items-center text-gray-600" id="toggleComments">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -86,6 +88,8 @@
         document.getElementById('authorInfo').textContent = `Author: ${blog.creator.firstName} ${blog.creator.lastName}`;
         document.getElementById('dateInfo').textContent = `Date Added: ${blog.createdAt || `Sometime ago...`}`;
         document.getElementById('blogContent').innerHTML = blog.content;
+        document.getElementById("upvoteCount").innerHTML = `Upvotes: ${blog.upvotes}`
+        document.getElementById("downvoteCount").innerHTML = `Downvotes: ${blog.downvotes}`
     }
 
     // Function to populate comments
@@ -134,11 +138,6 @@
 
     function submitComment() { }
 
-    function upvoteBlogPost() { }
-
-    function downvoteBlogPost() { }
-
-
     const toggleCommentsButton = document.getElementById('toggleComments');
     const commentsSection = document.getElementById('commentsSection');
     const commentForm = document.getElementById('commentForm');
@@ -178,5 +177,152 @@
 
     fetchData();
 </script>
+
+<!-- This script tag deals with all the upvote/downvote logic of the thread -->
+<script>
+    const upvoteButton = document.getElementById('upvote');
+    const downvoteButton = document.getElementById('downvote');
+
+    const authToken = localStorage.getItem("preplane-authHeader");
+    const threadId = document.getElementById("blog_id").textContent;
+
+    const apiUrl = {
+        getStatus: `/api/threads/status/${threadId}`,
+        upvote: `/api/threads/upvote/${threadId}`,
+        downvote: `/api/threads/downvote/${threadId}`,
+        removeVote: `/api/threads/remove-vote/${threadId}`,
+    };
+
+    checkStatus();
+
+    upvoteButton.addEventListener('click', toggleUpvote);
+    downvoteButton.addEventListener('click', toggleDownvote);
+
+    // Used to check the initial status of the page and set the buttons accordingly
+    function checkStatus() {
+        fetch(apiUrl.getStatus, {
+            method: "GET",
+            headers: {
+                "Authorization": authToken,
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data === 1) {
+                    setButtonState(upvoteButton, true);
+                    setButtonState(downvoteButton, false, true);
+                } else if (data === -1) {
+                    setButtonState(upvoteButton, false, true);
+                    setButtonState(downvoteButton, true);
+                } else {
+                    setButtonState(upvoteButton, false);
+                    setButtonState(downvoteButton, false);
+                }
+            });
+    }
+
+    function toggleUpvote() {
+        if (upvoteButton.classList.contains('active')) {
+            // Remove upvote
+            fetch(apiUrl.removeVote, {
+                method: 'POST',
+                headers: {
+                    "Authorization": authToken,
+                    'Content-Type': 'application/json'
+                },
+            })
+                .then(() => {
+                    setButtonState(upvoteButton, false);
+                    setButtonState(downvoteButton, false, false);
+                })
+                .finally(() => {
+                    location.reload();
+                });
+        } else {
+            // Add upvote
+            fetch(apiUrl.upvote, {
+                method: 'POST',
+                headers: {
+                    "Authorization": authToken,
+                    'Content-Type': 'application/json'
+                },
+            })
+                .then(() => {
+                    setButtonState(upvoteButton, true);
+                    setButtonState(downvoteButton, false, true);
+                })
+                .finally(() => {
+                    location.reload();
+                });
+        }
+    }
+
+    function toggleDownvote() {
+        if (downvoteButton.classList.contains('active')) {
+            // Remove downvote
+            fetch(apiUrl.removeVote, {
+                method: 'POST',
+                headers: {
+                    "Authorization": authToken,
+                    'Content-Type': 'application/json'
+                },
+            })
+                .then(() => {
+                    setButtonState(downvoteButton, false);
+                    setButtonState(upvoteButton, false, false)
+                })
+                .finally(() => {
+                    location.reload();
+                });
+        } else {
+            // Add a downvote
+            fetch(apiUrl.downvote, {
+                method: 'POST',
+                headers: {
+                    "Authorization": authToken,
+                    'Content-Type': 'application/json'
+                },
+            })
+                .then(() => {
+                    setButtonState(downvoteButton, true);
+                    setButtonState(upvoteButton, false, true);
+                })
+                .finally(() => {
+                    location.reload();
+                });;
+        }
+    }
+
+    // Used to update the state of the button: `isActive` and `isDisabled`
+    function setButtonState(button, isActive, isDisabled = false) {
+        const icon = button.querySelector('i');
+        if (isActive) {
+            icon.classList.remove('far');
+            icon.classList.add('fas');
+            button.classList.add('active');
+        } else {
+            icon.classList.remove('fas');
+            icon.classList.add('far');
+            button.classList.remove('active');
+        }
+
+        if (isDisabled)
+            button.classList.add('disabled');
+        else
+            button.classList.remove('disabled');
+    }
+</script>
+
+<style>
+    .active {
+        color: #007bff;
+    }
+
+    .disabled {
+        pointer-events: none;
+        opacity: 0.5;
+    }
+</style>
 
 </html>

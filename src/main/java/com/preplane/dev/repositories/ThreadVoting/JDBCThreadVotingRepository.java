@@ -14,7 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Repository
-public class JDBCThreadVotingRepository implements ThreadVotingRepository{
+public class JDBCThreadVotingRepository implements ThreadVotingRepository {
     @Autowired
     private JdbcTemplate template;
 
@@ -24,7 +24,6 @@ public class JDBCThreadVotingRepository implements ThreadVotingRepository{
         this.voteThreadMapper = new voteThreadMapper();
     }
 
-
     @Override
     @Transactional
     public SQLResult<Integer> save(VoteThread voteThread) {
@@ -32,7 +31,8 @@ public class JDBCThreadVotingRepository implements ThreadVotingRepository{
         var result = new SQLResult<Integer>();
 
         try {
-            int rowCount = template.update(sqlQuery, voteThread.getThreadId(), voteThread.getUserId(), voteThread.getVote());
+            int rowCount = template.update(sqlQuery, voteThread.getThreadId(), voteThread.getUserId(),
+                    voteThread.getVote());
             result.response = rowCount;
             if (rowCount == 1) {
                 result.message = "The vote was saved successfully.";
@@ -51,25 +51,47 @@ public class JDBCThreadVotingRepository implements ThreadVotingRepository{
 
     @Override
     @Transactional
-    public SQLResult<Boolean> check(int threadId, int userId) {
-        String sqlQuery = "select * from user_thread where thread_id = ? and user_id = ?";
-        var result = new SQLResult<Boolean>();
-        
+    public SQLResult<Integer> check(int threadId, int userId) {
+        String sqlQuery = "SELECT * FROM user_thread WHERE thread_id = ? AND user_id = ?";
+        var result = new SQLResult<Integer>();
+
         try {
             var response = template.query(sqlQuery, this.voteThreadMapper, threadId, userId);
             if (response.isEmpty()) {
                 result.message = "User is eligible to vote";
                 result.statusCode = HttpStatus.OK;
-                result.response = true;
+                result.response = 0;
             } else {
                 result.message = "User already voted";
-                result.statusCode = HttpStatus.BAD_REQUEST;
-                result.response = false;
+                result.statusCode = HttpStatus.OK;
+                result.response = response.get(0).getVote();
             }
         } catch (Exception e) {
             result.message = "There was an error in retrieving the thread. Error Message: " + e.getMessage();
             result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
-            result.response = false;
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public SQLResult<Integer> delete(int threadId, int userId) {
+        String sqlQuery = "SELECT * FROM user_thread WHERE thread_id = ? AND user_id = ?";
+        var result = new SQLResult<Integer>();
+
+        try {
+            var response = template.query(sqlQuery, this.voteThreadMapper, threadId, userId);
+            if (response.get(0).getVote() == 1)
+                template.update("UPDATE thread SET upvotes = upvotes - 1 WHERE thread_id = ?", threadId);
+            else
+                template.update("UPDATE thread SET downvotes = downvotes - 1 WHERE thread_id = ?", threadId);
+
+            var rowCount = template.update("DELETE FROM user_thread WHERE thread_id = ? AND user_id = ?", threadId,
+                    userId);
+            result.response = rowCount;
+        } catch (Exception e) {
+            result.message = "There was an error in deleting the thread's vote. Error Message: " + e.getMessage();
+            result.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return result;
     }

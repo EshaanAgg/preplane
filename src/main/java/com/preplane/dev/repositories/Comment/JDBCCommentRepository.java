@@ -124,7 +124,6 @@ public class JDBCCommentRepository implements CommentRepository {
 
             } else {
                 result.message = "There are no comments available for this thread.";
-                result.statusCode = HttpStatus.NO_CONTENT;
             }
         } catch (Exception e) {
             result.message = "There was an error in fetching the comments. Error Message: " + e.getMessage();
