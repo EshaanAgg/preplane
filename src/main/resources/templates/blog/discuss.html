@@ -121,7 +121,8 @@
         // Utility function to get the date in a human readable format
         function timeAgo(date) {
             const now = new Date();
-            const diff = now - date;
+            const diff = now.getTime() - date.getTime();
+
             const seconds = Math.floor(diff / 1000);
             const minutes = Math.floor(seconds / 60);
             const hours = Math.floor(minutes / 60);
@@ -188,7 +189,7 @@
                 <li class="flex items-center justify-between p-2 text-gray-700 border-b">
                     <div>
                         <a href="/blog/${item.threadId}" class="text-xl font-semibold text-gray-800">${item.title}</a>
-                        <p class="text-sm text-gray-500">${item.creator.firstName} ${item.creator.lastName} - ${timeAgo(item.createdAt)}</p>
+                        <p class="text-sm text-gray-500">${item.creator.firstName} ${item.creator.lastName} - ${timeAgo(new Date(item.createdAt))}</p>
                     </div>
                     <div>
                         <div class="text-sm text-gray-500">Upvotes: ${item.upvotes} </div>

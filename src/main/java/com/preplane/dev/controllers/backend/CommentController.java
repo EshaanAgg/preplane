@@ -3,6 +3,7 @@ package com.preplane.dev.controllers.backend;
 import com.preplane.dev.models.Comment;
 import com.preplane.dev.models.User;
 import com.preplane.dev.repositories.Comment.JDBCCommentRepository;
+import com.preplane.dev.security.Auth;
 import com.preplane.dev.security.services.CommentAuthorizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,10 +31,8 @@ public class CommentController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Comment> createComment(@RequestBody Comment comment,
-            @AuthenticationPrincipal User loggedInUser) {
-        comment.setUserId(loggedInUser.getId());
-
+    public ResponseEntity<Comment> createComment(@RequestBody Comment comment) {
+        comment.setUserId(Auth.getCurrentUserId());
         var response = commentRepository.save(comment);
 
         if (response.statusCode == HttpStatus.CREATED) {

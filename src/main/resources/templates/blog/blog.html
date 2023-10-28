@@ -71,8 +71,7 @@
                 <div class="mt-2">
                     <textarea id="commentText" placeholder="Your Comment" class="w-full border p-2 rounded"></textarea>
                 </div>
-                <button id="submitComment" onclick="submitForm()"
-                    class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Add Comment</button>
+                <button id="submitComment" onclick="submitForm()" class="text-black">Add Comment</button>
             </div>
 
         </div>
@@ -136,7 +135,19 @@
         populateComments(comments);
     }
 
-    function submitComment() { }
+    function submitComment(commentText) {
+        fetch(`/api/comments/`, {
+            method: 'POST',
+            headers: {
+                "Authorization": authToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                threadId: document.getElementById("blog_id").textContent,
+                content: commentText,
+            })
+        });
+    }
 
     const toggleCommentsButton = document.getElementById('toggleComments');
     const commentsSection = document.getElementById('commentsSection');
@@ -157,22 +168,13 @@
     });
 
     submitCommentButton.addEventListener('click', () => {
-        const commentAuthor = document.getElementById('commentAuthor').value;
         const commentText = document.getElementById('commentText').value;
 
-        if (commentAuthor && commentText) {
-            const newComment = {
-                author: commentAuthor,
-                text: commentText,
-            };
-
-            // TODO
-            // Need to add logic to add the comment to the backend and then rerender the whole page
-
-            // Clear the input fields
-            document.getElementById('commentAuthor').value = '';
-            document.getElementById('commentText').value = '';
+        if (commentText != "") {
+            submitComment(commentText);
+            location.reload();
         }
+        else alert("The comment body cannot be empty.")
     });
 
     fetchData();
