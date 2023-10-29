@@ -20,7 +20,7 @@ async function userFetch(){
     var dropdownMenu = document.getElementById('dropdownMenu');
     var profilePage = document.getElementById('profilePage');
     var logged = document.getElementById('logged');
-    if(user){
+    if(user.firstName !== undefined){
       dropdownButton.innerHTML = name
       if(!sign.classList.contains('hidden')){
         sign.classList.add('hidden');
@@ -32,6 +32,11 @@ async function userFetch(){
       }
     }
     else{
+      // var homeUrl 
+      // if(!(window.location.href == "/" || window.location.href == "/auth/login" || window.location.href == "/auth/signup")){
+      //   alert("You must be logged in to view this page");
+      //   window.location.href = '/';
+      // }
       if(sign.classList.contains('hidden')){
         sign.classList.remove('hidden');
         logged.classList.remove('hidden');
@@ -49,3 +54,10 @@ async function userFetch(){
 }
 
 userFetch();
+
+function logout(){
+  console.log(localStorage)
+  localStorage.clear();
+  console.log(localStorage)
+  window.location.href = "/";
+}

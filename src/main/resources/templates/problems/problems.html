@@ -82,7 +82,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button>
+                                                <button onclick= getRandom()>
                                                     <div
                                                         style="border: 3px solid green; padding: 10px; display: inline-block; width:60px;height: 60px ; border-radius: 50%; display: flex; justify-content: center; align-items: center;margin-left: 40px; margin-bottom: 10px;">
                                                         <img src="https://img.icons8.com/external-tanah-basah-glyph-tanah-basah/48/40C057/external-Shuffle-arrows-tanah-basah-glyph-tanah-basah.png"
@@ -413,6 +413,25 @@
             topicSelect.addEventListener('change', filterProblems);
 
             fetchData();
+
+            async function getRandom(){
+                const authToken = localStorage.getItem("preplane-authHeader");
+
+                // Make the API call and store the data related to the problems
+                const response = await fetch('/api/problems/', {
+                    method: 'GET',
+                    headers: {
+                        "Authorization": authToken,
+                        'Content-Type': 'application/json'
+                    },
+                });
+                problemData = await response.json();
+                filterProblemsData = problemData.filter(
+                        (problem) => problem.submissions.length == 0
+                    );
+                var randomProblem = filterProblemsData[Math.floor(Math.random() * filterProblemsData.length)].problemId;
+                window.location.href = window.location.href + "/" + randomProblem; 
+            }
         </script>
 </body>
 
