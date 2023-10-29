@@ -11,10 +11,10 @@
     <!-- Font Awesome Icons -->
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <!-- Nucleo Icons -->
-    <link href="css/style.css" rel="stylesheet" />
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
     <!-- Main Styling -->
     <script src="https://unpkg.com/@popperjs/core@2"></script>
-    <script src= "js/preplane.js"></script>
+    <script th:src= "@{/js/preplane.js}"></script>
 
 </head>
 
@@ -82,7 +82,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button>
+                                                <button onclick= getRandom()>
                                                     <div
                                                         style="border: 3px solid green; padding: 10px; display: inline-block; width:60px;height: 60px ; border-radius: 50%; display: flex; justify-content: center; align-items: center;margin-left: 40px; margin-bottom: 10px;">
                                                         <img src="https://img.icons8.com/external-tanah-basah-glyph-tanah-basah/48/40C057/external-Shuffle-arrows-tanah-basah-glyph-tanah-basah.png"
@@ -304,10 +304,12 @@
                 </span>
               </td>
               <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                <a href="/problems/${problem.problemId}">
                 <button
                   style="background-color: green; color: white;font-weight: 300;font-size: small; padding: 5px 5px; border: none; border-radius: 5px; text-align: center; width: 60px; height: 30px; opacity: 0.7;">
                   Solve
                 </button>
+                </a>
               </td>
             </tr >
                     `;
@@ -411,6 +413,25 @@
             topicSelect.addEventListener('change', filterProblems);
 
             fetchData();
+
+            async function getRandom(){
+                const authToken = localStorage.getItem("preplane-authHeader");
+
+                // Make the API call and store the data related to the problems
+                const response = await fetch('/api/problems/', {
+                    method: 'GET',
+                    headers: {
+                        "Authorization": authToken,
+                        'Content-Type': 'application/json'
+                    },
+                });
+                problemData = await response.json();
+                filterProblemsData = problemData.filter(
+                        (problem) => problem.submissions.length == 0
+                    );
+                var randomProblem = filterProblemsData[Math.floor(Math.random() * filterProblemsData.length)].problemId;
+                window.location.href = window.location.href + "/" + randomProblem; 
+            }
         </script>
 </body>
 
