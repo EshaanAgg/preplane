@@ -41,7 +41,7 @@ public class OtherControllers {
         return "premium/success";
     }
 
-    @GetMapping("/problem/{id}")
+    @GetMapping("/problems/{id}")
     public String problem(@PathVariable String id, Model model) {
         model.addAttribute("id", id);
         return "problems/problem";
