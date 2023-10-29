@@ -11,10 +11,10 @@
     <!-- Font Awesome Icons -->
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <!-- Nucleo Icons -->
-    <link href="../css/style.css" rel="stylesheet" />
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
     <!-- Main Styling -->
     <script src="https://unpkg.com/@popperjs/core@2"></script>
-    <script src= "js/preplane.js"></script>
+    <script th:src= "@{/js/preplane.js}"></script>
 
 </head>
 
@@ -26,19 +26,19 @@
             `navbar`
             fragment</div>
 
-        <div class="flex space-x-4">
+        <div class="flex space-x-6 ml-4">
             <div class="hidden" id="problem_id" th:text="${id}"></div>
-            <button class="tab-btn active: hover:bg-gray-200" onclick="showTab('problem-description')">Problem
+            <button class="tab-btn active: hover:bg-gray-200 mt-4 mr-4 md:mr-12 text-black font-semibold rounded" onclick="showTab('problem-description')">Problem
                 Description</button>
-            <button class="tab-btn hover:bg-gray-200" onclick="showTab('editorial')">Editorial</button>
-            <button class="tab-btn hover:bg-gray-200" onclick="showTab('submissions')">Submissions</button>
+            <button class="tab-btn hover:bg-gray-200 mt-4 mr-4 md:mr-12 text-black font-semibold rounded" onclick="showTab('editorial')">Editorial</button>
+            <button class="tab-btn hover:bg-gray-200 mt-4 mr-4 md:mr-12 text-black font-semibold rounded" onclick="showTab('submissions')">Submissions</button>
         </div>
         <section id="problem-description" class="tab-content">
             <!-- Problem description content here -->
-            <div class="w-full px-6 py-6 mx-auto">
+            <div class="w-full bg-white px-6 py-6 mx-auto ">
                 <div class="flex flex-wrap -mx-3">
                     <div class="max-w-xl w-full bg-white p-6 rounded-lg shadow-md">
-                        <h1 class="text-xl md:text-2xl lg:text-2xl xl:text-3xl font-semibold text-center mb-1"
+                        <h1 class="text-1xl md:text-2xl lg:text-2xl xl:text-3xl font-semibold text-center mb-1"
                             id="problemName">Problem Name</h1>
                         <div class="flex items-center justify-center">
                             <div class="text-black mr-2">Time Limit:</div>
@@ -56,18 +56,22 @@
                             <div id="problemStatement">
                                 <!-- Problem statement content will be inserted here -->
                             </div>
+                            <div class="text-black mt-4 font-semibold">Input:</div>
                             <div id="input">
                                 <!-- input statement -->
                             </div>
+                            <div class="text-black mt-4 font-semibold">Output:</div>
                             <div id="output">
                                 <!-- Output -->
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            <div class="text-black text-lg font-bold mb-4 ">Submit?</div>
             <input type="file" id="fileInput" accept=".cpp">
-            <button onclick="processFile(),makeSubmisson()">Submit Code</button>
+            <br>
+            <button class="text-sm text-white bg-black rounded-lg mt-4 px-2 py-1"onclick="processFile(),makeSubmisson()">Submit Code</button>
+        </div>
         </section>
         <section id="editorial" class="tab-content">
             <div class="w-full px-4 sm:px-6 md:px-8 py-6 mx-auto">
@@ -119,32 +123,38 @@
 
 
     <script>
+        // Function to show the tab by name
         function showTab(tabName) {
-            // Get all tab content elements
+            
             const tabContents = document.querySelectorAll('.tab-content');
-
-            // Get all tab buttons
+    
             const tabBtns = document.querySelectorAll('.tab-btn');
-
-            // Hide all tab content
+            
             tabContents.forEach((content) => {
                 content.style.display = 'none';
             });
-
-            // Deactivate all tab buttons
+    
             tabBtns.forEach((btn) => {
                 btn.classList.remove('active', 'text-blue');
             });
-
-            // Show the selected tab content
-            document.getElementById(tabName).style.display = 'block';
-
-            // Activate the selected tab button and apply hover effect
+    
+            const selectedTab = document.getElementById(tabName);
+            selectedTab.style.display = 'block';
+    
             event.currentTarget.classList.add('active', 'text-blue');
-
+    
+            localStorage.setItem('activeTab', tabName);
         }
-        showTab('problem-description');
+    
+        // Check if there is a stored active tab and load it
+        const storedActiveTab = localStorage.getItem('activeTab');
+        if (storedActiveTab) {
+            showTab(storedActiveTab);
+        } else {
+            showTab('problem-description'); // Default to 'problem-description' if there is no stored active tab
+        }
     </script>
+    
 
     <script>
         // Your data object with problem details
@@ -187,12 +197,20 @@
             console.log(tags);
             let tagNames = tags.filter(tag => tag.type != 'COMPANY').map(tag => tag.name).join(', ');
             let companyTagNames = tags.filter(tag => tag.type === 'COMPANY').map(tag => tag.name).join(', ');
+            const testcasesArray = problemData.testcases.split("||");
+    
+            if (testcasesArray.length >= 2) {
+                const input = testcasesArray[0].replace(/\n/g, '<br>');;
+                const output = testcasesArray[1].replace(/\n/g, '<br>');;
 
+                document.getElementById('input').innerHTML = input;
+                document.getElementById('output').innerHTML = output;
+            }
             document.getElementById('problemName').textContent = problemData.title;
             document.getElementById('timeLimit').innerHTML = problemData.timeLimit + " second";
             document.getElementById('companies').textContent = companyTagNames;
             document.getElementById('tags').innerHTML = tagNames;
-            document.getElementById('input').innerHTML = problemData.testcases;
+            // document.getElementById('input').innerHTML = problemData.testcases;
             document.getElementById('editorial-code').textContent = problemData.authorsSolution;
             /* document.getElementById('output').textContent = problemData.output; */
             // Use innerHTML to insert the HTML content, including paragraphs

@@ -11,10 +11,10 @@
     <!-- Font Awesome Icons -->
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <!-- Nucleo Icons -->
-    <link href="css/style.css" rel="stylesheet" />
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
     <!-- Main Styling -->
     <script src="https://unpkg.com/@popperjs/core@2"></script>
-    <script src= "js/preplane.js"></script>
+    <script th:src= "@{/js/preplane.js}"></script>
 
 </head>
 
@@ -304,10 +304,12 @@
                 </span>
               </td>
               <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                <a href="/problems/${problem.problemId}">
                 <button
                   style="background-color: green; color: white;font-weight: 300;font-size: small; padding: 5px 5px; border: none; border-radius: 5px; text-align: center; width: 60px; height: 30px; opacity: 0.7;">
                   Solve
                 </button>
+                </a>
               </td>
             </tr >
                     `;

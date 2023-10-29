@@ -160,7 +160,7 @@ CREATE TABLE mcq_submission (
 -- Coding problems and tag data
 INSERT INTO coding_problem (title, statement, author, authors_solution, testcases, time_limit, memory_limit)
 VALUES
-    ('Sum of Two Numbers', 'Write a program to add two numbers and print the result.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
+    ('Sum of Two Numbers', 'Write a program to add two numbers and print the result.', 1, '#include <bits/stdc++.h>', '3 \n1 2 3 || 3\n 1 2 3', 1.0, 256),
     ('Factorial of a Number', 'Write a program to calculate the factorial of a number.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
     ('Palindrome Check', 'Write a program to check if a given word is a palindrome.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
     ('Maximum of Three Numbers', 'Write a program to find the maximum of three numbers.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
