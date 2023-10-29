@@ -28,13 +28,13 @@ public class SubmissionController {
         return new ResponseEntity<>(response.response, response.statusCode);
     }
 
-    @PutMapping("/")
+    @PostMapping("/")
     public ResponseEntity<?> submitCode(@Valid @RequestBody CodeSubmission submission) {
 
         try {
             var currentUser = Auth.getCurrentUser();
             var response = codeSubmissionRepository
-                    .save(new CodingSubmission(submission.problemId, currentUser.getId(), submission.code));
+                    .save(new CodingSubmission(submission.submissionId, submission.problemId, currentUser.getId(), submission.code));
             return new ResponseEntity<>(response.response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
