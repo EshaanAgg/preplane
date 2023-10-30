@@ -20,12 +20,12 @@ public class JDBCCodingSubmissionRepository implements CodingSubmissionRepositor
     @Override
     @Transactional
     public SQLResult<Integer> save(CodingSubmission submission) {
-        String sqlQuery = "INSERT INTO coding_submission (problem_id, user_id, code)  VALUES (?,?,?)";
+        String sqlQuery = "INSERT INTO coding_submission (submission_id, problem_id, user_id, code)  VALUES (?,?,?,?)";
 
         var result = new SQLResult<Integer>();
 
         try {
-            int rowCount = template.update(sqlQuery, submission.getProblemId(), submission.getUserId(),
+            int rowCount = template.update(sqlQuery, submission.getSubmissionId(), submission.getProblemId(), submission.getUserId(),
                     submission.getCode());
             result.response = rowCount;
 
