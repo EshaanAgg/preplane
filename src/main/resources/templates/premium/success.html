@@ -1,25 +1,61 @@
-<html lang="en">
-
-<head>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Preplane | Premium</title>
-    <!-- Fonts and icons -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
-    <!-- Font Awesome Icons -->
-    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-    <!-- Nucleo Icons -->
-    <link href="css/style.css" rel="stylesheet" />
-    <!-- Main Styling -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700"
+      rel="stylesheet"
+    />
+    <script
+      src="https://kit.fontawesome.com/42d5adcbca.js"
+      crossorigin="anonymous"
+    ></script>
     <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tinycolor2@1.6.0/cjs/tinycolor.min.js"></script>
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
 
-</head>
-
-<body>
-
-    Payment Successful
-
-</body>
-
+  <body
+    class="m-0 font-sans text-base antialiased font-normal leading-default bg-gray-50 text-slate-500"
+  >
+    <div th:replace="fragments/sidenav :: sidenav">
+      This content will be replaced by the `sidenav` fragment
+    </div>
+    <main
+      class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200"
+    >
+      <div th:replace="fragments/navbar :: navbar" th:with="name=${title}">
+        This content will be replaced by the `navbar` fragment
+      </div>
+      <div
+        class="p-6 rounded-lg shadow-lg text-center w-2/3"
+        style="
+          background-image: radial-gradient(
+            circle,
+            #e9ecef 50%,
+            transparent 120%
+          );
+          margin-top: 100px;
+          margin-left: 185px;
+        "
+      >
+        <h2
+          class="text-4xl font-semibold text-gray-700 mb-12"
+          style="margin-top: 100px"
+        >
+          Congratulations 🎊
+        </h2>
+        <h4 class="text-gray-700">Your payment was successful!</h4>
+        <a th:href="@{/}">
+          <button
+            class="bg-white text-black py-2 px-4 rounded-full mt-12 mb-12"
+          >
+            Home page
+          </button></a
+        >
+      </div>
+    </main>
+  </body>
 </html>
