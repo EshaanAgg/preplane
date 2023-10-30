@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <meta charset="UTF-8" />
@@ -8,7 +8,7 @@
   <title>
     Preplane
   </title>
-  <meta name="description" content="Simple landind page" />
+  <meta name="description" content="Simple landing page"/>
   <meta name="keywords" content="" />
   <meta name="author" content="" />
   <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
@@ -17,10 +17,9 @@
   <!--Replace with your tailwind.css once created-->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet" />
   <!-- Define your gradient here - use online tools to find a gradient matching your branding-->
-
 </head>
 
-<body class="m-0 font-sans antialiased font-normal text-base leading-default bg-gray-50 text-slate-500"
+<body class="m-0 font-sans antialiased font-normal"
   style="background: linear-gradient(90deg, purple 0%, white 120%);">
   <div style="display: none;">
     <div th:replace="fragments/sidenav :: sidenav">This content will be replaced by the `sidenav` fragment</div>
@@ -34,7 +33,6 @@
     <div class="w-full px-6 py-6 mx-auto">
       <div class="pt-24">
         <div class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
-          <!--Left Col-->
           <div style="margin: 5%;margin-top: 0%;">
             <img width="200px" src="./assets/img/logo.png" />
           </div>
@@ -46,13 +44,11 @@
             <p class="leading-normal text-2xl mb-8">
               Master Algorithms, Ace Interviews, and Land Your Dream Tech Job with Preplane!
             </p>
-            <button
-              class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
+            <a th:href="@{/problems}"><button
+              class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg">
               Explore
-            </button>
+            </button></a>
           </div>
-          <!--Right Col-->
-
         </div>
       </div>
       <div class="relative -mt-12 lg:-mt-24">
@@ -570,11 +566,6 @@
       e.preventDefault();
     }
   </script>
-  <!--Footer-->
-
-  <!-- jQuery if you need it -->
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
-
 </body>
 
 </html>
