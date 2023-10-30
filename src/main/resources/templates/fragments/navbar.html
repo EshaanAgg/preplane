@@ -1,92 +1,101 @@
 <!-- Navbar -->
-<nav th:fragment="navbar"
-    class="relative flex flex-wrap items-center justify-between px-0 py-2 mx-6 transition-all shadow-none duration-250 ease-soft-in rounded-2xl lg:flex-nowrap lg:justify-start"
-    navbar-main navbar-scroll="true">
-    <p th:text="${name}">heweloo</p>
-    <div class="flex items-center justify-between w-full px-4 py-1 mx-auto flex-wrap-inherit">
-        <nav>
-            <div style = "display: flex; flex-direction: row;">
-                <a th:href= "@{/}">
-                    <h8 class="mb-0 font-bold"  style = "padding: 1rem;"> Preplane </h8>
-                </a>
-                <a th:href= "@{/problems}">
-                    <h8 class="mb-0 font-bold"  style = "padding: 1rem;"> Problems </h8>
-                </a>
-                <a th:href= "@{/blog}">
-                    <h8 class="mb-0 font-bold"  style = "padding: 1rem;"> Discuss </h8>
-                </a> 
-            </div>
-        </nav>
+<nav
+  th:fragment="navbar"
+  class="relative flex flex-wrap items-center justify-between px-0 py-2 mx-6 transition-all shadow-none duration-250 ease-soft-in rounded-2xl lg:flex-nowrap lg:justify-start"
+  navbar-main
+  navbar-scroll="true"
+>
+  <p th:text="${name}">heweloo</p>
+  <div
+    class="flex items-center justify-between w-full px-4 py-1 mx-auto flex-wrap-inherit"
+  >
+    <nav>
+      <div style="display: flex; flex-direction: row">
+        <a th:href="@{/}">
+          <h8 class="mb-0 font-bold" style="padding: 1rem"> Preplane </h8>
+        </a>
+        <a th:href="@{/problems}">
+          <h8 class="mb-0 font-bold" style="padding: 1rem"> Problems </h8>
+        </a>
+        <a th:href="@{/blog}">
+          <h8 class="mb-0 font-bold" style="padding: 1rem"> Discuss </h8>
+        </a>
+      </div>
+    </nav>
 
-        <div class="flex items-center mt-2 grow sm:mt-0 sm:mr-6 md:mr-0 lg:flex lg:basis-auto">
-            <div class="flex items-center md:ml-auto md:pr-4">
-                <div class="relative flex flex-wrap items-stretch w-full transition-all rounded-lg ease-soft">
-                    <span
-                        class="text-sm ease-soft leading-5.6 absolute z-50 -ml-px flex h-full items-center whitespace-nowrap rounded-lg rounded-tr-none rounded-br-none border border-r-0 border-transparent bg-transparent py-2 px-2.5 text-center font-normal text-slate-500 transition-all">
-                        <i class="fas fa-search"></i>
-                    </span>
-                    <input type="text"
-                        class="pl-8.75 text-sm focus:shadow-soft-primary-outline ease-soft w-1/100 leading-5.6 relative -ml-px block min-w-0 flex-auto rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 pr-3 text-gray-700 transition-all placeholder:text-gray-500 focus:border-fuchsia-300 focus:outline-none focus:transition-shadow"
-                        placeholder="Type here..." />
-                </div>
-            </div>
-            <ul class="flex flex-row justify-end pl-0 mb-0 list-none md-max:w-full">
-                <li class="flex items-center" id="sign">
-                    <a th:href="@{/auth/login}"
-                        class="block px-0 py-2 text-sm font-semibold transition-all ease-nav-brand text-slate-500">
-                        <i class="fa fa-user sm:mr-1"></i>
-                        <span class="hidden sm:inline">Sign In</span>
-                    </a>
-                </li>
-                <li class="hidden flex items-center" id="profile">
-                    <div class="relative inline-block text-left">
-                        <span id="dropdownButton" class="block px-0 py-2 text-sm font-semibold transition-all ease-nav-brand text-slate-500" style="cursor: pointer;">
-                            Hii John
-                            <svg class="fill-current h-4 w-4 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                <path d="M7 10l5 5m0 0l5-5m-5 5V5"></path>
-                            </svg>
-                        </span>
-                        <div id="dropdownMenu" class="hidden absolute z-50 mt-2 w-32 rounded-md shadow-lg bg-white">
-                            <a th:href="@{/profile}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Profile</a>
-                            <button onclick=logout() class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Log Out</button>
-                        </div>
-                    </div>
-                    
-                    <!-- <a th:href="@{/auth/login}"
-                        class="block px-0 py-2 text-sm font-semibold transition-all ease-nav-brand text-slate-500">
-                        <i class="fa fa-user sm:mr-1"></i>
-                        <span class="hidden sm:inline">Sign In</span>
-                    </a> -->
-                </li>
-            </ul>
+    <div
+      class="flex items-center mt-2 grow sm:mt-0 sm:mr-6 md:mr-0 lg:flex lg:basis-auto"
+    >
+      <div class="flex items-center md:ml-auto md:pr-4">
+        <div
+          class="relative flex flex-wrap items-stretch w-full transition-all rounded-lg ease-soft"
+        >
+          <span
+            class="text-sm ease-soft leading-5.6 absolute z-50 -ml-px flex h-full items-center whitespace-nowrap rounded-lg rounded-tr-none rounded-br-none border border-r-0 border-transparent bg-transparent py-2 px-2.5 text-center font-normal text-slate-500 transition-all"
+          >
+            <i class="fas fa-search"></i>
+          </span>
+          <input
+            type="text"
+            class="pl-8.75 text-sm focus:shadow-soft-primary-outline ease-soft w-1/100 leading-5.6 relative -ml-px block min-w-0 flex-auto rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 pr-3 text-gray-700 transition-all placeholder:text-gray-500 focus:border-fuchsia-300 focus:outline-none focus:transition-shadow"
+            placeholder="Type here..."
+          />
         </div>
+      </div>
+      <ul class="flex flex-row justify-end pl-0 mb-0 list-none md-max:w-full">
+        <li class="flex items-center" id="sign">
+          <a
+            th:href="@{/auth/login}"
+            class="block px-0 py-2 text-sm font-semibold transition-all ease-nav-brand"
+          >
+            <i class="fa fa-user sm:mr-1"></i>
+            <span class="hidden sm:inline">Sign In</span>
+          </a>
+        </li>
+        <li class="hidden flex items-center" id="profile">
+          <div class="relative inline-block text-left">
+            <span
+              id="dropdownButton"
+              class="block px-0 py-2 text-sm font-semibold transition-all ease-nav-brand text-slate-500"
+              style="cursor: pointer"
+            >
+              Hii John
+              <svg
+                class="fill-current h-4 w-4 ml-2"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path d="M7 10l5 5m0 0l5-5m-5 5V5"></path>
+              </svg>
+            </span>
+            <div
+              id="dropdownMenu"
+              class="hidden absolute z-50 mt-2 w-32 rounded-md shadow-lg bg-white"
+            >
+              <a
+                th:href="@{/profile}"
+                class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                >Profile</a
+              >
+              <button
+                onclick="logout()"
+                class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+              >
+                Log Out
+              </button>
+            </div>
+          </div>
+        </li>
+      </ul>
     </div>
+  </div>
 </nav>
 
 <script>
-    // window.onload = function() {
-    //   const user = localStorage.getItem('user');
-    //   var sign = document.getElementById('sign');
-    //   var profile = document.getElementById('profile');
-    //   if(user){
-    //     if(!sign.classList.contains('hidden'))
-    //       sign.classList.add('hidden');
-    //     if(profile.classList.contains('hidden'))
-    //       profile.classList.remove('hidden');
-    //   }
-    //   else{
-    //     if(sign.classList.contains('hidden'))
-    //       sign.classList.remove('hidden');
-    //     if(!profile.classList.contains('hidden'))
-    //       profile.classList.add('hidden');
-    //   }
-    //   // alert('Page reloaded!');
-    // };
+  var dropdownButton = document.getElementById("dropdownButton");
+  var dropdownMenu = document.getElementById("dropdownMenu");
 
-    var dropdownButton = document.getElementById('dropdownButton');
-    var dropdownMenu = document.getElementById('dropdownMenu');
-
-    dropdownButton.addEventListener('click', function() {
-        dropdownMenu.classList.toggle('hidden');
-    });
-  </script>
+  dropdownButton.addEventListener("click", function () {
+    dropdownMenu.classList.toggle("hidden");
+  });
+</script>
