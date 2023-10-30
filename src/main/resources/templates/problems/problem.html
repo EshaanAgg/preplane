@@ -85,10 +85,9 @@
                     <!-- Approach -->
                     <div class="mb-4">
                         <h3 class="text-lg font-semibold mb-2">Approach:</h3>
-                        <p class="text-gray-600">
+                        <p class="text-gray-600" id="solution-text">
                             <!-- Editorial approach content goes here -->
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non eros nec arcu auctor
-                            hendrerit.
+                            
                         </p>
                     </div>
 
@@ -202,6 +201,7 @@
             let tagNames = tags.filter(tag => tag.type != 'COMPANY').map(tag => tag.name).join(', ');
             let companyTagNames = tags.filter(tag => tag.type === 'COMPANY').map(tag => tag.name).join(', ');
             const testcasesArray = problemData.testcases.split("||");
+            const SolutionCodes = problemData.authorsSolution.split("$$");
 
             if (testcasesArray.length >= 2) {
                 const input = testcasesArray[0].replace(/\n/g, '<br>');;
@@ -215,7 +215,8 @@
             document.getElementById('companies').textContent = companyTagNames;
             document.getElementById('tags').innerHTML = tagNames;
             // document.getElementById('input').innerHTML = problemData.testcases;
-            document.getElementById('editorial-code').textContent = problemData.authorsSolution;
+            document.getElementById('solution-text').textContent = SolutionCodes[0];
+            document.getElementById('editorial-code').textContent = SolutionCodes[1];
             /* document.getElementById('output').textContent = problemData.output; */
             // Use innerHTML to insert the HTML content, including paragraphs
             document.getElementById('problemStatement').innerHTML = problemData.statement;

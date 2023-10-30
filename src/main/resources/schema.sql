@@ -184,24 +184,292 @@ int main(){
     cout << "No" << endl;
   }
 }', '99 96 || Yes', 1.0, 256),
-    ('Factorial of a Number', 'Write a program to calculate the factorial of a number.', 1, 'Solution code here...', '4 || 24\n', 1.0, 256),
-    ('Palindrome Check', 'Write a program to check if a given word is a palindrome.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Maximum of Three Numbers', 'Write a program to find the maximum of three numbers.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Fibonacci Series', 'Write a program to generate the first 10 numbers in the Fibonacci series.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Prime Number Check', 'Write a program to check if a given number is prime.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Reverse a String', 'Write a program to reverse a given string.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Binary to Decimal', 'Write a program to convert a binary number to decimal.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Calculate Square Root', 'Write a program to calculate the square root of a number.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Factorial Using Recursion', 'Write a recursive program to calculate the factorial of a number.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Find Largest Element', 'Write a program to find the largest element in an array.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Calculate Exponent', 'Write a program to calculate the exponent of a number.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Matrix Multiplication', 'Write a program to multiply two matrices.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Count Vowels and Consonants', 'Write a program to count the number of vowels and consonants in a string.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Find Missing Number', 'Write a program to find the missing number in an array of consecutive integers.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Sort an Array', 'Write a program to sort an array using the bubble sort algorithm.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Linear Search', 'Write a program to perform a linear search in an array.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('String Concatenation', 'Write a program to concatenate two strings.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Calculate Square', 'Write a program to calculate the square of a number.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256);
+    ('Honor the names', 'You are given a persons surname and first name as strings S and T, respectively.
+Print the concatenation of the surname, a space ( ), and the honorific (san) in this order.', 1, 'This is a basic problem of string input/output. Read and print the string just as instructed in the problem statement. $$ #include<bits/stdc++.h>
+
+using namespace std;
+
+//redeem yourself king
+int main() {
+    string s, t;
+    cin >> s >> t;
+    cout << s << " san" << endl;
+}
+', 'Takahashi Chokudai || Takahashi san', 1.0, 256),
+    ('Same', 'You are given N integers. Take the input N and the array containing N integers and determine if all the numbers are equal. Output Yes if they are equal and No otherwise', 1, 'If any two consecutive elements are different then the answer is No. Thus, it is sufficient to read 
+A, inspect every pairs of elements, and determine if they have the same value.
+The following is sample code. $$ #include <iostream>
+#include <vector>
+
+using namespace std;
+//redeem yourself King
+int main() {
+    int N;
+    cin >> N;
+
+    vector<int> A(N);
+    for(int i = 0; i < N; ++i) // Read A
+        cin >> A[i];
+
+    for(int i = 0; i < N; ++i)
+        for(int j = 0; j < N; ++j)
+            if(A[i] != A[j]){ // If there is a pair of different values,
+                cout << "No" << endl; // print No and
+                return 0; // exit
+            }
+
+    // If no pair has different values,
+    cout << "Yes" << endl; // print Yes and
+    return 0; // exit
+}
+', '4\n 3 3 3 3 || Yes', 1.0, 256),
+    ('First ABC2', 'You are given a string S of length N consisting of A, B, and C.Find the position where ABC first appears as a (contiguous) substring in S. In other words, find the smallest integer n that satisfies all of the following conditions. 
+    The string obtained by extracting the n-th through (n+2)-th characters of S is ABC', 1, 'Therefore, it is sufficient to scan 
+n for each 1,2,…,N−2 in a for statement, and determine for each n if it satisfies the condition. To obtain the n-th character of S, most programming language provides array subscript operator S[n]. $$ #include <iostream>
+#include <string>
+using namespace std;
+//redeem yourself king
+int main() {
+  int N;
+  string S;
+  cin >> N >> S;
+  int ans = -1;
+  for (int i = 0; i < N - 2; i++) {
+    if (S[i] == \'A\' and S[i + 1] == \'B\' and S[i + 2] == \'C\') {
+      ans = i + 1;
+      break;
+    }
+  }
+  cout << ans << endl;
+}
+', '8 ABABCABC || 3', 1.0, 256),
+    ('Full Moon', 'Takahashi likes full moons.
+
+Let today be day 
+1. The first day on or after today on which he can see a full moon is day M. After that, he can see a full moon every P days, that is, on day M+P, day M+2P, and so on.
+Find the number of days between day 1 and day N, inclusive, on which he can see a full moon.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('tcdr', 'You are given a string S consisting of lowercase English letters. Remove all occurrences of a, e, i, o, u from S and print the resulting string. S contains at least one character other than a, e, i, o, u.', 1, 'Follow the instructions of the problem statement to remove a, e, i, o, and u from 
+S, or append the characters of S except for a, e, i, o, and u to an initially empty string, in order to obtain the answer. $$ #include <iostream>
+#include <string>
+using namespace std;
+//redeem yourself king
+int main() {
+	string s;
+	cin >> s;
+	string ans = \"\";
+	for (char c : s) if (c != \'a\' && c != \'e\' && c != \'i\' && c != \'o\' && c != \'u\') ans += c;
+	cout << ans << endl;
+}
+', 'atcoder $$ tcdr', 1.0, 256),
+    ('Reverse a String', 'Write a program to reverse a given string.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('Binary to Decimal', 'Write a program to convert a binary number to decimal.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('Calculate Square Root', 'Write a program to calculate the square root of a number.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('Factorial Using Recursion', 'Write a recursive program to calculate the factorial of a number.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('Find Largest Element', 'Write a program to find the largest element in an array.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('Calculate Exponent', 'Write a program to calculate the exponent of a number.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('Matrix Multiplication', 'Write a program to multiply two matrices.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('Count Vowels and Consonants', 'Write a program to count the number of vowels and consonants in a string.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('Find Missing Number', 'Write a program to find the missing number in an array of consecutive integers.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('Sort an Array', 'Write a program to sort an array using the bubble sort algorithm.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('Linear Search', 'Write a program to perform a linear search in an array.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('String Concatenation', 'Write a program to concatenate two strings.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('Calculate Square', 'Write a program to calculate the square of a number.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256);
 
 -- Insert tags and associate them with problems
 INSERT INTO tags (tag_type, tag_name)
