@@ -160,8 +160,31 @@ CREATE TABLE mcq_submission (
 -- Coding problems and tag data
 INSERT INTO coding_problem (title, statement, author, authors_solution, testcases, time_limit, memory_limit)
 VALUES
-    ('Sum of Two Numbers', 'Write a program to add two numbers and print the result.', 1, '#include <bits/stdc++.h>', '3 \n1 2 3 || 3\n 1 2 3', 1.0, 256),
-    ('Factorial of a Number', 'Write a program to calculate the factorial of a number.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
+    ('2UP3DOWN', 'Takahashi is in a building with 
+100 floors.
+
+He uses the stairs for moving up two floors or less or moving down three floors or less, and uses the elevator otherwise.
+
+Does he use the stairs to move from floor 
+X to floor 
+Y?', 1, 'When Takahashi is at 
+X-th floor, he uses stairs if he is heading at between the 
+(X−3)-th and 
+(X+2)-th floor. All that left is to determine if 
+Y is in this range. 
+$$ #include<bits/stdc++.h>
+using namespace std;
+//redeem yourself king
+int main(){
+  int x,y;
+  cin >> x >> y;
+  if(x-3<=y && y<=x+2){
+    cout << "Yes" << endl;
+  }else{
+    cout << "No" << endl;
+  }
+}', '99 96 || Yes', 1.0, 256),
+    ('Factorial of a Number', 'Write a program to calculate the factorial of a number.', 1, 'Solution code here...', '4 || 24\n', 1.0, 256),
     ('Palindrome Check', 'Write a program to check if a given word is a palindrome.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
     ('Maximum of Three Numbers', 'Write a program to find the maximum of three numbers.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
     ('Fibonacci Series', 'Write a program to generate the first 10 numbers in the Fibonacci series.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
