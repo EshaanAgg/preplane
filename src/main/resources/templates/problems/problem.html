@@ -229,6 +229,8 @@
             console.log(submissionsData);
             const submissionContainer = document.getElementById('submission-container');
 
+            submissionsData.reverse();
+
             submissionsData.forEach(submission => {
                 const submissionItem = document.createElement('div');
                 submissionItem.className = 'border border-gray-200 p-4 rounded-lg flex items-center justify-between';
@@ -289,13 +291,19 @@
             var endpoint = '2f5a3efa.compilers.sphere-engine.com';
             const id = document.getElementById("problem_id").textContent;
 
+            var inp = document.getElementById('input').textContent.trim().replace(/\n/g, " ");
+
+            console.log("INPUT");
+            console.log(inp);
+
             var submissionData = {
                 compilerId: 44,
                 source: urlEncodedCode,
-                problemCode: "PROB"+id.toString()
+                problemCode: "PROB"+id.toString(),
+                input: inp
             };
             console.log(submissionData);
-            fetch(`https://${endpoint}/api/v3/submissions?access_token=${accessToken}&compilerId=${submissionData.compilerId}&source=${submissionData.source}&problemCode=${submissionData.problemCode}`, {
+            fetch(`https://${endpoint}/api/v3/submissions?access_token=${accessToken}&compilerId=${submissionData.compilerId}&source=${submissionData.source}&problemCode=${submissionData.problemCode}&input=${submissionData.input}`, {
                 method: 'POST',
                 headers: {
                     'Accept': '*/*'
@@ -311,7 +319,7 @@
                     var accessToken = '814030cd81669a02073a918d3842cb44';
                     var endpoint = '2f5a3efa.compilers.sphere-engine.com';
 
-                    fetch(`https://${endpoint}/api/v3/submissions/${data.id}?access_token=${accessToken}`, {
+                    fetch(`https://${endpoint}/api/v3/submissions/${data.id}?access_token=${accessToken}&withOutput=true&withInput=true`, {
                         method: 'GET'
                     }).then(response => response.json())
                         .then(verd => {
@@ -324,6 +332,27 @@
 
                             console.log(subData);
 
+                            var verdictData = {
+                                submissionId: data.id,
+                                verdict: "",
+                                executionTime: verd.time,
+                                executionMemory: verd.memory
+                            }
+
+                            console.log("OUTPUT");
+                            console.log(verd.output);
+                            console.log(document.getElementById('output').textContent.trim());
+
+                            if (verd.result != 15) verdictData.verdict = verdicts.get(verd.result);
+                            else {
+                                if (verd.output.trim().replace(/\n/g, " ") == document.getElementById('output').textContent.trim().replace(/\n/g, " ")) {
+                                    verdictData.verdict = "AC";
+                                }
+                                else {
+                                    verdictData.verdict = "WA";
+                                }
+                            }
+
                             fetch(`/api/submit/`, {
                                 method: 'POST',
                                 body: JSON.stringify(subData),
@@ -334,12 +363,6 @@
                             }).then(response => response.json())
                                 .then(x => {
                                     console.log(x);
-                                    var verdictData = {
-                                        submissionId: data.id,
-                                        verdict: verdicts.get(verd.result),
-                                        executionTime: verd.time,
-                                        executionMemory: verd.memory
-                                    }
 
                                     console.log(verdictData);
 
@@ -353,13 +376,11 @@
                                     }).then(response => response.json())
                                         .then(data => {
                                             console.log(data);
+                                            localStorage.setItem('activeTab', 'submissions');
+                                            window.location.reload();
                                         })
                                 })
                         })
-
-
-
-
 
 
 
