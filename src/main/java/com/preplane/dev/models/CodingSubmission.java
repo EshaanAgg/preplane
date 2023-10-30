@@ -25,7 +25,8 @@ public class CodingSubmission {
     public CodingSubmission() {
     }
 
-    public CodingSubmission(int problemId, int userId, String code) {
+    public CodingSubmission(int submissionId, int problemId, int userId, String code) {
+        this.submissionId = submissionId;
         this.problemId = problemId;
         this.userId = userId;
         this.code = code;
