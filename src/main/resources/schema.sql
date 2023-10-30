@@ -275,19 +275,201 @@ int main() {
 	cout << ans << endl;
 }
 ', 'atcoder $$ tcdr', 1.0, 256),
-    ('Reverse a String', 'Write a program to reverse a given string.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Binary to Decimal', 'Write a program to convert a binary number to decimal.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Calculate Square Root', 'Write a program to calculate the square root of a number.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Factorial Using Recursion', 'Write a recursive program to calculate the factorial of a number.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Find Largest Element', 'Write a program to find the largest element in an array.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Calculate Exponent', 'Write a program to calculate the exponent of a number.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Matrix Multiplication', 'Write a program to multiply two matrices.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Count Vowels and Consonants', 'Write a program to count the number of vowels and consonants in a string.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Find Missing Number', 'Write a program to find the missing number in an array of consecutive integers.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Sort an Array', 'Write a program to sort an array using the bubble sort algorithm.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Linear Search', 'Write a program to perform a linear search in an array.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('String Concatenation', 'Write a program to concatenate two strings.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256),
-    ('Calculate Square', 'Write a program to calculate the square of a number.', 1, 'Solution code here...', 'Test case data here...', 1.0, 256);
+    ('Reverse a String', 'Write a program to reverse a given string.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('Binary to Decimal', 'Write a program to convert a binary number to decimal.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('Calculate Square Root', 'Write a program to calculate the square root of a number.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('Factorial Using Recursion', 'Write a recursive program to calculate the factorial of a number.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('Find Largest Element', 'Write a program to find the largest element in an array.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('Calculate Exponent', 'Write a program to calculate the exponent of a number.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('Matrix Multiplication', 'Write a program to multiply two matrices.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('Count Vowels and Consonants', 'Write a program to count the number of vowels and consonants in a string.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('Find Missing Number', 'Write a program to find the missing number in an array of consecutive integers.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('Sort an Array', 'Write a program to sort an array using the bubble sort algorithm.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('Linear Search', 'Write a program to perform a linear search in an array.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('String Concatenation', 'Write a program to concatenate two strings.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256),
+    ('Calculate Square', 'Write a program to calculate the square of a number.', 1, 'The answer for this problem can be found by inspecting each of day 
+M, day M+P,… to check whether it is within the first N days, and add 1 to the answer if it is, and terminating the loop if it is not. This can be implemented with a for statement. $$ #include <bits/stdc++.h>
+using namespace std;
+//Redeem Yourself King
+int main() {
+    int n, m, p;
+    cin >> n >> m >> p;
+    int res = 0;
+    while(m <= n) {
+        res++;
+        m += p;
+    }
+    cout << res << endl;
+}
+', '200000 314 318 || 628', 1.0, 256);
 
 -- Insert tags and associate them with problems
 INSERT INTO tags (tag_type, tag_name)
