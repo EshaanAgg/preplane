@@ -1,7 +1,7 @@
 -- Setup database
-DROP DATABASE IF EXISTS preplane;
-CREATE DATABASE preplane;
-USE preplane;
+DROP DATABASE IF EXISTS railway;
+CREATE DATABASE railway;
+USE railway;
 
 -- Create all the tables
 CREATE TABLE user (
